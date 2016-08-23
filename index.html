@@ -1,5 +1,823 @@
-<html>
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="compile" />
+<meta name="keywords" content="build" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="wwwc" />
+<meta name="keywords" content="clcl" />
+<meta name="keywords" content="svnmerge.py" />
+<title>Subversion関連のネタとWWWCのプラグイン</title>
+<script>
+<!--
+  function addstring() {
+      document.forms[0].q.value = 'site:www.asahi-net.or.jp/~iu9m-tcym/ ' + document.forms[0].q.value;
+      return true;
+  }
+// -->
+</script>
+</head>
 <body>
-test page
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div align="left">
+	<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+	<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+	</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+	<noscript>
+		<div align="right">
+		<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+		<strong>
+		<a href="http://diary.fc2.com/">日記</a>
+		</strong>
+		</div>
+	</noscript>
+	<!-- [FC2 Analyzer]  -->
+</div>
+<div align="right">
+	<!-- FC2カウンター ここから -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+	<script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=1203325"></script><noscript><img src="http://counter1.fc2.com/counter_img.php?id=1203325"><br><strong><a href="http://flowerfan.com/">アレンジメント</a></strong></noscript>
+	<!-- FC2カウンター ここまで -->
+	<!--
+	<IMG SRC="http://cgi.asahi-net.or.jp/cgi-bin/Count.cgi?df=index.dat" ALT=""> 
+	-->
+	since 2001/08/19
+</div>
+
+<div align="right">
+$Date: 2016-07-31 10:27:40 +0900 (2016/07/31 (日)) $<br>
+$Revision: 1009 $<br>
+</div>
+
+<h2>Subversion Book のリンク</h2>
+
+<h3>日本語</h3>
+
+<ul>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/">
+	Subversion によるバージョン管理 For Subversion 1.4
+	</a>
+</li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/">
+	Subversion によるバージョン管理 For Subversion 1.5
+	</a>
+</li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.7/html-chunk/">
+	Subversion によるバージョン管理 For Subversion 1.7
+	</a>
+</li>
+</ul>
+
+
+<h3>英語</h3>
+
+<ul>
+<li>
+	<a href="http://svnbook.red-bean.com/en/1.8/">
+	Version Control with Subversion For Subversion 1.8
+	</a>
+</li>
+<li>
+	<a href="http://svnbook.red-bean.com/nightly/en/index.html">
+	Version Control with Subversion (nightly)
+	</a>
+</li>
+</ul>
+
+
+
+<h2>メニュー</h2>
+
+<li><a href="./svndoc/">Subversion 関連</a></li>
+<li><a href="./redmine/">Redmine 関連</a></li>
+<li><a href="./svnmerge/">svnmerge.py 関連</a></li>
+<li><a href="./wwwc/">wwwc のプラグイン 関連</a></li>
+<li><a href="./clcl/">CLCL のプラグイン 関連</a></li>
+<li><a href="./cpu/">CPU 関連</a></li>
+<li><a href="./ssh/">SSH 関連</a></li>
+<li><a href="./Perl/">Perl 関連</a></li>
+<li><a href="./Fedora/">Fedora 関連</a></li>
+<li><a href="./distcc/">distcc 関連</a></li>
+<li><a href="./Jenkins/">Jenkins 関連</a></li>
+<li><a href="./other/">その他</a></li>
+
+<h2>変更履歴 (& News)</h2>
+<ol>
+	<li>
+		2016/07/31
+		<a href="./Jenkins/recommend_plugin.html">
+		Jenkins プラグイン
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/31
+		<a href="./Jenkins/jenkins_linux_install.html">
+		Jenkins インストール
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/31
+		<a href="./Jenkins/index.html">
+		Jenkins
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/30
+		<a href="./distcc/distcc_tcp.html">
+		distcc のインストール、使用方法のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/30
+		<a href="./distcc/index.html">
+		distcc のメインページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/18
+		<a href="./Fedora/samba_name_fedora24.html">
+		samba 名でアクセスする (Fedora 24)
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/07/18
+		<a href="./redmine/install_fedora24_redmine33.html">
+		Redmine 3.3 のインストール (Fedora 24)
+		</a>
+		を追加
+	</li>
+	<li>
+		2016/01/27
+		<a href="./svndoc/svn_svnsync.html">
+		pre-revprop-change に実行属性をつける手順が漏れていたのを修正
+		</a>
+		を追加
+	</li>
+	<li>
+		2014/08/22
+		<a href="./Fedora/install_linux_from_USB.html">
+		USB メモリから Linux をインストールを追加
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/08/18
+		[Subversion] <a href="./svndoc/svn_backup_dumps_py_svnrdump.html">
+		svn_backup_dumps.py の svnrdump 対応版 のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/08/11
+		<a href="./Fedora/index.html">
+		Fedora のページを追加
+		</a>
+	</li>
+	<li>
+		2013/03/07
+		<a href="./other/ping.html">
+		ping のページを追加
+		</a>
+	</li>
+	<li>
+		2013/03/07
+		<a href="./Flex-Bison/index.html">
+		Flex/Bison のページを追加
+		</a>
+	</li>
+	<li>
+		2013/03/04
+		<a href="./h265/index.html">
+		h.265 のページを修正
+		</a>
+	</li>
+	<li>
+		2014/02/27
+		<a href="./ocn-mobile-one/index.html">
+		OCN Moblie One
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/11/10
+		<a href="./h265/index.html">
+		h.265 のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/10/27
+		[Subversion] <a href="./svndoc/svnmailer-gmail.html">
+		svnmailer (カスタム版) でのコミットメール送信 SSL 対応 (gmail) のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/10/13
+		[Subversion] <a href="./svndoc/svnmailer.html">
+		svnmailer (カスタム版) のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/07/21
+		[Subversion] <a href="./svndoc/svn_backup_svnrdump.html">
+		svnrdump のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/07/21
+		すべてのページを UTF-8 に変換<br>
+		すべてのページの右上にコミット時間、リビジョン番号を追加<br>
+	</li>
+	<li>
+		2013/07/17
+		[Subversion] <a href="./svndoc/svnmucc.html">
+		svnmucc (<strong>S</strong>ubversion <strong>M</strong>ultiple <strong>U</strong>RL <strong>C</strong>ommand <strong>C</strong>lient)
+		のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2013/07/15
+		Subversion 関連のリンク切れのサイトへのリンクを削除&置き換え
+	</li>
+	<li>
+		2012/09/21
+		[Perl] <a href="./Perl/regex_lookbehind.html">
+		正規表現 先後読みのページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2011/01/17
+		[その他] <a href="./other/firefox_plugin.html">
+		お気に入りの Firefox プラグインのページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2011/01/07
+		<a href="./clcl/index.html#brachets">
+		括弧化ツール (CLCL プラグイン)
+		</a>
+		を作成
+	</li>
+	<li>
+		2010/11/16
+		<a href="http://subversion.jp/">
+		http://subversion.jp/
+		</a>
+		を<a href="./svndoc/#newinfo">リンク</a>に追加
+	</li>
+	<li>
+		2010/04/06
+		<a href="./ssh/">
+		SSH の覚え書き
+		</a>
+		を追加
+	</li>
+	<li>
+		2010/03/07
+		<a href="./Perl/">
+		Perl の覚え書き
+		</a>
+		を追加
+	</li>
+	<li>
+		2010/01/31
+		リンクを修正
+		<ul>
+		<li>
+		http://subversion.tigris.org → http://subversion.apache.org
+		</li>
+		<li>
+		http://svn.apache.org/repos/asf/subversion → http://svn.apache.org/repos/asf/subversion
+		</li>
+		</ul>
+	</li>
+	<li>
+		2010/01/30
+		<a href="./cpu/">
+		CPU 関連のリンクページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2010/01/24
+		[Subversion] <a href="svndoc/svn_1.7.html">
+		Subversion 1.7 のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2010/01/16
+		[Subversion] <a href="./svndoc/svn_pre-commit2.html">
+		pre-commit によるコミットの拒否の方法 (Part2)
+		</a>
+		のページを追加
+	</li>
+	<li>
+		2010/01/09
+		[Subversion] <a href="./svndoc/svn_pre-commit.html">
+		pre-commit によるコミットの拒否の方法
+		</a>
+		のページを更新
+	</li>
+	<li>
+		2009/12/05
+		[Subversion] <a href="./svndoc/svn_pre-commit.html">
+		pre-commit によるコミットの拒否の方法
+		</a>
+		のページを追加
+	</li>
+	<li>
+		2009/11/28
+		[Redmine] <a href="./redmine/index.html">
+		Redmine
+		</a>
+		のページにリンクを追加
+	</li>
+	<li>
+		2009/11/28
+		[Subversion] <a href="./svndoc/svn_ASF.html">
+		Subversion の Apache への移管
+		</a>
+		のページを更新
+	</li>
+	<li>
+		2009/11/18
+		[Subversion] <a href="./svndoc/svn_ASF.html">
+		Subversion の Apache への移管
+		</a>
+		のページを作りました。
+	</li>
+	<li>
+		2009/11/08
+		[Subversion] Subversion が Apache Project に統合されるらしい
+		
+		<ul>
+		<li>
+			<a href="http://www.mail-archive.com/general@incubator.apache.org/msg22945.html">
+			[PROPOSAL][VOTE] Subversion
+			</a>
+		</li>
+		<li>
+			<a href="http://www.mail-archive.com/general@incubator.apache.org/msg22984.html">
+			[RESULT] Subversion is now an Apache Incubator podling (was: [PROPOSAL][VOTE] Subversion)
+			</a>
+		</li>
+		<li>
+			<a href="http://sourceforge.jp/magazine/09/11/06/0511211">
+			「Subversion」がApacheプロジェクトに
+			</a>
+		</li>
+		
+		</ul>
+	</li>
+	<li>
+		2009/02/17
+		[Subversion] <a href="http://subversion.tigris.org/ds/viewMessage.do?dsForumId=495&dsMessageId=1172984">
+		Subversion 1.6 リリースブランチが作成されました。
+		</a>
+	</li>
+	<li>
+		2009/01/18
+		[Subversion] このページに「Subversion によるバージョン管理」へのリンクを追加
+	</li>
+	<li>
+		2008/09/25
+		[その他] <a href="./other/vs2005_explorer.html">
+		VS2005 からエクスプローラを起動する方法のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2008/08/06
+		[その他] <a href="./other/google_desktop.html">
+		Google Desktop 関連のリンクのページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2008/07/26
+		[Subversion] <a href="http://svn.haxx.se/users/archive-2008-07/1067.shtml">
+		Subversion 1.5.1 リリース
+		</a>
+	</li>
+	<li>
+		2008/07/01
+		[Subversion] <a href="svndoc/index.html#links">
+		リンク
+		</a>
+		に Subversion Announcements のページを追加
+	</li>
+	<li>
+		2008/07/01
+		[Subversion] <a href="svndoc/svn_mailer_py.html">
+		mailer.py でのコミットメール送信
+		</a>
+		のページを追加
+	</li>
+	<li>
+		2008/06/20
+		[Subversion] <a href="svndoc/svn_1.5.html">
+		Subversion 1.5.0 関連のページ
+		</a>
+		を追加
+	</li>
+	<li>
+		2008/06/20
+		[Subversion] <a href="http://svn.haxx.se/users/archive-2008-06/0687.shtml">
+		Subversion 1.5.0 リリース
+		</a>
+	</li>
+	<li>
+		2008/06/15
+		[Subversion] <a href="svndoc/svn_cherry_picking.html">cherry picking</a>
+		のページを追加
+	</li>
+	<li>
+		2008/06/15
+		[Subversion] <a href="svndoc/svn_mergeinfo.html">svn mergeinfo</a>
+		のページを更新
+	</li>
+	<li>
+		2008/06/15
+		[Subversion] <a href="svndoc/svn_mergetracking.html">Merge Tracking</a>
+		のページを更新
+	</li>
+	<li>
+		2008/06/15
+		[Subversion] <a href="svndoc/svn_hook_script.html">フックスクリプト</a>
+		のページを更新
+	</li>
+	<li>
+		2008/06/15
+		[Subversion] <a href="http://svn.haxx.se/dev/archive-2008-06/0460.shtml">
+		マージ関連の問題
+		</a>
+		は
+		<a href="http://svn.haxx.se/dev/archive-2008-06/0475.shtml">
+		1.5.1 で修正される予定
+		</a>
+		のようだ。
+	</li>
+	<li>
+		2008/06/12
+		[Subversion] Subversion 1.5.0 のリリースは延期されました。
+	</li>
+	<li>
+		2008/06/07
+		[Subversion] <a href="http://svn.haxx.se/dev/archive-2008-06/0287.shtml">
+		Subversion 1.5.0 のリリースは 6/12 ?
+		</a>
+		もし致命的な問題が見つからなければ 6/12 にリリースされそうです。
+	</li>
+	<li>
+		2008/04/25
+		[Subversion] <a href="http://svn.haxx.se/users/archive-2008-04/0723.shtml">
+		Subversion 1.5.0 rc 4 がリリースされました。
+		</a>
+	</li>
+	<li>
+		2008/03/20
+		[Subversion] <a href="http://subversion.tigris.org/servlets/ReadMsg?listName=users&msgNo=76011">
+		Subversion 1.5.0 Beta 1 がリリースされました。
+		</a>
+	</li>
+	<li>
+		2008/03/01
+		[Subversion] <a href="http://svn.haxx.se/users/archive-2008-02/1062.shtml">
+		Subversion 1.5.0 Alpha 2 がリリースされました。
+		</a>
+	</li>
+	<li>
+		2008/03/01
+		[Subversion] <a href="http://svn.haxx.se/dev/archive-2008-02/0885.shtml">
+		svn.collab.net が Subversion の 1.5.0 Alpha2 に切り替わりました。
+		</a>
+	</li>	
+	<li>
+		2008/01/31
+		[Subversion] <a href="http://subversion.tigris.org/servlets/ReadMsg?listName=svn&msgNo=34233">
+		Subversion の 1.5.x リリース用ブランチが作成されました。
+		</a>
+	</li>
+	<li>
+		2008/01/27
+		[Subversion] <a href="svndoc/svn_write_through_proxy.html">WebDAV ライトスループロキシ</a>
+		の解説ページを追加
+	</li>
+	<li>
+		2008/01/26
+		[Subversion] trunk r24027 で導入された <a href="http://www.sqlite.org/">sqlite3</a>ですが、
+		<a href="http://subversion.tigris.org/servlets/ReadMsg?list=svn&msgNo=34172">r29036</a> 
+		(<a href="http://subversion.tigris.org/servlets/ReadMsg?list=svn&msgNo=34158">r29023</a>)
+		以降で使われなくなりました。
+		
+		<p>
+		以下のページから sqlite の説明を削除
+		<ul>
+			<li><a href="svndoc/svn_basic_vc6.html">Subversion のコンパイル 基本編 (VC6)</a></li>
+			<li><a href="svndoc/svn_basic_2005.html">Subversion のコンパイル 基本編 (VS2005)</a></li>
+			<li><a href="svndoc/svn_ssl_vc6.html">Subversion のコンパイル SSL (VC6)</a></li>
+			<li><a href="svndoc/svn_ssl_2005.html">Subversion のコンパイル SSL (VS2005)</a></li>
+			<li><a href="svndoc/svn_i18n_vc6.html">Subversion のコンパイル 国際化対応 (VC6)</a></li>
+			<li><a href="svndoc/svn_i18n_2005.html">Subversion のコンパイル 国際化対応 (VS2005)</a></li>
+			<li><a href="svndoc/svn_libserf_vc6.html">ra_serf を有効にしてコンパイルする方法 (VC6)</a></li>
+			<li><a href="svndoc/svn_multi_ra_vc6.html">複数のRA Layer のサポート (VC6)</a></li>
+			<li><a href="svndoc/svn_python_vc6.html">Python binding (VC6)</a></li>
+			<li><a href="svndoc/svn_mergetracking.html">merge-tracking</a></li>
+		</ul>
+		sqlite の説明のページを分離
+		<ul>
+			<li><a href="svndoc/sqlite_vc6.html">sqlite3 のコンパイル (VC6)</a></li>
+		</ul>
+		</p>
+	</li>
+	<li>
+		2007/11/17
+		<a href="./svndoc/svn_reject_commit.html">
+		[Subversion] merge-tracking 非対応のクライアントからのコミット拒否する方法
+		</a>
+	</li>
+	<li>
+		2007/10/24
+		<a href="./svndoc/svn_externals_relative.html">
+		[Subversion] svn:externals で相対パスのサポート
+		</a>
+	</li>
+	<li>
+		2007/10/20
+		<a href="./svndoc/svn_wcformat.html">
+		[Subversion] change-svn-wc-format.py の説明
+		</a>
+	</li>
+	<li>
+		2007/10/07
+		<a href="./svndoc/svn_po.html">
+		[Subversion] Subversion の ja.po を更新する方法
+		</a>
+	</li>
+	<li>
+		2007/10/05
+		"Subversion によるバージョン管理" ダウン
+		<ul>
+			<li>
+			以下サイトで一時的にコピーが公開されています。<br>
+			<a href="http://www.caldron.jp/~nabetaro/hiki.cgi?SubversionWork">
+			http://www.caldron.jp/~nabetaro/hiki.cgi?SubversionWork
+			</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		2007/9/29
+		<a href="./svndoc/svn_svnsync.html#svnsync_prop">
+		[Subversion] svnsync によるバックアップのページで svn:sync-last-merged-rev 等
+		の説明を追加
+		</a>
+	</li>
+	<li>
+		2007/8/23
+		<a href="./svndoc/svn_backup.html">
+		[Subversion] Subversion のバックアップのページ</a>で
+		<a href="./svndoc/svn_backup_dumps_py.html">
+		svn-backup-dumps.py の説明部分を別ページ
+		</a>
+		に分離
+	</li>
+	<li>
+		2007/8/20
+		<a href="./svndoc/svn_apache_2005.html">
+		[Subversion] Apacheコンパイル with Subversion (VS2005) のページを追加
+		</a>
+	</li>
+	<li>
+		2007/8/04
+		<a href="./svndoc/svn_repo_link.html">
+		[Subversion] Subversionリポジトリのリンクを追加
+		</a>
+	</li>
+	<li>
+		2007/6/24
+		<a href="./svndoc/svn_multi_ra_vc6.html">
+		[Subversion] ra_neon と ra_serf を両方有効にしてコンパイルしたときの
+		ra_serf を使用するための作業を追加
+		</a>
+	</li>
+	<li>
+		2007/6/24
+		<a href="./svndoc/svn_python_vc6.html#apache2.2.x">
+		[Subversion] apache 2.2.x を利用して python bindings をコンパイルするときに
+		必要な追加作業を追記
+		</a>
+	</li>
+	<li>
+		2007/6/19
+		<a href="./svndoc/svn_multi_ra_vc6.html">
+		[Subversion] 複数のRA Layer のサポートのページを追加
+		</a>
+	</li>
+	<li>
+		2007/5/21
+		<a href="./svndoc/svn_libserf_vc6.html">
+		[Subversion] ra_serf を有効にしてコンパイルする方法のページを追加
+		</a>
+	</li>
+	<li>
+		2007/5/20
+		<a href="./svndoc/svn_basic_vc6.html">
+		[Subversion] sqlite3 のコンパイル方法で static library を生成するのを
+		やめてDLL を生成するように修正
+		</a>
+	</li>
+	<li>
+		2007/4/21
+		<a href="./svndoc/svn_sharding.html">
+		[Subversion] sharding (fsfs の新リポジトリ形式)
+		</a>
+	</li>
+	<li>
+		2007/4/07
+		<a href="./svndoc/svn_backup_dumps_py.html#warning-dump">
+		[Subversion] インクリメンタルバックアップ時の svnadmin dump の警告に関して追記
+		</a>
+	</li>
+	<li>
+		2007/4/01
+		<a href="./svndoc/svn_backup_dumps_py.html#inc-multi-rev">
+		[Subversion] svn-backup-dumps.py で -c オプションに関して追記
+		</a>
+	</li>
+	<li>
+		2007/3/24
+		<a href="./svndoc/svn_wintest_py.html">
+		[Subversion] win-test.py に関するページを追加
+		</a>
+	</li>
+	<li>
+		2007/3/24
+		[Subversion] trunk の r24027 以降で <a href="http://www.sqlite.org/">sqlite3</a> が
+		必要になったので、sqlite3 の説明を追加
+	</li>
+	<li>
+		2007/3/23
+		<a href="./svndoc/svn_mergetracking.html">
+		[Subversion] merge-tracking ブランチが trunk にマージされました。(r24027)
+		</a>
+	</li>
+	<li>
+		2007/3/19
+		<a href="./svndoc/svn_svnsync.html">
+		[Subversion] svnsync によるバックアップのページを追加
+		</a>
+	</li>
+	<li>
+		2007/3/19
+		<a href="http://svn.haxx.se/dev/archive-2007-03/0661.shtml">
+		[Subversion] svn.collab.net 復活
+		</a>
+	<p>
+		昨日作業ディレクトリを切り替えた人は、もとに戻しましょう。
+	</p>
+<pre>
+svn sw --relocate http://svn.red-bean.com http://svn.collab.net/repos
+</pre>
+	</li>
+	<li>
+		2007/3/18
+		<a href="./svndoc/svn_backup_unix.html">
+		[Subversion] cron/post-commit によるバックアップのページを追加
+		</a>
+	</li>
+	<li>
+		2007/3/18
+		<a href="http://svn.haxx.se/dev/archive-2007-03/0621.shtml">
+		[Subversion] svn.collab.net のハードディスククラッシュ
+		</a>
+	<p>
+		以下は作業ディレクトリの切り替え方法です。
+	</p>
+<pre>
+svn sw --relocate http://svn.collab.net/repos http://svn.red-bean.com 
+</pre>
+	<p>
+	参考: <a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.7/html-chunk/svn.ref.svn.c.switch.html">svn switch</a>
+	</p>
+	</li>
+	<li>
+		2007/3/16
+		<a href="./svndoc/svn_mergetracking.html">
+		[Subversion] --disable-shared を指定したときに
+		コンパイルができなくなる件の回避方法を追加
+		</a>
+	</li>
+	<li>
+		2007/3/11
+		<a href="./svnmerge/">
+		[Subversion] svnmerge.py 用のページを追加
+		</a>
+	</li>
+	<li>
+		2007/3/10
+		<a href="./svndoc/svn_mergetracking.html">
+		[Subversion] merge-tracking の最近の動向を追加
+		</a>
+	</li>
+	<li>
+		2007/3/07
+		<a href="./svndoc/svn_python_vc6.html">
+		[Subversion] Python bindings のページで Python 2.5 の場合の手順を追加
+		</a>
+	</li>
+	<li>
+		2007/3/05
+		<a href="./svndoc/svn_python_vc6.html">
+		[Subversion] Python bindings のコンパイルのページでデバッグ版の
+		コンパイルができない点を追記
+		</a>
+	</li>
+	<li>
+		2007/3/03
+		<a href="./svndoc/svn_apache_vc6.html">
+		[Subversion] Apacheコンパイル with Subversion (VC6) のページを追加
+		</a>
+	</li>
+	<li>
+		2007/2/26
+		<a href="./svndoc/svn_backup.html">
+		[Subversion] Subversion リポジトリのバックアップのページを追加
+		</a>
+	</li>
+	<li>
+		2007/2/24
+		<a href="./svndoc/svn_python_vc6.html">
+		[Subversion] Python bindings のコンパイル (VC6) のページを追加
+		</a>
+	</li>
+	<li>
+		2007/2/17
+		<a href="./svndoc/svn_mergetracking.html">
+		[Subversion] merge-tracking (VC6) のページを追加
+		</a>
+	</li>
+	<li>
+		2007/2/12
+		<a href="./clcl/">
+		[CLCL] clclプラグインのページを追加
+		</a>
+	</li>
+	<li>
+		2007/1/22
+		<a href="./svndoc/svn_i18n_2005.html">
+		[Subversion] 国際化対応 (VS2005) のページを追加
+		</a>
+	</li>
+</ol>
+
+<h2>連絡先</h2>
+<a href="mailto:m.tsutsu@gmail.com">m.tsutsu@gmail.com</A>
+
 </body>
-</html)
+</html>
