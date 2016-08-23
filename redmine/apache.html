@@ -1,0 +1,158 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Redmine をApache 経由で動かす方法</title>
+<meta name="keywords" content="redmine" />
+<meta name="keywords" content="apache" />
+<meta name="keywords" content="リバースプロキシ" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="install_linux.html">戻る</a>
+	<a href="subdir.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Redmine を Apache 経由で動かす方法</h1>
+<h2>概要</h2>
+<p>
+Redmine を Apache 経由で動かす方法を説明します。
+<a href="subdir.html">Redmine をサブディレクトリで動かす</a>も
+行うと一つのサーバーで Apache で通常のWebサービスを提供した上で
+Redmine と Apache を共存できます。
+
+<h2>手順</h2>
+<h3>前提</h3>
+以下の手順を行っているとします
+<ul>
+<li><a href="install_linux.html">Redmine の VineLinux へのインストール方法</a></li>
+</ul>
+
+<h3>Apache のリバースプロキシの設定</h3>
+<h4>目的</h4>
+ユーザーに見せるサーバーには Apache を使用する。
+そして Apache へのリクエストを mongrel サーバーに
+転送する。
+
+<h4>メリット</h4>
+<ul>
+	<li>
+	Apache の提供する豊富な機能が利用できる。
+	(アクセスログ、SSL、認証、IP ごとのアクセス制限、バーチャルホスト等)
+	</li>
+</ul>
+
+<h4>Apache 設定ファイル ( httpd.conf ) を編集</h4>
+/etc/apache2/conf/httpd.conf に以下の記述を追加する。
+<pre>
+ProxyPass        / http://localhost:3000/
+ProxyPassReverse / http://localhost:3000/
+</pre>
+
+<p>
+	参考
+	<ul>
+	<li>
+		<a href="http://httpd.apache.org/docs/2.2/ja/mod/mod_proxy.html">
+		http://httpd.apache.org/docs/2.2/ja/mod/mod_proxy.html
+		</a>
+	</li>
+	<li>
+		<a href="http://www.slogical.co.jp/tech/apache_proxypass.html">
+		http://www.slogical.co.jp/tech/apache_proxypass.html
+		</a>
+	</li>
+	<li>
+		<a href="http://www.redout.net/data/reverseproxy.html">
+		http://www.redout.net/data/reverseproxy.html
+		</a>
+	</li>
+	</ul>
+</p>
+
+<h4>Apache を起動</h4>
+<pre>
+# /etc/init.d/apache2 start
+httpdを起動中:                                             [  OK  ]
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost/
+</pre>
+
+<h2>全手順</h2>
+<pre>
+# apt-get -y install subversion
+# apt-get -y install MySQL-shared
+# apt-get -y install MySQL-ruby
+# apt-get -y install MySQL-server
+# apt-get -y install MySQL-client
+# apt-get -y install rubygems
+# chkconfig apache2 on
+# chkconfig mysql   on
+# /etc/init.d/mysql start
+# gem install rake
+# gem install mongrel_cluster --include-dependencies
+# gem install rails --include-dependencies
+# adduser redmine
+# passwd  redmine
+
+$ svn co http://redmine.rubyforge.org/svn/tags/0.6.3 redmine
+$ mysqladmin -u root password mysql
+$ mysql -u root -p
+$ cd redmine/
+$ cp config/database.yml.example  config/database.yml
+$ vi config/database.yml
+
+$ rake db:migrate RAILS_ENV="production"
+$ rake load_default_data RAILS_ENV="production"
+$ mongrel_rails cluster::configure -e production -p 3000 --prefix=/redmine
+$ mongrel_rails start -d -e production -p 3000 --prefix=/redmine
+
+# cd ~apache/
+# vi /etc/apache2/conf/httpd.conf
+
+# /etc/init.d/apache2 restart
+</pre>
+
+</body>
+</html>

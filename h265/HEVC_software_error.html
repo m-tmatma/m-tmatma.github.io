@@ -1,0 +1,123 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="H.265" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>H.265 HEVC_software</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>HEVC software エラー</h1>
+
+<h2>Error: found fewer Reference Picture Sets than GOPSize</h2>
+
+<pre>
+TAppEncoder.exe           ^
+-i in.yuv                 ^
+-c encoder_intra_main.cfg ^
+-o out.yuv                ^
+--SourceWidth=1366        ^
+--SourceHeight=768        ^
+--InputBitDepth=8         ^
+--InputBitDepthC=8        ^
+-fr 30                    ^
+--QuadtreeTULog2MaxSize=2 ^
+--GOPSize=12
+
+HM software: Encoder Version [13.0][Windows][VS 1600][32 bit]
+******************************************************************
+** WARNING: --SEIDecodedPictureHash is now disabled by default. **
+**          Automatic verification of decoded pictures by a     **
+**          decoder requires this option to be enabled.         **
+******************************************************************
+***************************************************************************
+** WARNING: For conforming bitstreams a valid Level value must be set!   **
+***************************************************************************
+<strong>Error: Total Number Of Frames encoded must be more than 0</strong>
+Error: Intra period must be more than GOP size, or -1 , not 0
+Error: Resulting coded frame width must be a multiple of the minimum CU size
+Error: Intra period must be a multiple of GOPSize, or -1
+
+Error: found fewer Reference Picture Sets than GOPSize
+Error: Invalid GOP structure given
+</pre>
+
+--FramesToBeEncoded が足りない。
+
+
+<h2>Resulting coded frame width must be a multiple of the minimum CU size</h2>
+
+<pre>
+TAppEncoder.exe -i in.yuv        ^
+-c encoder_intra_main.cfg        ^
+-o out.yuv                       ^
+--SourceWidth=<strong>1366</strong> ^
+--SourceHeight=768               ^
+--InputBitDepth=8                ^
+--InputBitDepthC=8               ^
+--IntraPeriod=-1                 ^
+-fr 30 --QuadtreeTULog2MaxSize=2 ^
+--GOPSize=12                     ^
+--FramesToBeEncoded=30
+
+
+HM software: Encoder Version [13.0][Windows][VS 1600][32 bit]
+******************************************************************
+** WARNING: --SEIDecodedPictureHash is now disabled by default. **
+**          Automatic verification of decoded pictures by a     **
+**          decoder requires this option to be enabled.         **
+******************************************************************
+***************************************************************************
+** WARNING: For conforming bitstreams a valid Level value must be set!   **
+***************************************************************************
+<strong>Error: Resulting coded frame width must be a multiple of the minimum CU size</strong>
+
+Error: found fewer Reference Picture Sets than GOPSize
+Error: Invalid GOP structure given
+</pre>
+
+SourceWidth は 8 の倍数である必要がある。
+
+</body>
+</html>
+

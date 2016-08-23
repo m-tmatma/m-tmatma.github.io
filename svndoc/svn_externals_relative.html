@@ -1,0 +1,247 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>svn:externals で相対パスのサポート (relative svn:externals)</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="Subversion 1,5" />
+<meta name="keywords" content="relative" />
+<meta name="keywords" content="相対パス" />
+<meta name="keywords" content="svn:externals" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_write_through_proxy.html">前に戻る</a>
+	<a href="svn_crashreport.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>svn:externals で相対パスのサポート (relative svn:externals)</h1>
+<h2>概要</h2>
+<p>
+Subversion 1.5 では svn:externals に相対パスを指定できるようになっています。
+</p>
+
+<h2>必要な環境</h2>
+<ul>
+	<li>Subversion 1.5</li>
+	</ul>
+</ul>
+
+<h2>リンク</h2>
+
+<ul>
+<li>
+	<a href="http://subversion.apache.org/docs/release-notes/1.5.html#externals">
+	Relative peg URLs in svn:externals
+	</a>
+</li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.advanced.externals.html">
+	外部定義 (2010/01/09 現在ではほとんど英語ですが)
+	</a>
+</li>
+</ul>
+
+<!--
+<h2>ペグリビジョンとは?</h2>
+-->
+
+<h2>svn:externals でサポートする形式</h2>
+
+svn:externals で使用できる形式
+
+<h3>Subversion 1.4 以前でサポートしている形式</h3>
+<ol>
+	<li>DIR URL</li>
+	<li>DIR -r N URL</li>
+	<li>DIR -rN  URL</li>
+</ol>
+<h3>Subversion 1.5 以降でサポートしている形式</h3>
+<ol>
+	<li><strong>URL DIR</strong></li>
+	<li><strong>-r N URL DIR</strong></li>
+	<li><strong>-rN URL DIR</strong></li>
+</ol>
+
+Note:
+<ul>
+<li>Subversion 1.5 では URL に相対パスが使えるようになっています。</li>
+<li>Subversion 1.5 ではSubversion 1.4 の形式とURL と DIR の順番が逆です。</li>
+<li>勿論 Subversion 1.5 は Subversion 1.4 の形式を扱えます。</li>
+<li>Subversion 1.5 ではリビジョンを指定するときは一番最初に置きます</li>
+</ul>
+
+URLに指定できる形式
+<ul>
+	<li>通常のURL</li>
+	http:// 等の通常の URL
+	<li><strong>../</strong> で始まるパス</li>
+	svn:externals が設定されているディレクトリを基準とする相対パス
+	<li><strong>^/</strong> で始まるパス</li>
+	リポジトリルートからの相対パス
+	<li><strong>/</strong> で始まるパス</li>
+	サーバールートを基準にした相対パス
+	<li><strong>//</strong> で始まるパス</li>
+	スキーマ非依存( svn:// や https:// や svn+ssh:// 等に依存しない)
+</ul>
+
+
+<h2>例</h2>
+<!--
+<h3>Subversion 1.4 形式の例</h3>
+<pre>
+Subversion -r27108 https://svn.apache.org/repos/asf/subversion/trunk/
+apr https://svn.apache.org/repos/asf/apr/apr/tags/1.2.9/
+neon -r 1269 http://svn.webdav.org/repos/projects/neon/trunk
+</pre>
+-->
+
+<h3>Subversion 1.5 形式の例</h3>
+<!------------------------------------------------------->
+URL DIR
+
+<ul>
+<li>
+<!------------------------------------------------------->
+普通のURL DIR
+<pre>
+https://svn.apache.org/repos/asf/subversion/trunk svn-trunk
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(カレントディレクトリからの相対パス) DIR
+<pre>
+<strong>../</strong>dirs1 dirname
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(リポジトリルートからの相対パス) DIR
+<pre>
+<strong>^/</strong>trunk svn-trunk
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(サーバールートからの相対パス) DIR
+<pre>
+<strong>/</strong>repos/svn/trunk svn-trunk
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(スキーマ非依存) DIR
+<pre>
+<strong>//svn.collab.net/</strong>repos/svn/trunk svn-trunk
+</pre>
+</li>
+</ul>
+
+
+<!------------------------------------------------------->
+-rN URL DIR
+<pre>
+-r27108 https://svn.apache.org/repos/asf/subversion/trunk svn-trunk
+</pre>
+
+<h2>設定例</h2>
+<p>
+ここで <strong>extdir</strong> は svn:externals 属性を設定するディレクトリ名
+</p>
+
+<ul>
+<li>
+<!------------------------------------------------------->
+普通のURL DIR
+<pre>
+svn propset svn:externals "https://svn.apache.org/repos/asf/subversion/trunk svn-trunk" extdir
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(svn:externals が設定されているディレクトリからの相対パス) DIR
+<pre>
+svn propset svn:externals "<strong>../</strong>dirs1 dirname" extdir
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(リポジトリルートからの相対パス) DIR
+<pre>
+svn propset svn:externals "<strong>^/</strong>trunk svn-trunk" extdir
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(サーバールートからの相対パス) DIR
+<pre>
+svn propset svn:externals "<strong>/</strong>repos/svn/trunk svn-trunk" extdir
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+URL(スキーマ非依存) DIR
+<pre>
+svn propset svn:externals "<strong>//svn.collab.net/</strong>repos/svn/trunk svn-trunk" extdir
+</pre>
+</li>
+
+<li>
+<!------------------------------------------------------->
+-rN URL DIR
+<pre>
+svn propset svn:externals "-r27108 https://svn.apache.org/repos/asf/subversion/trunk svn-trunk" extdir
+</pre>
+</li>
+</ul>
+
+</body>
+</html>
+

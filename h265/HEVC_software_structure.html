@@ -1,0 +1,202 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="H.265" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>H.265</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>HEVC software 構造</h1>
+
+<ol>
+	<li>
+	TLibCommon - Library containing functionality that is shared between encoder and decoder	
+	</li>
+	<li>
+	TLibEncoder - Library containing encoder functionality	
+	</li>
+	<li>
+	TLibDecoder - Library containing encoder functionality	
+	</li>
+	<li>
+	libMD5 - MD5 helper functions	
+	</li>
+	<li>
+	TAppCommon - Application support library	
+	</li>
+	<li>
+	TAppEncoder - Encoder application	
+	</li>
+	<li>
+	TAppDecoder - Decoder application
+	</li>
+</ol>
+
+
+<h2>用語定義</h2>
+
+<table>
+  <tr>
+    <td>POC</td>
+    <td>Picture Order Count</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>CTU</td>
+    <td>Coding Tree Unit</td>
+    <td>固定サイズの符号化ユニット</td>
+  </tr>
+  <tr>
+    <td>CU</td>
+    <td>Coding Unit</td>
+    <td>可変サイズの符号化ユニット</td>
+  </tr>
+  <tr>
+    <td>PU</td>
+    <td>Prediction Unit</td>
+    <td>CU を予測用に分割する PU</td>
+  </tr>
+  <tr>
+    <td>TU</td>
+    <td>Transform Unit</td>
+    <td>PU を予測用に分割する TU</td>
+  </tr>
+  <tr>
+    <td>SAO: Sample Adaptive Offset</td>
+    <td><a href="http://en.wikipedia.org/wiki/High_Efficiency_Video_Coding#Sample_adaptive_offset">sample adaptive offset</a></td>
+  </tr>
+  <tr>
+    <td>WPP</td>
+    <td>Wavefront Parallel Processing</td>
+    <td></td>
+  </tr>
+  
+</table>
+
+<h2>デバッグ機能</h2>
+
+ENC_DEC_TRACE を 1 にするとデコードの過程を TraceDec.txt に出力する。
+エンコードの過程は TraceEnc.txt に出力する。
+
+<h2>クラス定義</h2>
+
+<table>
+  <tr>
+    <td>TComDataCU</td>
+    <td>CU data structure class</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComPic</td>
+    <td>picture class (symbol + YUV buffers)</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComPicSym</td>
+    <td>picture symbol class</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComPicYuv</td>
+    <td>picture YUV buffer class</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>Pel</td>
+    <td>16-bit pixel type</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComBitIf</td>
+    <td>pure virtual class for basic bit handling</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComOutputBitslieam</td>
+    <td>Model of a writable bitslieam that accumulates bits to produce a byteslieam</li>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComInputBitslieam</td>
+    <td>Model of an input bitslieam that exliacts bits from a predefined byteslieam</li>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>DecTop</td>
+    <td>decoder class</td>
+    <td>TLibDecoder</td>
+  <tr>
+    <td>DecGop</td>
+    <td>GOP decoder class</td>
+    <td>TLibDecoder</td>
+  </tr>
+  <tr>
+    <td>DecEntropyIf</td>
+    <td>entropy decoder pure class</td>
+    <td>TLibDecoder</td>
+  </tr>
+  <tr>
+    <td>DecEntropy</td>
+    <td>entropy decoder class</td>
+    <td>TLibDecoder</td>
+  </tr>
+  <tr>
+    <td>TComPrediction</td>
+    <td>prediction class</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComWeightPrediction</td>
+    <td>weighting prediction class</td>
+    <td>TLibCommon</td>
+  </tr>
+  <tr>
+    <td>TComTrQuant</td>
+    <td>transform and quantization class</td>
+    <td>TLibCommon</td>
+  </tr>
+</table>
+
+</body>
+</html>

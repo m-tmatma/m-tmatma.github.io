@@ -1,0 +1,200 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversionリポジトリのバックアップ [svnrdump の利用方法]</title>
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svnrdump" />
+<meta name="keywords" content="backup" />
+<meta name="keywords" content="バックアップ" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_backup.html">前に戻る</a>
+	<a href="svn_backup_unix.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversionリポジトリのバックアップ [svnrdump の利用方法]</h1>
+
+<h2>概要</h2>
+
+svnadmin dump はリポジトリをダンプしてリビジョンごとにバックアップを行えるツールです。<br>
+ただし svnadmin dump ではリポジトリがローカルファイルシステムに存在することが条件でした。<br>
+
+<strong>svnrdump dump</strong> を使うことでsubversion 経由での読み取りアクセス権さえあれば
+<strong>離れたマシンからダンプ</strong>を行うことができます。<br>
+またバックアップデータのリストアも<strong>svnrdump load</strong> を使うことでバックアップを
+とったマシンとは別のマシンにデータをリストアを行うこともできます。
+
+<!------------------------------------------------------------>
+<!--            svnrdump の特徴                  -->
+<!------------------------------------------------------------>
+<h2>svnrdump の特徴</h2>
+
+<h3>サポートしている機能</h3>
+
+svnrdump では、以下の3つのタイプのバックアップをサポートしています。
+
+<ol>
+	<li>フルバックアップ</li>
+	<li>リビジョンごとのバックアップ</li>
+	<li>複数リビジョン</li>
+</ol>
+
+これは svnadmin dump と同じです。
+
+<!------------------------------------------------------------>
+<!--            svnrdump の利用方法              -->
+<!------------------------------------------------------------>
+<h2>svnrdump の利用方法</h2>
+
+<h3>ヘルプ</h3>
+
+--help をつけて実行するとヘルプが表示されます。
+リビジョンを指定しない場合フルダンプになります。
+
+<pre>
+D:\tmp>svnrdump help
+general usage: svnrdump SUBCOMMAND URL [-r LOWER[:UPPER]]
+Type 'svnrdump help <subcommand>' for help on a specific subcommand.
+Type 'svnrdump --version' to see the program version and RA modules.
+
+Available subcommands:
+   dump
+   load
+   help (?, h)
+   
+D:\tmp>svnrdump help dump
+dump: usage: svnrdump dump URL [-r LOWER[:UPPER]]
+
+Dump revisions LOWER to UPPER of repository at remote URL to stdout
+in a 'dumpfile' portable format.  If only LOWER is given, dump that
+one revision.
+
+有効なオプション:
+  -r [--revision] <ARG>    : リビジョン番号を <ARG> (または範囲 X:Y) と指定し
+                             ます
+  -q [--quiet]             : 標準エラー出力に (エラー以外の) 進行状況を出力し
+                             ません
+  --incremental            : 増分のみをダンプします
+  --config-dir <ARG>       : ディレクトリ <ARG> からユーザ設定ファイルを読み
+                             込みます
+  --config-option <ARG>    : set user configuration option in the format:
+                                 FILE:SECTION:OPTION=[VALUE]
+                             For example:
+                                 servers:global:http-library=serf
+  --username <ARG>         : ユーザ名を <ARG> と指定します
+  --password <ARG>         : パスワードを <ARG> と指定します
+  --no-auth-cache          : 認証情報をキャッシュしません
+  --trust-server-cert      : accept SSL server certificates from unknown
+                             certificate authorities without prompting (but only
+                             with '--non-interactive')
+  --non-interactive        : do no interactive prompting (default is to prompt
+                             only if standard input is a terminal device)
+  --force-interactive      : do interactive prompting even if standard input
+                             is not a terminal device
+</pre>
+
+<h2>svnrdump dump を利用したバックアップ</h2>
+
+<h3 id="example-svnrdump-dump">実行例 (svnrdump dump)</h4>
+
+<pre>
+D:\tmp>svnrdump dump -r 1 http://svn.apache.org/repos/asf > asf-00001.svndmp
+* Dumped revision 1.
+
+D:\tmp>svnrdump dump -r 1:10 http://svn.apache.org/repos/asf > asf-00001-00010.svndmp
+* Dumped revision 1.
+* Dumped revision 2.
+* Dumped revision 3.
+* Dumped revision 4.
+* Dumped revision 5.
+* Dumped revision 6.
+* Dumped revision 7.
+* Dumped revision 8.
+* Dumped revision 9.
+* Dumped revision 10.
+</pre>
+
+<h2>svnrdump load を利用したリストア</h2>
+
+<h3 id="example-svnrdump-load">実行例 (svnrdump load)</h4>
+
+<pre>
+D:\tmp>svnadmin create asf
+
+D:\tmp>svnrdump load file:///D:/tmp/asf < asf-00001-00010.svndmp
+svnrdump: E165006: リポジトリが、リビジョン属性を変更できるようにはなっていません。
+管理者に pre-revprop-change フックを作成するよう頼んでください
+</pre>
+
+フックスクリプトを修正してリビジョンプロパティの変更を許可する。<br>
+このフックスクリプトはかなり手抜きです。<br>
+
+<pre>
+D:\tmp>type asf\hooks\pre-revprop-change.bat
+exit 0
+
+D:\tmp>svnrdump load file:///D:/tmp/asf < asf-00001-00010.svndmp
+* Loaded revision 1.
+* Loaded revision 2.
+* Loaded revision 3.
+* Loaded revision 4.
+* Loaded revision 5.
+* Loaded revision 6.
+* Loaded revision 7.
+* Loaded revision 8.
+* Loaded revision 9.
+* Loaded revision 10.
+</pre>
+
+<p>参考
+	<ul>
+	<li><a href="http://svnbook.red-bean.com/en/1.7/svn.ref.svnrdump.c.dump.html">svnrdump dump</a></li>
+	<li><a href="http://svnbook.red-bean.com/en/1.7/svn.ref.svnrdump.c.load.html">svnrdump load</a></li>
+	<!--
+	<li><a href="svn_backup_dumps_py.html">svn-backup-dumps.py の利用方法</a></li>
+	-->
+	</ul>
+</p>
+
+</body>
+</html>

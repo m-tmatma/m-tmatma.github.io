@@ -1,0 +1,385 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Subversion のコンパイル (for Windows) 基本編 (VC6)</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="compile" />
+<meta name="keywords" content="vc6" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="./">前に戻る</a>
+	<a href="svn_apache_vc6.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion のコンパイル 基本編 (VC6)</h1>
+
+<strong>この情報は古いです</strong>
+
+<h2>概要</h2>
+Subversion を Windows 上でコンパイルする方法を簡単に
+説明します。わかりやすくするため、手順はまず最小の構成で
+コンパイルし、徐々にオプションの機能を追加していく形で
+説明します。(Apache の設定に関しては<a href="svn_apache_vc6.html">次のページ</a>を参照)
+
+<h2>準備</h2>
+<ul>
+	<li>Visual C++ 6 をインストールする
+	(ServicePack もインストールしておいた方がよい)
+	</li>
+	<li>
+	Platform SDK 2003 Febrary Edition をインストールする
+	</li>
+	<li>
+	Python 2.4 or 2.5 をインストールする<br>
+	<strong>python.exe のパスを 環境変数 PATH に設定しておく</strong>
+	</li>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/INSTALL">
+	http://svn.apache.org/repos/asf/subversion/trunk/INSTALL
+	</a>
+	をちらっと見る<br>
+	( "Building the Latest Source under Windows" という章に
+	一応、コンパイル方法が書かれています。)
+	</li>
+</ul>
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li><a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=688&expandFolder=688&folderID=2627">
+	berkley DB 4.x(バイナリ版) ( db-4.x.x-win32.zip )</a></li>
+	<li><a href="http://www.webdav.org/neon/">neonのソースコード (neon-0.xx.x.tar.gz )</a></li>
+	<li><a href="http://www.zlib.net">zlibのソースコード (zlib-1.x.x.tar.gz )</a></li>
+	<li><a href="http://httpd.apache.org">apache 2.0.x or apache 2.2.xのソースコード
+	( httpd-2.0.x-win32-src.zip or httpd-2.2.x-win32-src.zip)</a>
+	</li>
+	<li>
+	awk.exe 
+	(<strong>Apache をセットアップしない場合には不要</strong>)
+	<p>具体時には Apache.dsw の InstallBin をコンパイルしないときには不要</p>
+	<a href="http://cm.bell-labs.com/cm/cs/who/bwk/awk95.exe">
+	awk.exe (awk95.exe をダウンロードして awk.exe に名前変更する)
+	</li>
+	<li>
+	Subversion のソースコード<br>
+	大体以下のような方法で入手できます。(勿論最新のソースコードでなくてもいいですが、
+	どうせなら最新を使いたい)
+	<ul>
+		<li>
+		<a href="http://tortoisesvn.tigris.org/">TortoiseSVN </a>
+		のバイナリをダウンロードして、TortoiseSVN を使って最新のソースコードを入手する。
+		</li>
+		<img src="tsvn_checkout_svn.png">
+		<li>
+		<p>
+		<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=91&expandFolder=91&folderID=91">
+		リリース版のバイナリ</a>を入手して、最新のソースコードを入手する。<br>
+		<strong>インストーラ形式を使うときは、国際化対応版のコンパイルするときに
+		環境変数 APR_ICONV_PATH と 環境変数 PATHの設定に注意が必要。
+		</strong>
+		</li>
+<pre>
+svn co http://svn.apache.org/repos/asf/subversion/trunk trunk
+</pre>
+ファイアフォール等のために、外部サイトへのアクセスができない場合
+以下のように <strong>https</strong>でアクセスするとうまくいくことがあります。
+<pre>
+svn co <strong>https</strong>://svn.apache.org/repos/asf/subversion/trunk trunk
+</pre>
+		<li>
+		<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=260&expandFolder=260&folderID=91">
+		リリース版のソースコード</a>をダウンロードして、自分でバイナリを
+		作成した後、そのバイナリで、最新のソースコードを入手する。
+		</li>
+	</ul>
+	</li>
+</ul>
+
+<h2 id="prepare">下準備</h2>
+<h3>berkley DBの準備</h3>
+
+berkley DB のライブラリおよびヘッダを以下のような構成にする。
+(berkley DB のバイナリパッケージを利用する場合はファイルを解凍
+するだけで以下のディレクトリ構造ができるが、自分でコンパイル
+する場合は自分でコピーして以下のようなディレクトリ構造を作ること。)
+<br>
+
+<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=688&expandFolder=688&folderID=2627">
+tigris.org にコンパイル済みバイナリがあるのでそれを使うと楽だ
+</a>
+
+<pre>
+db4-win32\
+ │
+ ├─bin
+ │   │
+ │   ├─db_archive.exe
+ │   ├─db_checkpoint.exe
+ │   │  ... (中略) ...
+ │   ├─excxx_txnguide_inmem.exe
+ │   ├─libdb44.dll
+ │   └─libdb44d.dll
+ │
+ ├─include
+ │   │
+ │   ├─db.h
+ │   └─db_cxx.h
+ │
+ └─lib
+      │
+      ├─libdb44.exp
+      ├─libdb44.lib
+      ├─libdb44d.exp
+      ├─libdb44d.lib
+      ├─libdb44s.lib
+      └─libdb44sd.lib
+</pre>
+
+<h3>必要なファイルの配置</h3>
+以下のような感じでファイルを置くとして以後の説明をする。
+<pre>
+ │
+ ├─common
+ │   │
+ │   ├─db4-win32
+ │   ├─httpd-2.2.3
+ │   ├─neon-0.26.2
+ │   └─zlib-1.2.3
+ │
+ └─trunk (subversion のソースコード)
+      │
+      ├─INSTALL
+      │  ... (中略) ...
+      └─gen-make.py
+</pre>
+
+<h3>apache のコンパイル</h3>
+<ol>
+<li>Apache.dsw を開く。</li>
+<li>mod_dav_fs のプロジェクトを選択する。</li>
+<li>Debug/Release の各構成をコンパイルする。</li>
+</ol>
+
+<h2>Subversion のコンパイル</h2>
+<h3>プロジェクトファイルの作成</h3>
+以下のコマンドを subversion のソースコードのルートで実行する。
+条件を少し変えて何度も実行することになるので、
+バッチファイルを作成して実行すると便利です。
+<strong>
+"-t dsp" は VC6 用のプロジェクトファイルを作成するという意味です。
+</strong>
+(見やすくするため改行していますが、実際には１行で入力します。)
+<pre>
+c:\...\trunk> python gen-make.py <strong>-t dsp</strong>
+	--with-neon=..\common\neon-0.26.2
+	--with-berkeley-db=..\common\db4-win32
+	--with-zlib=..\common\zlib-1.2.3 
+	--with-httpd=..\common\httpd-2.2.3
+</pre>
+
+ルートディレクトリにプロジェクトワークスペースができる
+<pre>
+subversion_msvc.dsw
+</pre>
+
+以下のディレクトリにプロジェクトファイルができる
+<pre>
+build\win32\msvc-dsp
+</pre>
+
+<ul>
+	<li>neon のソースコードを subversion のソースコードのディレクトリに
+	置くと、--with-neon は省略可能</li>
+	<li>berkeley-db のソースコードを subversion のソースコードの
+	ディレクトリに置くと、--with-berkeley-db は省略可能</li>
+	<li>zlib のソースコードを subversion のソースコードの
+	ディレクトリに置くと、--with-zlib は省略可能</li>
+</ul>
+
+<h4>subversion library の static ライブラリ化</h4>
+<p>
+r22841 以降のバージョンではデフォルトで subversion のライブラリを
+独立した DLL としてコンパイルするようになっています。
+もし static ライブラリとしてコンパイルするためにはプロジェクトファイル
+作成時に、<strong>--disable-shared </strong>をつけて実行してください。
+</p>
+<pre>
+C:\...\trunk> python gen-make.py -t dsp 
+	--with-neon=..\common\neon-0.26.2
+	--with-berkeley-db=..\common\db4-win32
+	--with-zlib=..\common\zlib-1.2.3
+	--with-httpd=..\common\httpd-2.2.3
+	<strong>--disable-shared </strong>
+</pre>
+
+<p>
+このオプションをつけないでプロジェクトファイルを
+作成した場合、実行時に Subversion library の各種DLL を実行ファイルと
+同じディレクトリにコピーする必要があります。( libsvn_repos-1.dll 等)
+</p>
+
+<h3>Subversionのコンパイル</h3>
+subversion_msvc.dsw を VC6 で開いて __ALL__ または __ALL__TESTS__ の
+構成を選択してビルド(F7)を実行する。
+
+<p>
+<u>コマンドラインから行う場合</u>
+<pre>
+msdev subversion_msvc.dsw /MAKE "__ALL__ - Win32 Release"
+</pre>
+<pre>
+msdev subversion_msvc.dsw /MAKE "__ALL_TESTS__ - Win32 Release"
+</pre>
+</p>
+
+<h3>svn コマンドの実行確認</h3>
+以下のような構成でファイルをコピーする。
+
+<h4>gen-make.py を実行するときに --disable-shared を指定した場合</h4>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h4>gen-make.py を実行するときに --disable-shared を指定しなかった場合</h4>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─<strong>libsvn_client-1.dll</strong>
+├─<strong>libsvn_delta-1.dll</strong>
+├─<strong>libsvn_diff-1.dll</strong>
+├─<strong>libsvn_fs-1.dll</strong>
+├─<strong>libsvn_ra-1.dll</strong>
+├─<strong>libsvn_repos-1.dll</strong>
+├─<strong>libsvn_subr-1.dll</strong>
+├─<strong>libsvn_wc-1.dll</strong>
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h3>動作確認</h3>
+svn.exe を実行して以下の出力が出ることを確認する。
+<pre>
+c:\...\trunk\Release\subversion\svn> svn
+Type 'svn help' for usage.
+</pre>
+
+<pre>
+c:\...\trunk\Release\subversion\svn> svn --version
+svn, version 1.5.0 (dev build)
+   compiled Nov 18 2007, 16:21:05
+
+Copyright (C) 2000-2007 CollabNet.
+Subversion is open source software, see http://subversion.tigris.org/
+This product includes software developed by CollabNet (http://www.Collab.Net/).
+
+The following repository access (RA) modules are available:
+
+* ra_neon : Module for accessing a repository via WebDAV protocol using Neon.
+  - handles 'http' scheme
+* ra_svn : Module for accessing a repository using the svn network protocol.
+  - handles 'svn' scheme
+* ra_local : Module for accessing a repository on local disk.
+  - handles 'file' scheme
+</pre>
+
+<h1>Trouble Shooting</h1>
+<h2>コンパイル時</h2>
+	<h3>
+	CSIDL_COMMON_APPDATA が定義されていないというエラーが出る。<br>
+	</h3>
+<pre>
+error C2065: 'CSIDL_COMMON_APPDATA' : 定義されていない識別子です。
+</pre>
+	Visual C++ 6 の標準ヘッダでは定義されていない変数や関数が使用されているので、
+	<a href="http://www.microsoft.com/msdownload/platformsdk/sdkupdate/psdk-full.htm">
+	Platform SDK 2003 February
+	</a>(VC6をサポートする最後のPlatform SDK)
+	をインストールして、そのヘッダファイルのディレクトリパスを一番上に指定する。
+
+<h2>実行時</h2>
+	<h3>
+	libapr-1.dll が見つからないといわれる
+	</h3>
+	svn.exe と同じディレクトリに libapr-1.dll 等のファイルを
+	コピーするか DLLがあるディレクトリを 環境変数 PATH に
+	追加する。
+
+	<h3>
+	libapr***.dll で落ちる場合のメモ
+	</h3>
+	<p>
+	Subversion のバイナリをインストーラでインストール
+	した場合、システムの PATH 環境変数に Subversion の
+	コマンドのパスが指定されている場合があります。
+
+	そうすると、subversion のバイナリはこちらの
+	APR をロードするので、バイナリ互換性のない APR が
+	インストールされていると落ちます。
+	</p>
+	<p>
+	このため PATH 環境変数から別のバージョンの
+	APR を削除するか、インストーラでインストール
+	してバイナリをコンパイルしたファイルで
+	すべて上書きするようにしてください。
+	</p>
+</body>
+</html>

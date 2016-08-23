@@ -1,0 +1,250 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="compile" />
+<meta name="keywords" content="VS2008" />
+<meta name="keywords" content="subversion 1.9" />
+<meta name="keywords" content="ssl" />
+<meta name="keywords" content="OpenSSL" />
+<link href="../../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion のコンパイル (for Windows) SSLサポート (VS2008)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_apache_2008.html">前に戻る</a>
+	<a href="svn_i18n_2008.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>SSL のサポート付きでコンパイルする方法 (VS2008)</h1>
+
+<strong>この情報は古いです</strong>
+
+<h2>概要</h2>
+VS2008 で Subversion を SSLサポートを有効にしてコンパイルする方法を簡単に
+説明します。
+
+<p>
+以下の手順を既に行っていることを前提としています。
+<ol>
+<li><a href="./svn_basic_2008.html">最小の構成でコンパイルする (VS2008)</a></li>
+</ol>
+
+<h2>準備</h2>
+	<ul>
+	<li>ActivePerl 5.8.x をインストールする
+    (もっと古いバージョンでもいいかもしれないが、未確認)
+	</li>
+	<li>
+	OpenSSL の配布ファイルを解凍して、INSTALL.W32 を読む
+	</li>
+</ul>
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li><a href="http://www.activestate.com/">
+	ActivePerl </a>
+	( Windows (x86) MSI ActivePerl-5.8.8.819-MSWin32-x86-267479.msi 等)
+	</li>
+	<li><a href="http://www.openssl.org/">
+	OpenSSL (openssl-0.9.xx.tar.gz )</a>
+	</li>
+</ul>
+
+<h2>下準備</h2>
+
+	以下のような感じでファイルを置くとして以後の説明をする。
+<pre>
+│
+├─common
+│   │
+│   ├─db4-win32
+│   ├─openssl-1.0.1e
+│   ├─httpd-2.0.59
+│   └─zlib-1.2.3
+│
+└─trunk (subversion のソースコード)
+      │
+      ├─INSTALL
+      │  ... (中略) ...
+      └─gen-make.py
+</pre>
+
+<h2>OpenSSL のコンパイル</h2>
+	OpenSSLを解凍したディレクトリを以下 c:\...\openssl-1.0.1e とします。<br>
+
+<ol>
+<li>
+<strong>スタートメニューから [Microsoft Visual Studio 2008] -> [Visual Studio Tools] 
+-> [Visual Studio 2008 コマンド プロンプト] を選ぶ。</strong>
+</li>
+<li>
+OpenSSL のソースコードのディレクトリに移動する。
+</li>
+<li>
+以下のコマンドを入力する
+
+<p>
+x86 でビルドする
+<pre>
+c:\...\openssl-1.0.1e> perl Configure VC-WIN32
+c:\...\openssl-1.0.1e> <strong>ms\do_ms</strong>
+c:\...\openssl-1.0.1e> nmake -f ms\ntdll.mak
+</pre>
+</p>
+
+<p>
+x86 でビルドする
+<pre>
+c:\...\openssl-1.0.1e> perl Configure VC-WIN64A
+c:\...\openssl-1.0.1e> call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" amd64
+c:\...\openssl-1.0.1e> ms\do_win64a
+c:\...\openssl-1.0.1e> nmake -f ms\ntdll.mak
+</pre>
+</p>
+
+</li>
+</ol>
+<h2>プロジェクトファイルの作成</h2>
+以下のコマンドを subversion のソースコードのルートで実行する。
+
+<pre>
+c:\...\trunk> python gen-make.py -t vcproj --vsnet-version=2008		^ 
+	<strong>--with-openssl=..\common\openssl-1.0.1e</strong>		^
+	--with-berkeley-db=..\common\db4-win32							^
+	--with-zlib=..\common\zlib-1.2.3								^
+	--with-httpd=..\common\httpd-2.0.59
+</pre>
+
+ルートディレクトリにソリューションファイルができる
+<pre>
+subversion_vcnet.sln
+</pre>
+
+以下のディレクトリにプロジェクトファイルができる
+<pre>
+build\win32\vcnet-vcproj
+</pre>
+
+<h2>Subversionのコンパイル</h2>
+subversion_vcnet.sln を VS2008 で開いて __ALL__ または __ALL__TESTS__ の
+構成を選択して<strong>リビルド</strong>する。
+SSL を無効にした状態でコンパイルした後で、SSL を有効にしてコンパイルする
+場合、リビルドしないと再コンパイルが必要なのに
+再コンパイルが走りません。最初から SSL サポートを有効に
+してコンパイルする場合、リビルドは不要です。
+
+
+<h2>svn コマンドの実行準備</h2>
+以下のような構成でファイルをコピーする。
+<h3>gen-make.py を実行するときに --disable-shared を指定した場合</h3>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─<strong>libeay32.dll</strong>
+├─<strong>ssleay32.dll</strong>
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h3>gen-make.py を実行するときに --disable-shared を指定しなかった場合</h3>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─<strong>libeay32.dll</strong>
+├─<strong>ssleay32.dll</strong>
+├─libsvn_client-1.dll
+├─libsvn_delta-1.dll
+├─libsvn_diff-1.dll
+├─libsvn_fs-1.dll
+├─libsvn_ra-1.dll
+├─libsvn_repos-1.dll
+├─libsvn_subr-1.dll
+├─libsvn_wc-1.dll
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h3>注意</h3>
+APR のDLLは異なるバージョンのファイルを混ぜて置かないこと。
+例: libapr-1.dll と libapr.dll 等
+
+<h2>svn コマンドの実行確認</h2>
+svn.exe を実行して以下の出力が出ることを確認する。
+<pre>
+c:\...\trunk\Release\subversion\svn> svn --version
+svn, version 1.5.0 (dev build)
+   compiled Nov 18 2007, 16:21:05
+
+Copyright (C) 2000-2007 CollabNet.
+Subversion is open source software, see http://subversion.tigris.org/
+This product includes software developed by CollabNet (http://www.Collab.Net/).
+
+The following repository access (RA) modules are available:
+
+* ra_neon : Module for accessing a repository via WebDAV protocol using Neon.
+  - handles 'http' scheme
+  - <strong>handles 'https' scheme</strong>
+* ra_svn : Module for accessing a repository using the svn network protocol.
+  - handles 'svn' scheme
+* ra_local : Module for accessing a repository on local disk.
+  - handles 'file' scheme
+</pre>
+
+</body>
+</html>

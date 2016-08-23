@@ -1,0 +1,95 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svn_apply_autoprops.py" />
+<meta name="keywords" content="日本語" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>autoprop の設定を svn_apply_autoprops.py で作業コピーに反映する</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	前に戻る
+	次へ進む
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>autoprop の設定を svn_apply_autoprops.py で作業コピーに反映する</h1>
+<h2>概要</h2>
+Subversion では新規ファイルを登録するときに規定のプロパティを設定する機能 autoprop が
+あります。しかしこの機能はクライアント側の設定のため強制力はなく指定したファイルに
+意図したプロパティが設定されていないことがあります。
+
+svn_apply_autoprops.py を使うと autoprop の設定を読み込んで作業コピーに設定を
+反映することができます。
+
+<h2>セットアップ手順</h2>
+
+<h2>入手先</h2>
+<p>
+svn_apply_autoprops.py は以下から入手可能です。
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/contrib/client-side/svn_apply_autoprops.py">
+http://svn.apache.org/repos/asf/subversion/trunk/contrib/client-side/svn_apply_autoprops.py
+</a>
+</p>
+Subversion のソースコード配布ファイルの中にも含まれています。
+
+<h2>Subvesion Python bindings のインストール</h2>
+svn_apply_autoprops.py は Subversion Python bindings を使っているので
+Python bindings をインストールする必要があります。
+
+<p>
+参照
+<ul>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/subversion/bindings/swig/INSTALL">
+	subversion/bindings/swig/INSTALL
+	</a>
+	</li>
+	<li>
+	<a href="http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_python_vc6.html">
+	Python binding をコンパイルする方法 (VC6)
+	</a>
+	</li>
+</ul>
+</p>
+
+</body>
+</html>

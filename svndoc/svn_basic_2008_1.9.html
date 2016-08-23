@@ -1,0 +1,502 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Subversion のコンパイル (for Windows) 基本編 (VS2008)</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="compile" />
+<meta name="keywords" content="VS2008" />
+<meta name="keywords" content="subversion 1.9" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="./">前に戻る</a>
+	<a href="svn_apache_2008.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion のコンパイル (for Windows)  基本編 (VS2008)</h1>
+<h2>概要</h2>
+Subversion を Visual Studio 2008 Pro(以下 VS2008)で
+コンパイルする方法を簡単に説明します。
+
+わかりやすくするため、手順はまず最小の構成でコンパイルし、
+徐々にオプションの機能を追加していく形で説明します。
+
+<h2>VC6 の場合との違い</h2>
+<ul>
+<li>Berkeley DB のVS2008用のバイナリ版が用意されていないので自分でコンパイルする</li>
+(VC6 の場合でも自分でコンパイル可能です)
+<li>gen_make.py でプロジェクトを作成する場合
+<strong>-t vcproj --vsnet-version=2008</strong>
+を渡す</li>
+<li>VS2008 用のランタイムライブラリがインストールされていない
+システムで実行する場合に、インストールしてもらうか再配布する必要がある
+</li>
+<li><strong>apache 2.2.x を使用する場合
+<a href="http://svn.apache.org/repos/asf/apr/apr/trunk/build/cvtdsp.pl">cvtdsp.pl</a>
+を実行しておく必要があります。</strong></li>
+</ul>
+
+<h2>準備</h2>
+	<ul>
+	<li>VS2008 をインストールする
+	<ul>
+		<li>
+		<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=bb4a75ab-e2d4-4c96-b39d-37baf6b5b1dc&DisplayLang=ja">
+		ServicePack1</a>もインストールしておいた方がよいかも(必須ではない)
+		<li>
+		</li>
+		<a href="http://www.microsoft.com/downloads/details.aspx?familyid=c2b1e300-f358-4523-b479-f53d234cdccf&displaylang=en">
+		Windows SDK for Vista
+		</a>もインストールしておいた方がよいかも(必須ではない)
+		</li>
+	</ul>
+
+	</li>
+	<li>
+	Python 2.4 or 2.5 をインストールする
+	</li>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/INSTALL">
+	http://svn.apache.org/repos/asf/subversion/trunk/INSTALL
+	</a>
+	をちらっと見る<br>
+	( "Building the Latest Source under Windows" という章に
+	一応、コンパイル方法が書かれています。)
+	</li>
+</ul>
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li><a href="http://www.oracle.com/database/berkeley-db.html">
+	Berkeley DBのソースコード</a></li>
+	<a href="http://www.oracle.com/technology/software/products/berkeley-db/index.html">
+	"Oracle Berkeley DB Downloads"
+	</a>のところからダウンロードする。<strong>"Previous Releases" のリンクを
+	たどって Berkeley DB 4.4.x を入手すること。</strong> 
+	Berkeley DB 4.5.x では認識してくれないようだ。2007/1/13 現在(コンパイルはできます)
+<p>
+Berkeley DB 4.5.x を使う場合(見やすくするため整形しています)
+<pre>
+c:\...\trunk>python gen-make.py -t vcproj --vsnet-version=2008 --disable-shared
+	--with-openssl=..\common\openssl-0.9.8d
+	<strong>--with-berkeley-db=..\common\db4-win32-4.5</strong>
+	--with-zlib=..\common\zlib-1.2.3
+	--with-httpd=..\common\httpd-2.0.59
+Generating for VS.NET 2008
+<strong>BDB not found, BDB fs will not be built</strong>
+Could not detect Ruby version.
+  Ruby bindings will be linked with msvcrt-ruby18.lib
+Found installed perl version number.
+  Perl bindings will be linked with perl58.lib
+Could not find installed SWIG, assuming version 1.3.25
+swig not found; skipping SWIG file generation...
+Wrote: build\win32\vcnet-vcproj\__ALL_TESTS___vcnet.vcproj
+                     .... 以下略 ...
+</pre>
+
+Berkeley DB 4.4.x を使う場合
+<pre>
+c:\...\trunk>python gen-make.py -t vcproj --vsnet-version=2008 --disable-shared
+	--with-openssl=..\common\openssl-0.9.8d
+	<strong>--with-berkeley-db=..\common\db4-win32-4.4</strong>
+	--with-zlib=..\common\zlib-1.2.3
+	--with-httpd=..\common\httpd-2.0.59
+Generating for VS.NET 2008
+<strong>Found libdb44.lib in ..\common\db4-win32-4.4\lib</strong>
+Could not detect Ruby version.
+  Ruby bindings will be linked with msvcrt-ruby18.lib
+Found installed perl version number.
+  Perl bindings will be linked with perl58.lib
+Could not find installed SWIG, assuming version 1.3.25
+swig not found; skipping SWIG file generation...
+Wrote: build\win32\vcnet-vcproj\__ALL_TESTS___vcnet.vcproj
+                     .... 以下略 ...
+</pre>
+	<li><a href="http://www.zlib.net">zlibのソースコード (zlib-1.x.x.tar.gz )</a></li>
+	<li><a href="http://httpd.apache.org">apache 2.0.x または 2.2.x のソースコード</a></li>
+	<li><a href="http://svn.apache.org/repos/asf/apr/apr/trunk/build/cvtdsp.pl">cvtdsp.pl</a> (Apache 2.2.x を使う場合)</li>
+	<li>
+	<a href="http://cm.bell-labs.com/cm/cs/who/bwk/awk95.exe">
+	awk.exe (awk95.exe をダウンロードして awk.exe に名前変更する)
+	</a><br>
+	apache をインストールする場合(InstallBinの構成をコンパイルする場合)に必要。<br>
+	awk.exe を保存したディレクトリの場所を、Visual C++ に設定する。
+	<ol>
+	<li>Visual C++ のメニューから [ツール] - [オプション]を選ぶ</li>
+	<li>[ディレクトリ] タブに移動する。</li>
+	<li>[表示するディレクトリ] で[実行可能ファイル]を選ぶ</li>
+	<li>[ディレクトリ] にawk.exe を保存したディレクトリパスを追加する</li>
+	</ol>
+	<strong>svn.exe 等をコンパイルするだけで apache をセットアップしない場合には不要</strong>
+	</li>
+	<p>
+	<li>
+	Subversion のソースコード<br>
+	大体以下のような方法で入手できます。(勿論最新のソースコードでなくてもいいですが、
+	どうせなら最新を使いたい)
+	<ul>
+		<li>
+		<a href="http://tortoisesvn.tigris.org/">TortoiseSVN </a>
+		のバイナリをダウンロードして、TortoiseSVN を使って最新のソースコードを入手する。
+		</li>
+		<img src="tsvn_checkout_svn.png">
+		<li>
+		<p>
+		<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=91&expandFolder=91&folderID=91">
+		リリース版のバイナリ</a>を入手して、最新のソースコードを入手する。<br>
+		<strong>インストーラ形式を使うときは、国際化対応版のコンパイルするときに
+		環境変数 APR_ICONV_PATH と 環境変数 PATHの設定に注意が必要。
+		</strong>
+		</li>
+<pre>
+svn co http://svn.apache.org/repos/asf/subversion/trunk trunk
+</pre>
+ファイアフォール等のために、外部サイトへのアクセスができない場合
+以下のように <strong>https</strong>でアクセスするとうまくいくことがあります。
+<pre>
+svn co <strong>https</strong>://svn.apache.org/repos/asf/subversion/trunk trunk
+</pre>
+		<li>
+		<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=260&expandFolder=260&folderID=91">
+		リリース版のソースコード</a>をダウンロードして、自分でバイナリを
+		作成した後、そのバイナリで、最新のソースコードを入手する。
+		</li>
+	</ul>
+	</li>
+</ul>
+
+<h2 id="prepare">下準備</h2>
+<h3>berkley DBのコンパイル</h3>
+<ol>
+<li>
+berkley DB のソースコードを展開する。
+以下のような構成で展開される。(berkley DB 4.5.20 の場合)
+<pre>
+db-4.4.20
+ │
+ ├─build_win32
+ │   │
+ │   ├─Berkeley_DB.dsw
+ │   ├─build_all.dsp
+ │   │  ... (中略) ...
+ │   ├─db.h
+ │   └─db_cxx.h
+ │
+... 以下略 ...
+</pre>
+</li>
+<li>
+build_win32\Berkeley_DB.dsw を Visual Studio 2008 で開く。
+変換するか確認されるので、『すべてはい』を選ぶ。
+</li>
+<li>
+build_all を Debug/Release の構成でコンパイルする。
+</li>
+<li>
+以下のようなディレクトリ構成になるようにコピーする。
+<pre>
+db4-win32\
+ │
+ ├─bin
+ │   │
+ │   ├─db_archive.exe
+ │   ├─db_checkpoint.exe
+ │   │  ... (中略) ...
+ │   ├─excxx_txnguide_inmem.exe
+ │   ├─<strong>libdb44d.dll  ← build_win32\Debug からコピーする</strong>
+ │   └─<strong>libdb44.dll   ← build_win32\Release からコピーする</strong>
+ │
+ ├─include
+ │   │
+ │   ├─<strong>db.h          ← build_win32 からコピーする(同じ名前のファイルが複数ある)</strong>
+ │   └─<strong>db_cxx.h      ← build_win32 からコピーする</strong>
+ │
+ └─lib
+      │
+      ├─libdb44.exp
+      ├─libdb44d.exp
+      ├─<strong>libdb44sd.lib ← build_win32\Debug からコピーする</strong>
+      ├─<strong>libdb44d.lib  ← build_win32\Debug からコピーする</strong>
+      ├─<strong>libdb44.lib   ← build_win32\Release からコピーする</strong>
+      └─<strong>libdb44s.lib  ← build_win32\Release からコピーする</strong>
+</pre>
+</li>
+</ol>
+
+<h3>必要なファイルの配置</h3>
+以下のような感じでファイルを置くとして以後の説明をする。
+<pre>
+ │
+ ├─common
+ │   │
+ │   ├─<strong>db4-win32 ← さきほど作成したディレクトリ</strong>
+ │   ├─<strong>httpd-2.0.59</strong>
+ │   └─zlib-1.2.3
+ │
+ └─trunk (subversion のソースコード)
+      │
+      ├─INSTALL
+      │  ... (中略) ...
+      └─gen-make.py
+</pre>
+
+<h3>apache のコンパイル</h3>
+
+<h4 id="cvtdsp">apache の DSP ファイルの変換 (Apache 2.2.x を使用する場合)</h4>
+<ol>
+	<li>cvtdsp.pl を Apache のソースコードのトップディレクトリにコピーする。</li>
+	<li>Apache のソースコードのトップディレクトリに移動する。</li>
+	<li>以下のコマンドを実行する。
+<pre>
+D:\svnwork\VS2008\common\httpd-2.2.4>perl cvtdsp.pl -2008
+Converted project httpd.dsp to 2008 in .
+Converted project libhttpd.dsp to 2008 in .
+Converted project mod_access_compat.dsp to 2008 in ./modules/aaa
+Converted project mod_authnz_ldap.dsp to 2008 in ./modules/aaa
+                中略
+Converted project rotatelogs.dsp to 2008 in ./support
+Converted project wintty.dsp to 2008 in ./support/win32
+</pre>
+	</li>
+</ol>
+<strong>この手順を行わなかった場合 <a href="svn_apache_2008.html#httpd_rc_compile_error">
+httpd.rc のコンパイルエラー</a>になります</strong>。
+
+
+<h4>apache のコンパイル</h4>
+<ol>
+<li>Apache.dswを Visual Studio 2008 で開く。
+変換するか確認されるので、『すべてはい』を選ぶ。
+</li>
+<li>mod_dav_fs のプロジェクトを選択する。</li>
+<li>Debug/Release の各構成をコンパイルする。</li>
+</ol>
+
+<h2>Subversion のコンパイル</h2>
+<h3>プロジェクトファイルの作成</h3>
+以下のコマンドを subversion のソースコードのルートで実行する。
+条件を少し変えて何度も実行することになるので、
+バッチファイルを作成して実行すると便利です。
+
+<p>
+複数行にわけて書けるように行末にハットを使っています。
+<a href="http://app.m-cocolog.jp/t/typecast/3295/3959/16851671">参考</a>
+</p>
+
+<pre>
+c:\...\trunk> python gen-make.py <strong>-t vcproj --vsnet-version=2008</strong>        ^
+    --with-berkeley-db=..\common\db4-win32                                 ^
+    --with-zlib=..\common\zlib-1.2.3                                       ^
+    --with-httpd=..\common\httpd-2.0.59
+</pre>
+
+ルートディレクトリにソリューションファイルができる
+<pre>
+subversion_vcnet.sln
+</pre>
+
+以下のディレクトリにプロジェクトファイルができる
+<pre>
+build\win32\vcnet-vcproj
+</pre>
+
+<ul>
+	<li>berkeley-db のソースコードを subversion のソースコードの
+	ディレクトリに置くと、--with-berkeley-db は省略可能</li>
+	<li>zlib のソースコードを subversion のソースコードの
+	ディレクトリに置くと、--with-zlib は省略可能</li>
+</ul>
+
+<h4>subversion library の static ライブラリ化</h4>
+<p>
+r22841 以降のバージョンではデフォルトで subversion のライブラリを
+独立した DLL としてコンパイルするようになっています。
+もし static ライブラリとしてコンパイルするためにはプロジェクトファイル
+作成時に、<strong>--disable-shared </strong>をつけて実行してください。
+</p>
+<pre>
+C:\...\trunk> python gen-make.py -t vcproj --vsnet-version=2008     ^
+    --with-berkeley-db=..\common\db4-win32             ^
+    --with-zlib=..\common\zlib-1.2.3                   ^
+    --with-httpd=..\common\httpd-2.0.59                ^
+    <strong>--disable-shared </strong>
+</pre>
+
+<p>
+このオプションをつけないでプロジェクトファイルを
+作成した場合、実行時に Subversion library の各種DLL を実行ファイルと
+同じディレクトリにコピーする必要があります。( libsvn_repos-1.dll 等)
+</p>
+
+<h3>Subversionのコンパイル</h3>
+subversion_vcnet.sln を VS2008 で開いて __ALL__ または __ALL__TESTS__ の
+構成を選択してビルドを実行する。
+
+<h3>svn コマンドの実行確認</h3>
+以下のような構成でファイルをコピーする。
+
+<h4>gen-make.py を実行するときに --disable-shared を指定した場合</h4>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h4>gen-make.py を実行するときに --disable-shared を指定しなかった場合</h4>
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─<strong>libsvn_client-1.dll</strong>
+├─<strong>libsvn_delta-1.dll</strong>
+├─<strong>libsvn_diff-1.dll</strong>
+├─<strong>libsvn_fs-1.dll</strong>
+├─<strong>libsvn_ra-1.dll</strong>
+├─<strong>libsvn_repos-1.dll</strong>
+├─<strong>libsvn_subr-1.dll</strong>
+├─<strong>libsvn_wc-1.dll</strong>
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h3>動作確認</h3>
+svn.exe を実行して以下の出力が出ることを確認する。
+<pre>
+c:\...\trunk\Release\subversion\svn> svn
+Type 'svn help' for usage.
+</pre>
+
+<pre>
+c:\...\trunk\Release\subversion\svn> svn --version
+svn, version 1.5.0 (dev build)
+   compiled Nov 18 2007, 16:21:05
+
+Copyright (C) 2000-2007 CollabNet.
+Subversion is open source software, see http://subversion.tigris.org/
+This product includes software developed by CollabNet (http://www.Collab.Net/).
+
+The following repository access (RA) modules are available:
+
+* ra_svn : Module for accessing a repository using the svn network protocol.
+  - handles 'svn' scheme
+* ra_local : Module for accessing a repository on local disk.
+  - handles 'file' scheme
+</pre>
+
+<h1>Trouble Shooting</h1>
+<h2>コンパイル時</h2>
+
+	<h3 id="warning_PRJ0009">PRJ0009 の警告が出る</h3>
+<pre>
+13>------ ビルド開始: プロジェクト: test_compat, 構成: Release Win32 ------
+13>test_compat : warning PRJ0009 : ビルド ログを開いて書き込むことができませんでした。
+13>ファイルが別のプロセスによって開かれていないこと、また書込み禁止になっていないことを確認してください。
+12>リンクしています...
+12>マニフェストを埋め込んでいます...
+13>コンパイルしています...
+13>compat-test.c
+12>ビルドログは "<strong>file://d:\svnwork\SVN2008\trunk\Release\subversion\tests\libsvn_subr\BuildLog.htm</strong>" に保存されました。
+12>test_config - エラー 0、警告 0
+</pre>
+<pre>
+19>------ ビルド開始: プロジェクト: test_translate, 構成: Release Win32 ------
+19>test_translate : warning PRJ0009 : ビルド ログを開いて書き込むことができませんでした。
+19>ファイルが別のプロセスによって開かれていないこと、また書込み禁止になっていないことを確認してください。
+18>コンパイルしています...
+18>time-test.c
+19>コンパイルしています...
+19>translate-test.c
+18>リンクしています...
+18>マニフェストを埋め込んでいます...
+19>リンクしています...
+18>ビルドログは "<strong>file://d:\svnwork\SVN2008\trunk\Release\subversion\tests\libsvn_subr\BuildLog.htm</strong>" に保存されました。
+18>test_time - エラー 0、警告 0
+</pre>
+	この警告は、上記のログでもわかるように ビルドログ BuildLog.htm のパスが
+	複数のプロジェクトで同じになっています。Visual Studio 2008 自体が
+	開いているためにそれ以降のプロジェクトで書き込みができないためです。
+
+<h2>実行時</h2>
+	<h3>
+	libapr-1.dll が見つからないといわれる
+	</h3>
+	svn.exe と同じディレクトリに libapr-1.dll 等のファイルを
+	コピーするか DLLがあるディレクトリを 環境変数 PATH に
+	追加する。
+
+	<h3>
+	libapr***.dll で落ちる場合のメモ
+	</h3>
+	<p>
+	Subversion のバイナリをインストーラでインストール
+	した場合、システムの PATH 環境変数に Subversion の
+	コマンドのパスが指定されている場合があります。
+
+	そうすると、subversion のバイナリはこちらの
+	APR をロードするので、バイナリ互換性のない APR が
+	インストールされていると落ちます。
+	</p>
+	<p>
+	このため PATH 環境変数から別のバージョンの
+	APR を削除するか、インストーラでインストール
+	してバイナリをコンパイルしたファイルで
+	すべて上書きするようにしてください。
+	</p>
+</body>
+</html>

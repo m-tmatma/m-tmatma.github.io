@@ -1,0 +1,235 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="hook" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion フックスクリプト</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion フックスクリプト</h1>
+<h2>概要</h2>
+フックスクリプトに関して解説します。
+
+<h2>リンク</h2>
+<ul>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.start-commit.html">
+		start-commit コミット実行前通知
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.pre-commit.html">
+		pre-commit コミット実行前通知
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.post-commit.html">
+		post-commit コミット成功通知
+		</a>
+	</li>
+	</li>
+	<li>
+		<a href="./svn_reject_commit.html">
+		start-commit によるSubversion 1.4 クライアントから Subversion 1.5 サーバーへのコミットを拒否する方法
+		</a>
+	</li>
+	<li>
+		<a href="./svn_pre-commit.html">
+		pre-commit によるコミットの拒否の方法
+		</a>
+	</li>
+	<li>
+		<a href="./svn_pre-commit2.html">
+		pre-commit によるコミットの拒否の方法 (Part2)
+		</a>
+	</li>
+</ul>
+
+<h2>フックスクリプトとは?</h2>
+Subversion リポジトリを作成すると hooks ディレクトリに以下のスクリプトの
+テンプレートが作成されます。
+
+<ul>
+	<li>start-commit</li>
+	<li>pre-commit</li>
+	<li>post-commit</li>
+	<li>pre-revprop-change</li>
+	<li>post-revprop-change</li>
+	<li>pre-lock</li>
+	<li>post-lock</li>
+	<li>pre-unlock</li>
+	<li>post-unlock</li>
+</ul>
+
+<table border="1" cellpadding="5">
+	<caption>hook</caption>
+	<tr>
+		<th></th>
+		<th>実行タイミング</th>
+		<th>主な用途</th>
+	</tr>
+	<tr>
+		<td>start-commit</td>
+		<td>コミットトランザクション作成前</td>
+		<td>ユーザー名に基づいたコミット拒否。Subversion のバージョンチェック。
+		たとえば merge-tracking をサポートしていないクライアントから merge-tracking をサポート
+		している Subversion 1.5 以降のサーバーへのコミットを拒否するなど。<br>
+		<a href="svn_reject_commit.html">
+		Subversion 1.5 では引数が 3 つになっています。</a>
+		</td>
+	</tr>
+	<tr>
+		<td>pre-commit</td>
+		<td>コミットトランザクション作成後で、コミット直前</td>
+		<td>コミットするデータの内容またはコミットログによるコミット拒否</td>
+	</tr>
+	<tr>
+		<td>post-commit</td>
+		<td>コミット直後</td>
+		<td>リポジトリデータのバックアップ、変更メール通知</td>
+	</tr>
+	<tr>
+		<td>pre-revprop-change</td>
+		<td>リビジョン属性変更前</td>
+		<td>リビジョン属性変更の許可</td>
+	</tr>
+	<tr>
+		<td>post-revprop-change</td>
+		<td>リビジョン属性変更(コミットログ等)の直後</td>
+		<td>リビジョン属性のバックアップ、変更メール通知</td>
+	</tr>
+	<tr>
+		<td>pre-lock</td>
+		<td>ロック取得直前</td>
+	</tr>
+	<tr>
+		<td>post-lock</td>
+		<td>ロック取得直後</td>
+		<td>メール通知</td>
+	</tr>
+	<tr>
+		<td>pre-unlock</td>
+		<td>ロック解放直前</td>
+	</tr>
+	<tr>
+		<td>post-unlock</td>
+		<td>ロック解放直後</td>
+		<td>メール通知</td>
+	</tr>
+</table>
+</p>
+
+<h2>フックスクリプトの設置</h2>
+
+<h3>Unix 系OSの場合</h3>
+<ol>
+	<li>
+		フックスクリプトのテンプレートファイルの名前を変更する。
+		<p>
+		例
+		<ul>
+			<li>
+			start-commit.tmpl → start-commit
+			</li>
+			<li>
+			pre-commit.tmpl   → pre-commit
+			</li>
+		</ul>
+		</p>
+	</li>
+	<li>
+		スクリプトを編集する
+	</li>
+	<li>
+		実行属性をつける
+	</li>
+</ol>
+
+<h3>Windows の場合</h3>
+<ol>
+	<li>
+		フックスクリプトのテンプレートファイルの名前を変更する。
+		<p>
+		例
+		<ul>
+			<li>
+			start-commit.tmpl → start-commit.bat
+			</li>
+			<li>
+			pre-commit.tmpl   → pre-commit.bat
+			</li>
+		</ul>
+		</p>
+	</li>
+	<li>
+		スクリプトを編集する
+	</li>
+</ol>
+
+
+<h2>フックスクリプトでできないこと</h2>
+
+<h3>start-commit と pre-commit</h3>
+
+<p>
+start-commit と pre-commit はコミットを行う前に実行されるフックスクリプトです。
+</p>
+<p>
+これらのフックスクリプトでできるのはコミットを許可するか禁止するかの判断だけです。
+コミット内容をフックスクリプトで変更することはできません。
+</p>
+
+<h2>フックスクリプトの作成上の注意</h2>
+<p>
+フックスクリプトが実行されるときには、セキュリティ上の理由から
+環境変数(PATH 変数も)がすべて空の状態で起動されます。
+</p>
+<p>
+このためスクリプト内部で外部プログラムを起動する場合は絶対パスを
+使用するかスクリプト内部で環境変数を設定する必要があります。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,393 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Redmine 3.3 のインストール (Fedora 24)</title>
+<meta name="keywords" content="Redmine" />
+<meta name="keywords" content="Redmine 3.3" />
+<meta name="keywords" content="インストール" />
+<meta name="keywords" content="fedora" />
+<meta name="keywords" content="fedora 24" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	<a href="apache.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2016-07-22 21:46:55 +0900 (2016/07/22 (金)) $<br>
+$Revision: 1003 $<br>
+</div>
+
+<h1>Redmine 3.3 のインストール (Fedora 24)</h1>
+
+<h2>概要</h2>
+Redmine のインストール方法を解説します。
+
+<h2>必要なもの</h2>
+<ul>
+	<li>SQLサーバー</li>
+	<li>Ruby</li>
+	<li>rubygems</li>
+	<li>rake</li>
+	<li>Ruby on Rails</li>
+	<li>Subversion</li>
+	<li>Passenger</li>
+	<li>Apache</li>
+	<li>Redmine</li>
+</ul>
+
+<h2>インストール手順</h2>
+
+<h3>ファイアーフォールの設定</h3>
+
+http サービスの許可
+
+<pre>
+[root@localhost ~]# firewall-cmd --permanent --add-service=http
+success
+[root@localhost ~]# firewall-cmd --reload
+success
+</pre>
+
+
+<h3>開発ツールのインストール</h3>
+
+<pre>
+[root@localhost ~]# dnf -y groupinstall 'Development Tools'
+[root@localhost ~]# dnf -y install gcc-c++
+</pre>
+
+<h3>apache の有効化</h3>
+
+<pre>
+[root@localhost ~]# systemctl start httpd.service
+[root@localhost ~]# systemctl enable httpd.service
+Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+</pre>
+
+<h3>Maria DB (MySQL) のインストール</h3>
+
+<pre>
+[root@localhost ~]# dnf install -y mariadb-server mariadb-devel
+[root@localhost ~]# vi /etc/my.cnf.d/mariadb-server.cnf
+</pre>
+
+
+/etc/my.cnf.d/mariadb-server.cnf
+<pre>
+# this is only for the mysqld standalone daemon
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mysqld/mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+[mysqld]
+character-set-server=utf8
+.........
+</pre>
+
+<pre>
+[root@localhost ~]# vi /etc/my.cnf.d/mysql-clients.cnf
+</pre>
+
+
+/etc/my.cnf.d/mysql-clients.cnf
+<pre>
+[mysql]
+default-character-set=utf8
+.........
+</pre>
+
+Maria DB の起動、有効化設定
+<pre>
+[root@localhost ~]# systemctl start mariadb
+[root@localhost ~]# systemctl enable mariadb
+Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
+</pre>
+
+データベースの初期設定
+<pre>
+[root@localhost ~]# mysql_secure_installation
+
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+Set root password? [Y/n] y
+New password:
+Re-enter new password:
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] y
+ ... Success!
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+Disallow root login remotely? [Y/n] y
+ ... Success!
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+Remove test database and access to it? [Y/n] y
+ - Dropping test database...
+ ... Success!
+ - Removing privileges on test database...
+ ... Success!
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+Reload privilege tables now? [Y/n] y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+</pre>
+
+
+データベースの設定とパスワードの設定
+<pre>
+[root@localhost ~]# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 10.1.14-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]&gt; create database redmine default character set utf8;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]&gt; grant all on redmine.* to redmine@localhost identified by 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]&gt; exit;
+Bye
+</pre>
+
+文字コードの確認
+<pre>
+[root@localhost ~]# mysql -u root --password
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 11
+Server version: 10.1.14-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]&gt; show variables like 'character_set%';
++--------------------------+------------------------------+
+| Variable_name            | Value                        |
++--------------------------+------------------------------+
+| character_set_client     | utf8                         |
+| character_set_connection | utf8                         |
+| character_set_database   | utf8                         |
+| character_set_filesystem | binary                       |
+| character_set_results    | utf8                         |
+| character_set_server     | utf8                         |
+| character_set_system     | utf8                         |
+| character_sets_dir       | /usr/share/mariadb/charsets/ |
++--------------------------+------------------------------+
+8 rows in set (0.00 sec)
+
+MariaDB [(none)]&gt; exit;
+Bye
+</pre>
+
+<h3>Redmine の入手および設定</h3>
+
+<pre>
+[root@localhost ~]# svn co http://svn.redmine.org/redmine/branches/3.3-stable /var/lib/redmine
+[root@localhost ~]# cd /var/lib/redmine
+[root@localhost redmine]# cp config/database.yml.example config/database.yml
+[root@localhost redmine]# vi config/database.yml
+</pre>
+
+config/database.yml
+<pre>
+production:
+  adapter: mysql2
+  database: redmine
+  host: localhost
+  username: redmine
+  password: password
+  encoding: utf8
+</pre>
+
+<pre>
+[root@localhost redmine]# chown -R apache:apache /var/lib/redmine
+</pre>
+
+<pre>
+[root@localhost redmine]# dnf install -y ruby-devel rubygem-bundler
+[root@localhost redmine]# dnf install -y libxml2-devel libxslt-devel ImageMagick-devel
+[root@localhost redmine]# dnf install -y ipa-pgothic-fonts
+[root@localhost redmine]# dnf install -y ipa-pgothic-fonts
+[root@localhost redmine]# dnf -y install openssl-devel readline-devel zlib-devel curl-devel libyaml-devel libffi-devel
+[root@localhost redmine]# dnf install -y redhat-rpm-config
+[root@localhost redmine]# gem install nokogiri -v '1.6.8'
+[root@localhost redmine]# bundle install
+</pre>
+
+<pre>
+[root@localhost redmine]# bundle exec rake generate_secret_token
+/usr/local/share/gems/gems/htmlentities-4.3.1/lib/htmlentities/mappings/expanded.rb:465: warning: key "inodot" is duplicated and overwritten on line 466
+
+root@localhost redmine]# RAILS_ENV=production bundle exec rake db:migrate
+</pre>
+
+apxs などのインストール
+<pre>
+[root@localhost redmine]# dnf install -y httpd-devel.x86_64
+</pre>
+
+passenger のインストール
+<pre>
+[root@localhost redmine]# gem install passenger
+</pre>
+
+passenger の Apache Module のインストール
+<pre>
+[root@localhost redmine]# passenger-install-apache2-module --auto
+</pre>
+
+passenger の設定の表示
+<pre>
+[root@localhost redmine]# passenger-install-apache2-module --snippet
+&lt;IfModule mod_passenger.c&gt;
+  PassengerRoot /usr/local/share/gems/gems/passenger-5.0.29
+  PassengerDefaultRuby /usr/bin/ruby
+&lt;/IfModule&gt;
+</pre>
+
+<pre>
+[root@localhost redmine]# vi /etc/httpd/conf.d/redmine.conf
+[root@localhost redmine]# cat /etc/httpd/conf.d/redmine.conf
+LoadModule passenger_module /usr/local/share/gems/gems/passenger-5.0.29/buildout/apache2/mod_passenger.so
+&lt;IfModule mod_passenger.c&gt;
+  PassengerRoot /usr/local/share/gems/gems/passenger-5.0.29
+  PassengerDefaultRuby /usr/bin/ruby
+&lt;/IfModule&gt;
+
+&lt;Directory "/var/lib/redmine/public"&gt;
+  Require all granted
+&lt;/Directory&gt;
+</pre>
+
+<h2>専用サーバーで動かす</h2>
+
+/etc/httpd/conf/httpd.conf
+<pre>
+#DocumentRoot "/var/www/html"
+DocumentRoot "/var/lib/redmine/public"
+</pre>
+
+<pre>
+[root@localhost redmine]# systemctl restart httpd.service
+</pre>
+
+<h2>サブディレクトリで動かす</h2>
+
+redmine のサブディレクトリで動かす方法
+
+<pre>
+[root@localhost redmine]# cat /etc/httpd/conf.d/redmine.conf
+LoadModule passenger_module /usr/local/share/gems/gems/passenger-5.0.29/buildout/apache2/mod_passenger.so
+&lt;IfModule mod_passenger.c&gt;
+  PassengerRoot /usr/local/share/gems/gems/passenger-5.0.29
+  PassengerDefaultRuby /usr/bin/ruby
+&lt;/IfModule&gt;
+
+&lt;Directory "/var/lib/redmine/public"&gt;
+  Require all granted
+&lt;/Directory&gt;
+
+RackBaseURI <strong>/redmine</strong>
+</pre>
+
+
+ドキュメントルートの設定変更
+
+/etc/httpd/conf/httpd.conf
+<pre>
+DocumentRoot "/var/www/html"
+</pre>
+
+ドキュメントルートのサブディレクトリにシンボリックリンクを張る
+<pre>
+[root@localhost redmine]# ln -s /var/lib/redmine/public /var/www/html/<strong>redmine</strong>
+</pre>
+
+Apache の再起動
+<pre>
+[root@localhost redmine]# systemctl restart httpd.service
+</pre>
+
+</body>
+</html>

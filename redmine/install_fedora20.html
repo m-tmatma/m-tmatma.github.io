@@ -1,0 +1,669 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Redmineのインストール</title>
+<meta name="keywords" content="Redmine" />
+<meta name="keywords" content="インストール" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	<a href="apache.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2015-02-06 14:36:07 +0900 (2015/02/06 (金)) $<br>
+$Revision: 988 $<br>
+</div>
+
+<h1>Redmine のインストール (Fedora 20)</h1>
+<h2>概要</h2>
+Redmine のインストール方法を解説します。
+
+<h2>参考ページ</h2>
+<ul>
+<li><a href="apache.html">Redmine をApache 経由で動かす方法</a></li>
+<li><a href="subdir.html">Redmine をサブディレクトリで動かす</a></li>
+</ul>
+
+<h2>必要なもの</h2>
+<ul>
+	<li>SQLサーバー</li>
+	<li>Ruby</li>
+	<li>rubygems</li>
+	<li>rake</li>
+	<li>Ruby on Rails</li>
+	<li>Redmine</li>
+	<li>Subversion (オプション)</li>
+	<li>Mongrel (オプション)</li>
+	<li>Apache (オプション)</li>
+</ul>
+
+<h2>インストール手順</h2>
+
+<!--
+<h3>Ruby</h3>
+パッケージでインストールする。(もしインストールされていなければ)
+<pre>
+# yum -y install ruby
+</pre>
+-->
+
+<h3>rubygems</h3>
+パッケージでインストールする。
+<pre>
+# yum -y install rubygems
+</pre>
+
+<h3>rake</h3>
+gem コマンドでインストールする。
+<pre>
+# gem install rake
+Fetching: rake-10.3.2.gem (100%)
+Successfully installed rake-10.3.2
+Parsing documentation for rake-10.3.2
+Installing ri documentation for rake-10.3.2
+Done installing documentation for rake after 2 seconds
+1 gem installed
+</pre>
+
+<p>
+	参考
+	<a href="http://www2s.biglobe.ne.jp/~idesaku/sss/tech/rake/#install">
+	http://www2s.biglobe.ne.jp/~idesaku/sss/tech/rake/#install
+	</a>
+</p>
+
+<h3>Ruby on Rails</h3>
+gem コマンドでインストールする。
+<pre>
+[root@spring8 ~]# gem install rails
+Fetching: i18n-0.6.11.gem (100%)
+Successfully installed i18n-0.6.11
+Fetching: thread_safe-0.3.4.gem (100%)
+Successfully installed thread_safe-0.3.4
+Fetching: tzinfo-1.2.1.gem (100%)
+Successfully installed tzinfo-1.2.1
+Fetching: minitest-5.4.0.gem (100%)
+Successfully installed minitest-5.4.0
+Fetching: activesupport-4.1.4.gem (100%)
+Successfully installed activesupport-4.1.4
+Fetching: rack-1.5.2.gem (100%)
+Successfully installed rack-1.5.2
+Fetching: rack-test-0.6.2.gem (100%)
+Successfully installed rack-test-0.6.2
+Fetching: builder-3.2.2.gem (100%)
+Successfully installed builder-3.2.2
+Fetching: erubis-2.7.0.gem (100%)
+Successfully installed erubis-2.7.0
+Fetching: actionview-4.1.4.gem (100%)
+Successfully installed actionview-4.1.4
+Fetching: actionpack-4.1.4.gem (100%)
+Successfully installed actionpack-4.1.4
+Fetching: activemodel-4.1.4.gem (100%)
+Successfully installed activemodel-4.1.4
+Fetching: arel-5.0.1.20140414130214.gem (100%)
+Successfully installed arel-5.0.1.20140414130214
+Fetching: activerecord-4.1.4.gem (100%)
+Successfully installed activerecord-4.1.4
+Fetching: mime-types-1.25.1.gem (100%)
+Successfully installed mime-types-1.25.1
+Fetching: polyglot-0.3.5.gem (100%)
+Successfully installed polyglot-0.3.5
+Fetching: treetop-1.4.15.gem (100%)
+Successfully installed treetop-1.4.15
+Fetching: mail-2.5.4.gem (100%)
+Successfully installed mail-2.5.4
+Fetching: actionmailer-4.1.4.gem (100%)
+Successfully installed actionmailer-4.1.4
+Fetching: thor-0.19.1.gem (100%)
+Successfully installed thor-0.19.1
+Fetching: railties-4.1.4.gem (100%)
+Successfully installed railties-4.1.4
+Fetching: bundler-1.6.5.gem (100%)
+Successfully installed bundler-1.6.5
+Fetching: hike-1.2.3.gem (100%)
+Successfully installed hike-1.2.3
+Fetching: multi_json-1.10.1.gem (100%)
+Successfully installed multi_json-1.10.1
+Fetching: tilt-1.4.1.gem (100%)
+Successfully installed tilt-1.4.1
+Fetching: sprockets-2.12.1.gem (100%)
+Successfully installed sprockets-2.12.1
+Fetching: sprockets-rails-2.1.3.gem (100%)
+Successfully installed sprockets-rails-2.1.3
+Fetching: rails-4.1.4.gem (100%)
+Successfully installed rails-4.1.4
+Parsing documentation for actionmailer-4.1.4
+Installing ri documentation for actionmailer-4.1.4
+Parsing documentation for actionpack-4.1.4
+Installing ri documentation for actionpack-4.1.4
+Parsing documentation for actionview-4.1.4
+Installing ri documentation for actionview-4.1.4
+Parsing documentation for activemodel-4.1.4
+Installing ri documentation for activemodel-4.1.4
+Parsing documentation for activerecord-4.1.4
+Installing ri documentation for activerecord-4.1.4
+Parsing documentation for activesupport-4.1.4
+Installing ri documentation for activesupport-4.1.4
+Parsing documentation for arel-5.0.1.20140414130214
+Installing ri documentation for arel-5.0.1.20140414130214
+Parsing documentation for builder-3.2.2
+Installing ri documentation for builder-3.2.2
+Parsing documentation for bundler-1.6.5
+Installing ri documentation for bundler-1.6.5
+Parsing documentation for erubis-2.7.0
+Installing ri documentation for erubis-2.7.0
+Parsing documentation for hike-1.2.3
+Installing ri documentation for hike-1.2.3
+Parsing documentation for i18n-0.6.11
+Installing ri documentation for i18n-0.6.11
+Parsing documentation for mail-2.5.4
+Installing ri documentation for mail-2.5.4
+Parsing documentation for mime-types-1.25.1
+Installing ri documentation for mime-types-1.25.1
+Parsing documentation for minitest-5.4.0
+Installing ri documentation for minitest-5.4.0
+Parsing documentation for multi_json-1.10.1
+Installing ri documentation for multi_json-1.10.1
+Parsing documentation for polyglot-0.3.5
+Installing ri documentation for polyglot-0.3.5
+Parsing documentation for rack-1.5.2
+Installing ri documentation for rack-1.5.2
+Parsing documentation for rack-test-0.6.2
+Installing ri documentation for rack-test-0.6.2
+Parsing documentation for rails-4.1.4
+Installing ri documentation for rails-4.1.4
+Parsing documentation for railties-4.1.4
+Installing ri documentation for railties-4.1.4
+Parsing documentation for sprockets-2.12.1
+Installing ri documentation for sprockets-2.12.1
+Parsing documentation for sprockets-rails-2.1.3
+Installing ri documentation for sprockets-rails-2.1.3
+Parsing documentation for thor-0.19.1
+Installing ri documentation for thor-0.19.1
+Parsing documentation for thread_safe-0.3.4
+Installing ri documentation for thread_safe-0.3.4
+Parsing documentation for tilt-1.4.1
+Installing ri documentation for tilt-1.4.1
+Parsing documentation for treetop-1.4.15
+Installing ri documentation for treetop-1.4.15
+Parsing documentation for tzinfo-1.2.1
+Installing ri documentation for tzinfo-1.2.1
+Done installing documentation for actionmailer, actionpack, actionview, activemodel, activerecord, activesupport, arel, builder, bundler, erubis, hike, i18n, mail, mime-types, minitest, multi_json, polyglot, rack, rack-test, rails, railties, sprockets, sprockets-rails, thor, thread_safe, tilt, treetop, tzinfo after 281 seconds
+28 gems installed
+</pre>
+
+<p>
+	参考
+	<a href="http://www.srcw.net/blog/2007/09/redmine.html">
+	http://www.srcw.net/blog/2007/09/redmine.html
+	</a>
+</p>
+
+<h3>Redmine</h3>
+Subversion で取得する。
+<pre>
+$ svn co http://svn.redmine.org/redmine/tags/2.5.2 redmine
+</pre>
+
+<h3>SQLサーバー</h3>
+<h4>MySQL のインストール</h4>
+
+<pre>
+# yum install -y rubygem-mysql2.x86_64
+# yum -y install mysql-server
+</pre>
+
+<pre>
+[root@atom ~]# chkconfig mysqld on
+情報:'systemctl enable mysqld.service'へ転送しています。
+Failed to issue method call: No such file or directory
+[root@atom ~]# service mysqld start
+Redirecting to /bin/systemctl start  mysqld.service
+</pre>
+
+<h4>ルートパスワード設定</h4>
+<pre>
+$ mysqladmin -u root password mysql
+</pre>
+ここでは、ユーザー root のパスワードを mysql に設定します。
+適宜適切なパスワードを設定します。
+
+<h4>MySQL 用のデータベース作成</h4>
+<pre>
+[tsuchiyama@atom 2.5.2]$ mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 5
+Server version: 5.5.38-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2014, Oracle, Monty Program Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> CREATE DATABASE redmine CHARACTER SET utf8;
+CREATE USER 'redmine'@'localhost' IDENTIFIED BY 'my_password';
+GRANT ALL PRIVILEGES ON redmine.* TO 'redmine'@'localhost';Query OK, 1 row affected (0.05 sec)
+
+MariaDB [(none)]> CREATE USER 'redmine'@'localhost' IDENTIFIED BY 'my_password';
+Query OK, 0 rows affected (0.06 sec)
+
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON redmine.* TO 'redmine'@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> quit
+</pre>
+
+<p>
+	参考
+	<a href="http://redmine.jp/guide/RedmineInstall">
+	http://redmine.jp/guide/RedmineInstall
+	</a>
+</p>
+
+<h4>rake のインストール</h4>
+
+<pre>
+# yum install rake
+</pre>
+
+<pre>
+$ gem install bundler
+Fetching: bundler-1.6.5.gem (100%)
+Successfully installed bundler-1.6.5
+Parsing documentation for bundler-1.6.5
+Installing ri documentation for bundler-1.6.5
+Done installing documentation for bundler after 4 seconds
+1 gem installed
+</pre>
+
+<pre>
+# yum install ruby-devel.x86_64
+</pre>
+
+<!--
+<pre>
+[tsuchiyama@atom 2.5.2]$ bundle install --without development test
+Your Gemfile lists the gem activerecord-jdbcmysql-adapter (>= 0) more than once.
+You should probably keep only one of them.
+While it's not a problem now, it could cause errors if you change the version of just one of them later.
+Fetching gem metadata from https://rubygems.org/.........
+Fetching additional metadata from https://rubygems.org/..
+Resolving dependencies...
+Installing rake 10.1.1
+Installing i18n 0.6.11
+Installing multi_json 1.10.1
+Installing activesupport 3.2.19
+Installing builder 3.0.0
+Installing activemodel 3.2.19
+Installing erubis 2.7.0
+Installing journey 1.0.4
+Installing rack 1.4.5
+Installing rack-cache 1.2
+Installing rack-test 0.6.2
+Installing hike 1.2.3
+Installing tilt 1.4.1
+Installing sprockets 2.2.2
+Installing actionpack 3.2.19
+Installing mime-types 1.25.1
+Installing polyglot 0.3.5
+Installing treetop 1.4.15
+Installing mail 2.5.4
+Installing actionmailer 3.2.19
+Installing arel 3.0.3
+Installing tzinfo 0.3.40
+Installing activerecord 3.2.19
+Installing activeresource 3.2.19
+Installing awesome_nested_set 2.1.6
+Using bundler 1.6.5
+Installing coderay 1.1.0
+Installing rack-ssl 1.3.4
+
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+
+    /usr/bin/ruby extconf.rb
+mkmf.rb can't find header files for ruby at /usr/share/include/ruby.h
+
+
+Gem files will remain installed in /home/tsuchiyama/.gem/ruby/gems/json-1.8.1 for inspection.
+Results logged to /home/tsuchiyama/.gem/ruby/gems/json-1.8.1/ext/json/ext/generator/gem_make.out
+An error occurred while installing json (1.8.1), and Bundler cannot continue.
+Make sure that `gem install json -v '1.8.1'` succeeds before bundling.
+</pre
+-->
+
+<pre>
+[tsuchiyama@atom 2.5.2]$ bundle install --without development test
+Your Gemfile lists the gem activerecord-jdbcmysql-adapter (>= 0) more than once.
+You should probably keep only one of them.
+While it's not a problem now, it could cause errors if you change the version of just one of them later.
+Fetching gem metadata from https://rubygems.org/.........
+Fetching additional metadata from https://rubygems.org/..
+Resolving dependencies...
+Using rake 10.1.1
+Using i18n 0.6.11
+Using multi_json 1.10.1
+Using activesupport 3.2.19
+Using builder 3.0.0
+Using activemodel 3.2.19
+Using erubis 2.7.0
+Using journey 1.0.4
+Using rack 1.4.5
+Using rack-cache 1.2
+Using rack-test 0.6.2
+Using hike 1.2.3
+Using tilt 1.4.1
+Using sprockets 2.2.2
+Using actionpack 3.2.19
+Using mime-types 1.25.1
+Using polyglot 0.3.5
+Using treetop 1.4.15
+Using mail 2.5.4
+Using actionmailer 3.2.19
+Using arel 3.0.3
+Using tzinfo 0.3.40
+Using activerecord 3.2.19
+Using activeresource 3.2.19
+Using awesome_nested_set 2.1.6
+Using bundler 1.6.5
+Using coderay 1.1.0
+Using rack-ssl 1.3.4
+Installing json 1.8.1
+Installing rdoc 3.12.2
+Installing thor 0.19.1
+Installing railties 3.2.19
+Installing jquery-rails 2.0.3
+
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+
+    /usr/bin/ruby extconf.rb
+checking for mysql_ssl_set()... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+        --with-opt-dir
+        --without-opt-dir
+        --with-opt-include
+        --without-opt-include=${opt-dir}/include
+        --with-opt-lib
+        --without-opt-lib=${opt-dir}/lib64
+        --with-make-prog
+        --without-make-prog
+        --srcdir=.
+        --curdir
+        --ruby=/usr/bin/ruby
+        --with-mysql-config
+        --without-mysql-config
+/usr/share/ruby/mkmf.rb:434:in `try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+        from /usr/share/ruby/mkmf.rb:519:in `try_link0'
+        from /usr/share/ruby/mkmf.rb:534:in `try_link'
+        from /usr/share/ruby/mkmf.rb:720:in `try_func'
+        from /usr/share/ruby/mkmf.rb:1004:in `block in have_func'
+        from /usr/share/ruby/mkmf.rb:895:in `block in checking_for'
+        from /usr/share/ruby/mkmf.rb:340:in `block (2 levels) in postpone'
+        from /usr/share/ruby/mkmf.rb:310:in `open'
+        from /usr/share/ruby/mkmf.rb:340:in `block in postpone'
+        from /usr/share/ruby/mkmf.rb:310:in `open'
+        from /usr/share/ruby/mkmf.rb:336:in `postpone'
+        from /usr/share/ruby/mkmf.rb:894:in `checking_for'
+        from /usr/share/ruby/mkmf.rb:1003:in `have_func'
+        from extconf.rb:50:in `<main>'
+
+
+Gem files will remain installed in /home/tsuchiyama/.gem/ruby/gems/mysql-2.8.1 for inspection.
+Results logged to /home/tsuchiyama/.gem/ruby/gems/mysql-2.8.1/ext/mysql_api/gem_make.out
+An error occurred while installing mysql (2.8.1), and Bundler cannot continue.
+Make sure that `gem install mysql -v '2.8.1'` succeeds before bundling.
+</pre>
+
+
+<h4>database.yml 作成</h4>
+<pre>
+	$ cp config/database.yml.example  config/database.yml
+</pre>
+
+<h4>database.yml 編集</h4>
+<pre>
+production:
+  adapter: mysql
+  database: redmine
+  host: localhost
+  username: root
+  password: <strong>mysql</strong>
+</pre>
+
+<p>
+	参考
+	<a href="http://redmine.jp/guide/RedmineInstall">
+	http://redmine.jp/guide/RedmineInstall
+	</a>
+</p>
+
+<h3>Redmine の初期化</h3>
+<pre>
+$ rake db:migrate RAILS_ENV="production"
+
+$ rake load_default_data RAILS_ENV="production"
+(in /home/redmine/redmine)
+
+Select language: bg, cs, de, en, es, fr, he, it, ja, ko, nl, pl, pt, pt-br, ro, ru, sr, sv, zh, zh-tw [en] ja
+====================================
+Loading default configuration data for language: ja
+
+Note: The rake task load_default_data has been deprecated, please use the replacement version redmine:load_default_data
+</pre>
+
+<p>
+	参考
+	<ul>
+	<li>
+		<a href="http://www.srcw.net/blog/2007/09/redmine.html">
+		http://www.srcw.net/blog/2007/09/redmine.html
+		</a>
+	</li>
+	<li>
+		<a href="http://www.nslabs.jp/redmine.rhtml">
+		http://www.nslabs.jp/redmine.rhtml
+		</a>
+	</li>
+	<li>
+		<a href="http://blogs.dion.ne.jp/koko/archives/5731471.html">
+		http://blogs.dion.ne.jp/koko/archives/5731471.html
+		</a>
+	</li>
+	<li>
+		<a href="http://ysky.vox.com/library/post/centos%E3%81%ABredmine%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.html">
+		http://ysky.vox.com/library/post/centos%E3%81%ABredmine%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.html
+		</a>
+	</li>
+	</ul>
+</p>
+
+<h3>Webrick</h3>
+<h4>Webrick で起動</h4>
+<pre>
+$ script/server -e production start
+=> Booting WEBrick...
+=> Rails application started on http://0.0.0.0:3000
+=> Ctrl-C to shutdown server; call with --help for options
+[2008-02-28 21:45:36] INFO  WEBrick 1.3.1
+[2008-02-28 21:45:36] INFO  ruby 1.8.5 (2006-08-25) [i386-linux]
+[2008-02-28 21:45:36] INFO  WEBrick::HTTPServer#start: pid=3007 port=3000
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost:3000/
+</pre>
+
+<h4>Webrick を停止</h4>
+Control + C を押して Webrick を停止する。
+
+<h3>Mongrel</h3>
+<h4>Mongrel のインストール</h4>
+<pre>
+# gem install mongrel_cluster --include-dependencies
+</pre>
+
+<p>
+	参考
+	<a href="http://rubyist.g.hatena.ne.jp/muscovyduck/20070402/p1">
+	http://rubyist.g.hatena.ne.jp/muscovyduck/20070402/p1
+	</a>
+</p>
+
+<h4>Mongrel の設定</h4>
+<p>
+mongrel_rails cluster::configure を使用して、mongrel_cluster.yml を
+作成する。
+</p>
+
+<h5>一番簡単な方法</h5>
+<pre>
+$ mongrel_rails cluster::configure
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ less config/mongrel_cluster.yml
+---
+log_file: log/mongrel.log
+port: 3000
+pid_file: tmp/pids/mongrel.pid
+servers: 2
+</pre>
+
+<h5>いくつかパラメータを追加</h5>
+<pre>
+$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd`
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ cat config/mongrel_cluster.yml
+---
+cwd: /home/redmine/redmine
+log_file: log/mongrel.log
+port: "3000"
+environment: production
+pid_file: tmp/pids/mongrel.pid
+servers: 2
+</pre>
+
+<h5>-N オプションを追加してみる。</h5>
+<pre>
+$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd` -N 5
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ cat config/mongrel_cluster.yml
+---
+cwd: /home/redmine/redmine
+log_file: log/mongrel.log
+port: "3000"
+environment: production
+pid_file: tmp/pids/mongrel.pid
+servers: 5
+</pre>
+
+<h4>mongrel の起動(対話モード)</h4>
+<pre>
+$ mongrel_rails start -e production -p 3000
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+** Starting Mongrel listening at 0.0.0.0:3000
+** Starting Rails with production environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel 1.1.2 available at 0.0.0.0:3000
+** Use CTRL-C to stop.
+</pre>
+
+<p>
+	参考
+	<a href="http://d.hatena.ne.jp/hayori/20071029/1193650726">
+	http://d.hatena.ne.jp/hayori/20071029/1193650726
+	</a>
+</p>
+
+<h4>mongrel の起動(デーモン)</h4>
+<pre>
+$ mongrel_rails start -d -e production -p 3000
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost:3000/
+</pre>
+
+<h2>全手順</h2>
+<pre>
+# yum -y install subversion
+# yum -y install MySQL-shared
+# yum -y install MySQL-ruby
+# yum -y install MySQL-server
+# yum -y install MySQL-client
+# yum -y install rubygems
+# chkconfig apache2 on
+# chkconfig mysql   on
+# /etc/init.d/mysql start
+# gem install rake
+# gem install mongrel_cluster --include-dependencies
+# gem install rails --include-dependencies
+# adduser redmine
+# passwd  redmine
+
+$ svn co http://redmine.rubyforge.org/svn/tags/0.6.3 redmine
+$ mysqladmin -u root password mysql
+$ mysql -u root -p
+$ cd redmine/
+$ cp config/database.yml.example  config/database.yml
+$ vi config/database.yml
+
+$ rake db:migrate RAILS_ENV="production"
+$ rake load_default_data RAILS_ENV="production"
+$ mongrel_rails cluster::configure -e production -p 3000
+$ mongrel_rails start -d -e production -p 3000
+</pre>
+
+</body>
+</html>

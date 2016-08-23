@@ -1,0 +1,131 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Perl" />
+<meta name="keywords" content="正規表現" />
+<meta name="keywords" content="先後読み" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>正規表現 先後読み</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-25 17:55:30 +0900 (2014/08/25 (月)) $<br>
+$Revision: 987 $<br>
+</div>
+
+<h1>正規表現 先後読み</h1>
+
+<h2>先読み</h2>
+
+<pre>
+(?=…)
+</pre>
+
+<ul>
+	<li>
+	… の部分の正規表現にマッチするけど処理対象にならない。
+	</li>
+	<li>
+	マッチする正規表現を絞り込むときに使う。
+	</li>
+	<li>
+	(?<=…) の正規表現の後ろの位置にマッチする
+	</li>
+</ul>
+
+
+<h2>後読み</h2>
+
+<pre>
+(?<=…)
+</pre>
+
+
+<ul>
+	<li>
+	… の部分の正規表現にマッチするけど処理対象にならない。
+	</li>
+	<li>
+	マッチする正規表現を絞り込むときに使う。
+	</li>
+	<li>
+	(?<=…) の正規表現の後ろの位置にマッチする
+	</li>
+</ul>
+
+<h3>コード例1</h3>
+
+たとえば HogeHoge Corp → HogeHoge Corporation と置換する場合
+
+<pre>
+s!(?<=HogeHoge )Corp!Corporation!
+</pre>
+
+とできる。
+
+<h3>コード例2</h3>
+
+<pre>
+while( <> )
+{
+	#	VALUE "CompanyName", "TODO: <会社名>" で
+	#
+	#
+	#	"CompanyName", "xxxxxx" → "CompanyName", "HogeHoge Corporation (C) 2012 All rights reserved."
+	#	に置換する
+	#
+	# "CompanyName",  は置換対象の絞り混みのためにマッチするが、置換対象にならない
+	# 正確には "CompanyName", のパターンの一番最後の位置にマッチする
+	s!(?<="CompanyName", )"[^"]+"!"HogeHoge Corporation (C) 2012 All rights reserved."!;
+	print;
+}
+</pre>
+
+<h2>参考</h2>
+
+<ul>
+	<li>
+		詳説 正規表現 第3版 の P57 (2.3.5 先後読みによって数値にカンマを付け加える)
+	</li>
+	<li>
+		<a href="http://d.hatena.ne.jp/chalcedony_htn/20090907/1252318833">正規表現の先読みと後読みはどっちがどっちだかわかりにくいんだよ！（追記あり）</a>
+	</li>
+</ul>
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=mtsuchiyama-22&o=9&p=8&l=as1&asins=4873113598&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>

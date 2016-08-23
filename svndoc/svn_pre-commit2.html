@@ -1,0 +1,242 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="pre-commit" />
+<meta name="keywords" content="svnlook" />
+<meta name="keywords" content="log" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>pre-commit によるコミットの拒否の方法 (part2)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="./svn_pre-commit.html">前に戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<div align="right">
+<ul>
+<li>初版: 2010/01/16</li>
+</ul>
+</div>
+
+<h1>pre-commit によるコミットの拒否の方法 (part2)</h1>
+
+<h2>概要</h2>
+
+<a href="./svn_pre-commit.html">pre-commit によるコミットの拒否の方法</a> の続きで
+svnlook log によってコミットログの取得を行うことができるので、それを利用して
+コミットログ中に Redmine との連携キーワードがない場合にコミットを拒否する方法を
+説明する。
+
+<h2>参考リンク</h2>
+
+<ul>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.start-commit.html">
+		start-commit コミット実行前通知 (トランザクションが作られる前に呼ばれるので今回の用途には使えない)
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.pre-commit.html">
+		pre-commit コミット実行前通知 (今回使用するもの)
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.post-commit.html">
+		post-commit コミット成功通知
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.svnlook.c.changed.html">
+		svnlook changed - 変更されたパスを出力します。
+		</a>
+	</li>
+	<li>
+		<a href="./svn_pre-commit.html">
+		pre-commit によるコミットの拒否の方法
+		</a>
+	</li>
+	<li>
+		<a href="./svn_hook_script.html">
+		Subversion フックスクリプト
+		</a>
+	</li>
+	<li>
+		<a href="./svn_reject_commit.html">
+		start-commit によるSubversion 1.4 クライアントから Subversion 1.5 サーバーへのコミットを拒否する方法
+		</a>
+	</li>
+	<li>
+		<a href="http://www.redmine.org/wiki/1/RedmineSettings#Referencing-issues-in-commit-messages">
+		Referencing issues in commit messages
+		</a>
+	</li>
+	<li>
+		<a href="http://redmine.jp/tech_note/subversion/">
+		Subversionとの連携
+		</a>
+	</li>
+</ul>
+
+<h2>実際の例</h2>
+
+<p>
+スクリプトの先頭のコメントにあるような pre-commit フックスクリプトを別に用意するか
+または Unix 系の OS の場合、スクリプトを pre-commit という名前で保存する必要がある。
+</p>
+
+<a href="./hook-script/check-commit-log.pl">
+check-commit-log.pl
+</a>
+
+<pre>
+#!/usr/bin/perl
+
+###############################################################################
+#
+#	check-commit-log.pl
+#
+#	svnlook log を利用して Redmine との連携キーワードを含まないコミットを
+#	拒否するスクリプト。pre-commit (pre-commit.bat) から呼び出すことが前提
+#
+#	pre-commit.bat の例
+#		set REPOS=%1
+#		set TXN=%2
+#
+#		set PATH=C:\Program Files\Subversion\bin
+#		c:\Perl\bin\perl.exe %REPOS%\hooks\check-commit-log.pl %REPOS% %TXN%
+#		exit %ERRORLEVEL%
+#
+#	pre-commit の例 (for UNIX)
+#		#!/bin/sh
+#		REPOS=%1
+#		TXN=%2
+#		
+#		set PATH=/usr/bin
+#		/usr/bin/perl $REPOS/hooks/check-commit-log.pl $REPOS $TXN || exit 1
+#		exit 0
+#
+###############################################################################
+use FindBin;	# スクリプト名を参照するためのモジュール
+
+<strong>
+# !!! 適宜書き換えて !!!
+# svnlook の絶対パスを指定する
+# または呼び出し側の pre-commit または pre-commit.bat で環境変数 PATH に
+# svnlook のパスを設定しても OK
+</strong>
+$SVNLOOK = "svnlook";
+
+# pre-commit (pre-commit.bat) からの引数
+$REPOS   = $ARGV[0];
+$TXN     = $ARGV[1];
+
+# debug オプション
+$debug   = 0;
+
+# svnlook のコマンドライン引数
+$svnlook_cmd = "$SVNLOOK log  -t $TXN $REPOS";
+
+# svnlook を(パイプで)実行
+open IN, "$svnlook_cmd |";
+
+my @svnlook_output = &lt;IN&gt;;
+close IN;
+
+# コミットログを連結して 1 つの文字列にする
+my $commit_log = join "", @svnlook_output;
+
+if( !is_commit_log_valid( $commit_log) )
+{
+	print STDERR "$FindBin::Script: Your commit is blocked because the commit log has no valid redmine keyword.\n";
+	exit 1;
+}
+
+exit 0;
+
+############################################################################3
+#
+#	コミットログを元にコミットを許可するか拒否するか判断する関数
+#
+#	戻り値
+#		1: コミットを許可する
+#		0: コミットを拒否する
+#
+#	!!! 適宜書き換えて !!!
+#
+#	参考
+#		http://www.redmine.org/wiki/1/RedmineSettings#Referencing-issues-in-commit-messages\n
+#		http://redmine.jp/tech_note/subversion/
+############################################################################3
+sub is_commit_log_valid
+{
+	my $commit_log  = shift;
+	
+	# Redmine のキーワードがふくれているかチェックする
+	unless( $commit_log =~ /(^|\b)refs #(\d+)($|\b)/ )
+	{
+		# Redmine のキーワードが含まれているけど不正な場合に
+		# チェックしてエラーの内容をユーザーに知らせる
+		if( $commit_log =~ /refs #(\d+)/ )
+		{
+			print STDERR "$FindBin::Script: You must divide refs keyword by word separators (i.e space)\n";
+		}
+		elsif( $commit_log =~ /#(\d+)/ )
+		{
+			print STDERR "$FindBin::Script: You must specify refs keyword before #$1\n";
+		}
+		print STDERR "$FindBin::Script: Example of a working commit message\n";
+		print STDERR "$FindBin::Script:  refs #2345\n";
+		print STDERR "$FindBin::Script:  ...\n";
+		print STDERR "$FindBin::Script:  ...\n";
+		print STDERR "$FindBin::Script: \n";
+		print STDERR "$FindBin::Script: See http://www.redmine.org/wiki/1/RedmineSettings#Referencing-issues-in-commit-messages\n";
+		print STDERR "$FindBin::Script: or http://redmine.jp/tech_note/subversion/ for detail.\n";
+		return 0;
+	}
+
+	return 1;
+}
+</pre>
+
+</body>
+</html>

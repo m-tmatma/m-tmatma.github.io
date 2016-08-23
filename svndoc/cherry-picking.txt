@@ -1,0 +1,44 @@
+
+cd /d D:\tmp
+fast_rm work trunk repos 1.0.x
+
+cd /d D:\tmp
+svnadmin create repos
+svn co file:///D:/tmp/repos work
+
+cd work
+svn mkdir tags branches trunk
+svn ci -m "initial dir"
+
+cd /d D:\tmp
+svn co  file:///D:/tmp/repos/trunk
+
+cd trunk
+echo 1 > test.txt
+svn add test.txt
+svn ci -m "add test.txt"
+
+svn cp  file:///D:/tmp/repos/trunk  file:///D:/tmp/repos/branches/1.0.x -m "make 1.0.x branch"
+
+echo 2 >> test.txt
+svn di
+svn ci -m "fix bug"
+
+echo 3 >> test.txt
+svn di
+svn ci -m "fix bug 2"
+
+cd /d D:\tmp
+svn co  file:///D:/tmp/repos/branches/1.0.x
+
+cd 1.0.x
+svn merge -c 4 file:///D:/tmp/repos/trunk
+svn di
+svn ci -m "merge from trunk"
+
+svn up
+svn pg svn:mergeinfo file:///D:/tmp/repos/branches/1.0.x
+svn pg svn:mergeinfo .
+svn mergeinfo file:///D:/tmp/repos/trunk
+svn mergeinfo --show-revs merged   file:///D:/tmp/repos/trunk
+svn mergeinfo --show-revs eligible file:///D:/tmp/repos/trunk

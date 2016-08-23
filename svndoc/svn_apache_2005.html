@@ -1,0 +1,483 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Apache 2.x のコンパイル(for Windows) (VS2005)</title>
+<meta name="keywords" content="apache" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="mod_dav_svn.so" />
+<meta name="keywords" content="cvtdsp.pl" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_basic_2005.html">前に戻る</a>
+	<a href="svn_ssl_2005.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<!------------------------------------------>
+<!--                                      -->
+<!--                                      -->
+<!------------------------------------------>
+<h1>Apache 2.xのコンパイル (for Windows) (VS2005)</h1>
+
+<strong>この情報は古いです</strong>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>概要</h2>
+Windows 上で Apache を構築する方法を説明します。
+ただし Subversion サーバーを構築する部分だけに限定して説明します。<br>
+<strong>Subversion サーバーを使わなければ、この手順をとばしても OK</strong>
+<a href="svn_ssl_2005.html">次へ進む</a>
+
+<p>
+以下の手順を既に行っていることを前提としています。
+</p>
+<ol>
+<li><a href="./svn_basic_2005.html">最小の構成でコンパイルする (VS2005)</a></li>
+</ol>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>準備</h2>
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li>
+	<a href="http://cm.bell-labs.com/cm/cs/who/bwk/awk95.exe">
+	awk.exe (awk95.exe をダウンロードして awk.exe に名前変更する)
+	</a>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/apr/apr/trunk/build/cvtdsp.pl">
+	cvtdsp.pl
+	</a>
+</ul>
+
+<h2 id="prepare">下準備</h2>
+<h3>実行パスの設定</h3>
+awk.exe を保存したディレクトリの場所を、Visual C++ に設定する。
+<ol>
+	<li>Visual C++ のメニューから [ツール] - [オプション]を選ぶ</li>
+	<li>[ディレクトリ] タブに移動する。</li>
+	<li>[表示するディレクトリ] で[実行可能ファイル]を選ぶ</li>
+	<li>[ディレクトリ] にawk.exe を保存したディレクトリパスを追加する</li>
+</ol>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apache のコンパイル</h2>
+<h3 id="cvtdsp_pl">cvtdsp.plの実行 (Apache 2.2.x の場合に必要)</h3>
+<ol>
+	<li>cvtdsp.pl を Apache のソースコードのトップディレクトリにコピーする。</li>
+	<li>Apache のソースコードのトップディレクトリに移動する。</li>
+	<li>以下のコマンドを実行する。
+<pre>
+D:\svnwork\vs2005\common\httpd-2.2.4>perl cvtdsp.pl -2005
+Converted project httpd.dsp to 2005 in .
+Converted project libhttpd.dsp to 2005 in .
+Converted project mod_access_compat.dsp to 2005 in ./modules/aaa
+Converted project mod_authnz_ldap.dsp to 2005 in ./modules/aaa
+                中略
+Converted project rotatelogs.dsp to 2005 in ./support
+Converted project wintty.dsp to 2005 in ./support/win32
+</pre>
+	</li>
+</ol>
+<strong>この手順を行わなかった場合 <a href="#httpd_rc_compile_error">
+httpd.rc のコンパイルエラー</a>になります</strong>。
+
+<h3 id="compile">コンパイル</h3>
+<ol>
+<li><strong>もし sln ファイルや vcproj ファイルがすでに存在している場合削除しておく</strong></li>
+<li>Visaul Studio 2005 でApache.dsw を開く。</li>
+<li>プロジェクトファイルを変換するか聞かれるので<strong>すべてはい</strong>を選択する</li>
+<li>BuildBin または InstallBin のプロジェクトを選択する。</li>
+<li>Debug/Release の各構成をコンパイルする。</li>
+</ol>
+<strong>InstallBin の構成でビルドすると、ソースコードが置かれているドライブの
+ルートディレクトリに必要ファイルがインストールされます</strong>
+
+<h3>InstallBin をコンパイルしたときに作成されるディレクトリ構成</h3>
+InstallBin をコンパイルすると以下のようなディレクトリ構成が作成されます。
+あまり関係ないファイルは省略しています。
+<pre>
+\Apache2\
+ │
+ ├─bin/
+ │   │
+ │   ├─iconv/
+ │   ├─Apache.exe
+ │   ├─httpd.exe
+ │   │     ...
+ │   ├─libapr.dll
+ │   ├─libapriconv.dll
+ │   ├─libaprutil.dll
+ │   └─libhttpd.dll
+ │
+ ├─cgi-bin/
+ ├─conf/
+ │   │
+ │   ├─extra/
+ │   └─<strong>httpd.conf</strong>
+ │
+ ├─error/
+ ├─htdocs/
+ ├─icons/
+ ├─include/
+ ├─lib/
+ ├─logs/
+ ├─manual/
+ ├─modules/
+ │   │
+ │   ├─mod_dav.pdb
+ │   ├─<strong>mod_dav.so</strong>
+ │   ├─mod_dav_fs.pdb
+ │   ├─<strong>mod_dav_fs.so</strong>
+ │   ├─mod_dbd.pdb
+ │   │     ...
+ │   ├─util_ldap.pdb
+ │   └─util_ldap.so
+ │
+ ├─proxy/
+ ├─symbols/
+ │
+ ├─CHANGES.txt
+ │    ...
+ ├─INSTALL.txt
+ └─README.txt
+</pre>
+
+<h3>注意</h3>
+APR のDLLは異なるバージョンのファイルを混ぜて置かないこと。
+例: libapr-1.dll と libapr.dll 等
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apacheの実行確認</h2>
+Apache.exe を実行して以下の出力が出ることを確認する。
+<pre>
+D:\Apache2\bin>Apache.exe help
+Usage: Apache.exe [-D name] [-d directory] [-f file]
+                  [-C "directive"] [-c "directive"]
+                  [-w] [-k start|restart|stop|shutdown]
+                  [-k install|config|uninstall] [-n service_name]
+                  [-v] [-V] [-h] [-l] [-L] [-t] [-S]
+Options:
+  -D name           : define a name for use in <IfDefine name> directives
+  -d directory      : specify an alternate initial ServerRoot
+  -f file           : specify an alternate ServerConfigFile
+  -C "directive"    : process directive before reading config files
+  -c "directive"    : process directive after reading config files
+  -n name           : set service name and use its ServerConfigFile
+  <strong>-k start        : tell Apache to start</strong>
+  -k restart        : tell running Apache to do a graceful restart
+  <strong>-k stop|shutdown: tell running Apache to shutdown</strong>
+  <strong>-k install      : install an Apache service</strong>
+  -k config         : change startup Options of an Apache service
+  <strong>-k uninstall    : uninstall an Apache service</strong>
+  -w                : hold open the console window on error
+  -e level          : show startup errors of level (see LogLevel)
+  -E file           : log startup errors to file
+  -v                : show version number
+  -V                : show compile settings
+  -h                : list available command line options (this page)
+  -l                : list compiled in modules
+  -L                : list available configuration directives
+  -t -D DUMP_VHOSTS : show parsed settings (currently only vhost settings)
+  -S                : a synonym for -t -D DUMP_VHOSTS
+  -t                : run syntax check for config files
+</pre>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apacheをサービスアプリとしてインストールする</h2>
+コマンドラインから以下のように入力します。
+成功した場合何も表示されません。
+<pre>
+D:\Apache2\bin>Apache.exe -k install
+
+D:\Apache2\bin>
+</pre>
+
+正しくインストールできたか確認します。
+<ol>
+<li>スタートメニューから、[ファイル名を指定して実行]を選ぶ または Windowsキー + R を押す</li>
+<li>services.msc と入力して実行します</li>
+<li>下の図のようになっていることを確認する</li>
+</ol>
+<img src="services_apache2.2.png">
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apacheを開始する</h2>
+<h3>コマンドラインから実行する場合</h3>
+コマンドラインから以下のように入力します。
+成功した場合何も表示されません。
+<pre>
+D:\Apache2\bin>Apache.exe -k start
+
+D:\Apache2\bin>
+</pre>
+
+<h3>サービス一覧画面から実行する場合</h3>
+<div>
+サービス一覧の画面から Apache2.2 の項目を右クリックして『開始』を選んでもOK です。
+</div>
+
+<h3>Apacheへの接続確認</h3>
+<ol>
+<li>ブラウザから http://localhost/ にアクセスできるか
+確認します</li>
+<li>"あなたの予想に反して、このページが見えているでしょうか" というページが
+出ればApacheの起動に成功です。</li>
+</ol>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apacheの設定 (前半部分)</h2>
+Apache を起動することができましたが、このままでは Subversion を
+使えないので、Subversion を設定できるようにします。
+
+<h3>必要なファイルのインストール</h3>
+以下のファイルを\Apache2\modules にコピーします。
+<ul>
+<li><strong>mod_dav_svn.so</strong> </li>
+<li><strong>libdb44.dll</strong> (BDB 4.4 の場合) </li>
+<li>intl3_svn.dll (国際化対応でコンパイルしている場合)</li>
+</ul>
+
+<h3>httpd.conf の編集</h3>
+<p>
+設定を行うためには \Apache2\conf\httpd.conf をテキストエディタで
+編集します。
+</p>
+
+変更前
+<pre>
+#LoadModule dav_module modules/mod_dav.so
+#LoadModule dav_fs_module modules/mod_dav_fs.so
+</pre>
+変更後
+<pre>
+LoadModule dav_module modules/mod_dav.so
+LoadModule dav_fs_module modules/mod_dav_fs.so
+LoadModule dav_svn_module modules/mod_dav_svn.so
+</pre>
+
+<h3>Apache の再起動 (httpd.conf の変更の反映) </h3>
+コマンドラインから以下のように入力します。
+成功した場合何も表示されません。
+<pre>
+D:\Apache2\bin>Apache.exe -k restart
+
+D:\Apache2\bin>
+</pre>
+
+<!------------------------------------------>
+<!--                                      -->
+<!------------------------------------------>
+<h2>Apacheの設定 (後半部分)</h2>
+<h3>テスト用リポジトリ構築</h3>
+以下のコマンドを実行してテスト用のリポジトリを用意します。
+<pre>
+D:\>svnadmin create svnrepos
+
+D:\>
+</pre>
+
+<h3>httpd.conf の設定</h3>
+以下の記述を httpd.conf に追加する。
+<pre>
+&lt;Location /svn&gt;
+	DAV svn
+	SVNPath D:/svnrepos
+&lt;/Location&gt;
+</pre>
+
+<h3>Apache の再起動 (httpd.conf の変更の反映) </h3>
+Apache を再起動します。
+
+
+<h3>動作確認</h3>
+ブラウザから http://localhost/svn/ に
+アクセスできるか確認します。<br>
+
+<a href="Revision0.html">こんなページ</a>が表示されれば成功です。
+
+
+<!------------------------------------------>
+<!--                                      -->
+<!--                                      -->
+<!------------------------------------------>
+<h2>リンク</h2>
+<ul>
+	<li>
+		<a href="http://www.apachelounge.com/forum/viewtopic.php?p=8304">
+		Building 2.2.3 gives error
+		</a>
+	</li>
+	<li>
+		<a href="http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=596742&SiteID=1&mode=1">
+		fatal error RC1107: invalid usage; use RC /? for Help
+		</a>
+	</li>
+	<li>
+		<a href="http://www.apachelounge.com/forum/viewtopic.php?t=778">
+		How to Build Apache Mod SSL 2.2.n Using Visual C++ Express
+		</a>
+	</li>
+	<li>
+		<a href="http://www.devside.net/guides/windows/apache">
+		Building Apache 2.2.3 or 2.0.59, with mod_ssl, mod_security, mod_deflate
+		</a>
+	</li>
+</ul>
+
+<!------------------------------------------>
+<!--                                      -->
+<!--                                      -->
+<!------------------------------------------>
+<h2>Trouble Shooting</h2>
+<h3 id="httpd_rc_compile_error">httpd.rc のコンパイルエラーになる</h3>
+<pre>
+19>------ ビルド開始: プロジェクト: htdbm, 構成: Debug Win32 ------
+12>リソースをコンパイルしています...
+12>fatal error RC1107: invalid usage; use RC /? for Help
+12>プロジェクト : error PRJ0002 : エラーの結果 1 が 'C:\Program Files\Microsoft Visual Studio 8\VC\bin\rc.exe' より返されました。
+12>ビルドログは "file://d:\svnwork\vs2005\common\httpd-2.2.4\Debug\BuildLog.htm" に保存されました。
+12>libhttpd - エラー 1、警告 2
+</pre>
+
+このエラーは Apache.dsw を Visual Studio 2005 で開いてプロジェクトファイルを
+変換するときに LONG_NAME="Apache htdbm command line utility" を
+"LONG_NAME="Apache htdbm command line utility"" に変換してしまうために
+起こります。
+<pre>
+rc.exe
+/d "_DEBUG" /d "APP_FILE" /d "BIN_NAME="htdbm.exe"" 
+/d "LONG_NAME="Apache htdbm command line utility"" 
+/d "_VC80_UPGRADE=0x0600" /l 0x409 
+/I "\svnwork\vs2005\common\httpd-2.2.4\build\win32" 
+/I "../include" 
+/I "../srclib/apr/include" 
+/fo"Debug/htdbm.res"
+</pre>
+
+<p>
+httpd.rc のコンパイルで以下のエラーになる場合、<a href="#cvtdsp_pl">cvtdsp.plの実行</a>
+で説明している手順を行ってから、Apache.dsw を開く必要があります。
+</p>
+<p>
+cvtdsp.pl を使うと LONG_NAME="Apache htdbm command line utility" の
+部分を "LONG_NAME=Apache htdbm command line utility" に変換します。<br>
+BIN_NAME に関しても同様です。
+</p>
+<p>
+なお  いったん Apache.dsw を Visual Studio 2005 で開いてしまった場合は
+sln ファイルやvcproj ファイルが作成されてしまっているので削除してから
+このスクリプトを実行するようにします。
+</p>
+
+<h3>サービス一覧から、Apache を起動しようとすると
+『ローカルコンピュータで Apache2 を開始できません。詳細については、システムイベントを
+確認してください。これが Microsoft 以外のサービスである場合は、サービスの製造元に
+問い合わせてサービス固有のエラーコード 1 を参照してください。』というエラーが出る場合</h3>
+
+<p>
+mod_dav_svn.so のロードに失敗している可能性があります。mod_dav_svn.so の置かれて
+いるディレクトリ(この手順の場合、D:\Apache2\modules) に mod_dav_svn.so が
+依存している DLL をすべてコピーしているか確認します。(通常、libdb44.dll や intl3_svn.dll がない)
+</p>
+
+mod_dav_svn.so が依存している DLL がわからなければ
+以下のようにして見つけることができます。
+
+<pre>
+D:\Apache2\modules>dumpbin /imports mod_dav_svn.so
+Microsoft (R) COFF Binary File Dumper Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+
+Dump of file mod_dav_svn.so
+
+File Type: DLL
+
+  Section contains the following imports:
+
+    mod_dav.so
+              1006B460 Import Address Table
+                    中略
+    libhttpd.dll <strong>← 元々入っているので自分でコピーしなくてもOK</strong>
+              1006B3D8 Import Address Table
+                    中略
+    libapr.dll <strong>← 元々入っているので自分でコピーしなくてもOK</strong>
+              1006B168 Import Address Table
+                    中略
+    libaprutil.dll <strong>← 元々入っているので自分でコピーしなくてもOK</strong>
+              1006B330 Import Address Table
+                    中略
+    <strong>intl3_svn.dll</strong> <strong>← 国際化対応でコンパイルしている場合</strong>
+              1006B330 Import Address Table
+                    中略
+    <strong>libdb44.dll</strong>
+              1006B330 Import Address Table
+                    中略
+	以下略
+</pre>
+
+<h3>コンソールから Apache を起動してエラー表示がないのに、サーバーに接続できない場合</h3>
+<p>
+イベントログを確認して、以下のエラーが記録されていた場合、上記のエラーと同じです。
+</p>
+<p>
+『<strong>Apache2 は次のサービス固有のエラーで終了しました: 1 (0x1)</strong>』
+</p>
+
+
+</body>
+</html>

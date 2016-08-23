@@ -1,0 +1,249 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="ja.po" />
+<meta name="keywords" content="gettext" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion の ja.po を更新する方法</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion の ja.po を更新する</h1>
+<h2>概要</h2>
+<p>
+Subversion では gettext によって、表示されるメッセージは各言語用に変換されて
+表示されます。表示されるメッセージが格納される po ファイルの更新方法を説明します。
+</p>
+
+<h2>Subversion の翻訳に関するドキュメント</h2>
+<ul>
+	<li>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk/TRANSLATING">
+		http://svn.apache.org/repos/asf/subversion/trunk/TRANSLATING
+		</a>
+	</li>
+</ul>
+
+<h2>必要な環境</h2>
+<ul>
+	<li>shell script 実行環境 (bash など)</li>
+	<li>gnu make</li>
+	<li>gettext 等のツール</li>
+	</ul>
+</ul>
+
+<h2>po ファイルの更新</h2>
+
+<h3>cygwin のインストール</h3>
+Windows 上で作業したい場合、gnu make や gettext 等がすべて利用可能な
+cygwin 環境で行うのがもっとも簡単です。UNIX 系のOS の場合、シェルを
+起動して、コマンドを入力すれば OK です。
+
+<p>
+<a href="http://www.cygwin.com">http://www.cygwin.com</a> から
+<a href="http://www.cygwin.com/setup.exe">setup.exe</a> を取得して
+インストールする。
+</p>
+
+<h3>最新のソースコードのメッセージを po ファイルに反映</h3>
+Start Menu から cygwin Bash Shell を起動して以下のコマンドを
+入力する。
+<pre>
+$ ./autogen.sh
+$ ./configure
+$ make locale-gnu-pot
+$ make locale-gnu-po-update PO=ja
+</pre>
+
+<h2>po ファイルの修正のときに気をつけること</h2>
+
+<h3>c-format</h3>
+printf の書式指定文字列を含むメッセージであることを示します。
+
+<h3>fuzzy</h3>
+
+locale-gnu-po-update で po ファイルを更新すると、fuzzy キーワードを
+含むエントリーが作成されることがあります。この場合翻訳者がメッセージを
+確認して、修正後 fuzzy キーワードを削除します。
+
+<p>
+po ファイルを msgmerge で更新したときに、英語のメッセージがちょっとだけ
+変更されたことにより、曖昧になったことを表しています。
+fuzzy というキーワードのあるメッセージは、翻訳されず英語のまま表示されます。<br>
+</p>
+
+<h4>具体例</h4>
+以下のようにメッセージが変更された場合を説明します。
+
+<ul>
+	<li>
+	po ファイル
+	</li>
+	"Module for accessing a repository via WebDAV (DeltaV) protocol."
+	<li>
+	最新のソースコード
+	</li>
+	"Module for accessing a repository via WebDAV protocol using Neon."
+</ul>
+
+<p>
+libsvn_ra_dav => libsvn_ra_neon に名前変更されたために、このメッセージが
+変更されました
+</p>
+
+元々の po ファイルの内容
+<pre>
+#: libsvn_ra_dav/session.c:578
+msgid "Module for accessing a repository via WebDAV (DeltaV) protocol."
+msgstr "WebDAV (DeltaV) プロトコルを使ってリポジトリにアクセスするモジュール。"
+</pre>
+
+make locale-gnu-po-update 実行後の po ファイルの内容
+<pre>
+#: libsvn_ra_neon/session.c:578
+#, <strong>fuzzy</strong>
+msgid "Module for accessing a repository via WebDAV protocol using Neon."
+msgstr "WebDAV (DeltaV) プロトコルを使ってリポジトリにアクセスするモジュール。"
+</pre>
+
+翻訳メッセージを、正しいものに修正して fuzzy キーワードを削除します。
+<pre>
+#: libsvn_ra_neon/session.c:578
+msgid "Module for accessing a repository via WebDAV protocol using Neon."
+msgstr "Neonを利用して WebDAV (DeltaV) プロトコル経由でリポジトリにアクセスするモジュール。"
+</pre>
+
+<h4>参考</h4>
+c-format の文字列で曖昧になった場合以下のようになります。
+<pre>
+#: libsvn_fs_fs/fs_fs.c:651
+#, <strong>fuzzy, c-format</strong>
+msgid "Format file '%s' contains an unexpected non-digit"
+msgstr "'%s' の 1 行目に数字以外が含まれています"
+</pre>
+
+この場合 メッセージを直してから fuzzy を削除します。
+<pre>
+#: libsvn_fs_fs/fs_fs.c:651
+#, <strong>c-format</strong>
+msgid "Format file '%s' contains an unexpected non-digit"
+msgstr "format ファイル '%s' に予期しない数字以外が含まれています"
+</pre>
+
+<h2>po ファイルのコンパイル</h2>
+以下のコマンドを実行して po ファイルをコンパイルします。
+<pre>
+$ make locale
+/usr/bin/msgfmt -c -o subversion/po/ja.mo subversion/po/ja.po
+/usr/bin/msgfmt -c -o subversion/po/ko.mo subversion/po/ko.po
+/usr/bin/msgfmt -c -o subversion/po/nb.mo subversion/po/nb.po
+/usr/bin/msgfmt -c -o subversion/po/pl.mo subversion/po/pl.po
+/usr/bin/msgfmt -c -o subversion/po/pt_BR.mo subversion/po/pt_BR.po
+/usr/bin/msgfmt -c -o subversion/po/sv.mo subversion/po/sv.po
+/usr/bin/msgfmt -c -o subversion/po/zh_CN.mo subversion/po/zh_CN.po
+/usr/bin/msgfmt -c -o subversion/po/zh_TW.mo subversion/po/zh_TW.po
+</pre>
+ここでエラーが発生した場合、変更した po ファイルを修正します。
+
+<h2>翻訳状況の確認</h2>
+<strong>
+このスクリプトは svn revert を呼ぶようなので自分が翻訳を
+追加したときに作業の確認に使用することはできないみたいです。
+</strong>
+<pre>
+[hogehoge@localhost trunk]$ python ./tools/po/l10n-report.py
+
+Translation status report for trunk r26631
+
+  lang   trans untrans   fuzzy     obs
+--------------------------------------
+    de    1564      88     128      52
+    es    1642      10      16     155
+    fr    1652       0       1       0
+    it    1645       7      18       6
+    ja    1608      44      81     345
+    ko    1580      72     104      51
+    nb    1589      63      89      58
+    pl    1648       4       4       2
+ pt_BR    1608      44      75      36
+    sv    1560      92     127      51
+ zh_CN    1652       0       2       1
+ zh_TW    1540     112     175     122
+
+You have not passed '-m' option, so email is not sent.
+</pre>
+
+<h2>リンク</h2>
+<ul>
+	<li>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk/TRANSLATING">
+		Guide to translating Subversion
+		</a>
+	</li>
+	<li>
+		<a href="http://anakin.ncst.ernet.in/~aparna/consolidated/c2335.html">
+		Gettext: Architectural Overview
+		</a>
+	</li>
+	<li>
+		<a href="http://ring.u-toyama.ac.jp/archives/doc/gnu-info-j/gettext/gettext-ja.html">
+		GNU gettextユーティリティ
+		</a>
+	</li>
+	<li>
+	<a href="http://www.gnu.org/software/gettext/manual/html_node/gettext_toc.html">
+	GNU `gettext' utilities
+	</a>
+	</li>
+	<li>
+	<a href="http://www.poedit.net/">
+	poEdit
+	</a>
+	</li>
+</ul>
+
+
+</body>
+</html>
+

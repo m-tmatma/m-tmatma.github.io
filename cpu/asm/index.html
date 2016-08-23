@@ -1,0 +1,130 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="link" />
+<link href="../../style.css" type="text/css" rel="stylesheet" />
+<title>アセンブラ on Windows ドライバ</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h3>Sources</h3>
+
+<pre>
+USER_C_FLAGS=$(USER_C_FLAGS) /Fa
+I386_SOURCES	= i386\my_cpuid.asm
+AMD64_SOURCES	= amd64\my_cpuid.asm
+</pre>
+
+<h3>__cpuid</h3>
+
+<pre>
+void __cpuid(
+   int CPUInfo[4],
+   int InfoType
+)
+{
+	_asm {
+		mov ECX, InfoType
+		cpuid
+		mov CPUInfo[0], EAX
+		mov CPUInfo[1], EBX
+		mov CPUInfo[2], ECX
+		mov CPUInfo[3], EDX
+	};
+}
+</pre>
+
+<h3>i386/my_cpuid.asm</h3>
+
+<pre>
+	.686P
+	.XMM
+	.model	flat
+
+INCLUDELIB LIBCMT
+INCLUDELIB OLDNAMES
+
+PUBLIC	my_cpuid
+_TEXT	SEGMENT
+_CPUInfo$  = 8						; size = 4
+_InfoType$ = 12						; size = 4
+my_cpuid PROC						; COMDAT
+	push	ebp
+	mov		ebp, esp
+	push	ebx
+	mov		ecx, DWORD PTR _InfoType$[ebp]
+	cpuid
+	mov		DWORD PTR _CPUInfo$[ebp  ], eax
+	mov		DWORD PTR _CPUInfo$[ebp+1], ebx
+	mov		DWORD PTR _CPUInfo$[ebp+2], ecx
+	mov		DWORD PTR _CPUInfo$[ebp+3], edx
+	pop		ebx
+	pop		ebp
+	ret		8
+my_cpuid ENDP				; __cpuid
+_TEXT	ENDS
+END
+</pre>
+
+<h3>amd64/my_cpuid.asm</h3>
+
+<pre>
+INCLUDELIB LIBCMT
+INCLUDELIB OLDNAMES
+
+;	void my_cpuid(
+;	   int CPUInfo[4],
+;	   int InfoType
+;	)
+;
+;	Parameter Passing 
+;		First 4 parameters - RCX, RDX, R8, R9
+;	http://msdn.microsoft.com/en-us/library/zthk2dkh%28v=VS.80%29.aspx
+;
+;	Caller/Callee Saved Registers
+;		The registers RAX, RCX, RDX, R8, R9, R10, R11 are considered volatile 
+;		and must be considered destroyed on function calls (unless otherwise 
+;		safety-provable by analysis such as whole program optimization).
+;		
+;		The registers RBX, RBP, RDI, RSI, R12, R13, R14, and R15 are considered 
+;		nonvolatile and must be saved and restored by a function that uses them.
+;	http://msdn.microsoft.com/en-us/library/6t169e9c%28v=VS.80%29.aspx
+;
+PUBLIC	my_cpuid
+_TEXT	SEGMENT
+my_cpuid PROC						; COMDAT
+	mov		r9,  rbx				; save rbx
+	mov		r8,  rcx				; save rcx (CPUInfo)
+	mov		eax, edx				; set paramter to cpuid (InfoType)
+	cpuid
+	mov		DWORD PTR [r8   ], eax
+	mov		DWORD PTR [r8+ 4], ebx
+	mov		DWORD PTR [r8+ 8], ecx
+	mov		DWORD PTR [r8+12], edx
+	mov		rbx,  r9				; restore rbx
+	ret		0
+my_cpuid ENDP
+END
+</pre>
+
+</body>
+</html>
+

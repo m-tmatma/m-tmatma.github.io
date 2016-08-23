@@ -1,0 +1,60 @@
+fastrm D:\svntest\*
+
+cd D:\svntest
+
+svnadmin create repos
+svn co file:///D:/svntest/repos work
+
+cd work
+svn mkdir tags branches trunk
+svn ci -m "add initial dir"
+
+cd D:\svntest
+svn co file:///D:/svntest/repos/trunk
+cd trunk
+echo 1 > test.txt
+svn add test.txt
+svn ci -m "add test.txt"
+echo 2 >> test.txt
+svn ci -m "update test.txt"
+
+svn cp file:///D:/svntest/repos/trunk file:///D:/svntest/repos/branches/feature1 -m "create branch"
+
+echo 3 >> test.txt
+svn ci -m "update test.txt"
+echo 4 >> test.txt
+svn ci -m "update test.txt"
+
+cd D:\svntest
+svn co  file:///D:/svntest/repos/branches/feature1
+cd feature1
+echo A >  test2.txt
+svn add   test2.txt
+svn ci -m "add test2.txt"
+echo B >> test2.txt
+svn ci -m "update test2.txt"
+svn mergeinfo --show-revs merged    file:///D:/svntest/repos/trunk
+svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/trunk
+
+svn merge file:///D:/svntest/repos/trunk
+svn st
+svn di
+svn up
+svn ci -m "merge from trunk"
+svn mergeinfo --show-revs merged    file:///D:/svntest/repos/trunk
+svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/trunk
+
+cd D:\svntest\trunk
+svn up
+svn mergeinfo --show-revs merged    file:///D:/svntest/repos/branches/feature1
+svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/branches/feature1
+svn merge                           file:///D:/svntest/repos/branches/feature1
+svn revert -R .
+del test2.txt
+svn merge     --reintegrate         file:///D:/svntest/repos/branches/feature1
+svn di
+svn st
+
+svn ci -m "merge from branch feature1"
+svn mergeinfo --show-revs merged    file:///D:/svntest/repos/branches/feature1
+svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/branches/feature1

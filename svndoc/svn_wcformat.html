@@ -1,0 +1,126 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="作業コピー" />
+<meta name="keywords" content="作業コピー" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>change-svn-wc-format.py</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_sharding.html">前に戻る</a></li>
+	<a href="svn_write_through_proxy.html">次へ進む</a></li>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>change-svn-wc-format.py</h1>
+<h2>概要</h2>
+<p>
+Subversion 1.5 では作業コピーのフォーマットが変更されています。Subversion 1.5 で
+作業コピーを操作すると自動的に、Subversion 1.5 用の形式に変換されます。
+</p>
+
+<p>
+この文章では、作業コピーを古いバージョンのものに変換するスクリプト
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/client-side/change-svn-wc-format.py">
+change-svn-wc-format.py
+</a>
+を紹介します。
+</p>
+
+<h2>change-svn-wc-format.py が必要な状況</h2>
+
+シナリオ1
+<ol>
+	<li>Subversion 1.5 でチェックアウトする or Subversion 1.4 以前で取得した作業コピーにSubversion 1.5 でアクセスする</li>
+	<li>Subversion 1.5 を使うのをやめて Subversion 1.4 にダウングレードする</li>
+	<li>Subversion 1.5 でチェックアウトした作業コピーにSubversion 1.4 からアクセスする
+	</li>
+</ol>
+シナリオ2
+<ol>
+	<li>TortoiseSVN 1.5 でチェックアウトする<li>
+	<li>TortoiseSVN 1.5 でチェックアウトした作業コピーにSubversion 1.4 からアクセスする
+	</li>
+</ol>
+
+<p>
+Subversion 1.5 用の作業コピーに Subversion 1.4 でアクセスした場合の
+エラーメッセージ
+<pre>
+$ svn up
+svn: このクライアントは、作業コピー '.' を扱うには古すぎます。もっと新しい Subversion クライアントを
+ダウンロードしてください。
+</pre>
+</p>
+
+<p>
+<strong>
+Subversion 1.5 は Subversion 1.4 の作業コピーを問題なく扱えるので
+Subversion 1.5 を使う場合は特に何も意識する必要はありません。
+</strong>
+</p>
+
+<h2>change-svn-wc-format.py の使い方</h2>
+
+<h3>ヘルプ</h3>
+<pre>
+$ change-svn-wc-format.py
+usage: change-svn-wc-format.py WC_PATH SVN_VERSION [--verbose] [--force]
+       change-svn-wc-format.py --help
+</pre>
+
+<h3>変換</h3>
+<pre>
+$ change-svn-wc-format.py . 1.4
+Converted WC at '.' into format 8 for Subversion 1.4
+</pre>
+
+<h3>リンク</h3>
+Subversion FAQ<br>
+<a href="http://subversion.apache.org/faq.html#working-copy-format-change">
+I got an error saying "This client is too old to work with working copy '...' ".
+How can I fix it without upgrading Subversion?
+</a>
+
+</body>
+</html>
+

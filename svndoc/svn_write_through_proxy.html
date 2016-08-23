@@ -1,0 +1,434 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="subversion 1.5" />
+<meta name="keywords" content="WebDAV" />
+<meta name="keywords" content="SVNMasterURI" />
+<meta name="keywords" content="Transparent" />
+<meta name="keywords" content="透過プロキシ" />
+<meta name="keywords" content="ライトスルー" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion 1.5.0 での新機能 (WebDAV Write Through Proxy)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_wcformat.html">前に戻る</a>
+	<a href="svn_externals_relative.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion WebDAV 透過ライトスループロキシ</h1>
+<h2>概要</h2>
+Subversion 1.5 の新機能である WebDAV 透過ライトスループロキシ(WebDAV Transparent Write-Through Proxy) に関して解説します。
+
+<h2>リンク</h2>
+<ul>
+	<li>
+	<a href="http://www.nabble.com/WebDAV-Proxy:-module-dumps-core-on-a-particular-configuration-td14805190.html">
+	WebDAV Proxy: module dumps core on a particular configuration
+	</a>
+	</li>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/webdav-proxy">
+	A master/slave server replication model for Subversion WebDAV-based transactions
+	</a>
+	</li>
+	<li>
+	<a href="http://www.erenkrantz.com/oscon/">
+	O'Reilly Open Source Conference 2007(Subversion: Powerful New Toys)
+	</a>
+	</li>
+</ul>
+
+<h2>前提条件</h2>
+<ul>
+	<li>Subversion 1.5 以降のソースコードを入手していること</li>
+	<li>Subversion の コンパイル方法を理解していること(Subversion 1.5 が正式リリースされていないため)</li>
+	<li><strong>Apache 2.2 を使用すること</strong> (Apache 2.2 で更新された mod_proxy に依存しているため)</li>
+	<li>svnsync の使い方を理解していること</li>
+</ul>
+
+<h2>WebDAV 透過ライトスループロキシ とは?</h2>
+WebDAV 透過ライトスループロキシとは Subversion 1.5 で導入される、一種のレプリケーション(複製)機能です。
+マスターサーバー 1 つと、1 つ以上のスレーブサーバーで構成されます。
+
+<h3>適用例</h3>
+<p>
+マスターサーバーが遠隔地にあって、その間の回線が遅いとき場合などに、ローカルネットワーク上に
+スレーブサーバーを設置します。クライアントは、常にスレーブサーバーを使用するようにします。
+チェックアウト、更新、ログの閲覧等の読み込みアクセスは、ローカルネットワークで処理できるので
+高速に処理できます。そしてクライアントはスレーブサーバーに対してコミットすれば、「透過的に」
+マスターサーバーにも反映されます。大部分のアクセスは読み込みアクセスだけなのでスループットを
+改善することができます。
+</p>
+
+<h3>読み込みアクセスの場合</h3>
+<ol>
+<li>ユーザーはスレーブサーバー(のうちの一つ)にアクセスします</li>
+<li>スレーブサーバーは、ローカルのリポジトリにアクセスしてユーザーに結果を返します。</li>
+</ol>
+読み込みアクセスの場合、マスターサーバーにアクセスする必要がありません。
+また、スレーブサーバーは複数用意することが可能です。
+
+<h3>書き込みアクセスの場合</h3>
+<ol>
+<li>ユーザーはスレーブサーバー(のうちの一つ)にアクセスします</li>
+<li>スレーブサーバーは、マスターサーバーにリクエストをスルーします。</li>
+<li>マスターサーバーは、ローカルのリポジトリに変更をコミットします。</li>
+<li><strong>(post-commit フックを通じて)</strong>マスターサーバーから スレーブサーバーに <strong>svnsync</strong> により変更を反映させます。</li>
+</ol>
+
+<h3>注意事項</h3>
+本機能には、一点注意しないといけない点があります。
+Subversion 1.5 で実装されている WebDAV Write Though Proxy には一点欠陥があります。
+それは、ユーザーがコミットしたときに、マスターサーバーのリポジトリは更新されますが、
+スレーブサーバーのリポジトリは自動的には更新されないことです。
+
+マスターサーバーで post-commit フックスクリプトを作成してマスターサーバーから
+スレーブサーバー側に変更を反映させなければいけません。これは svnsync を使って
+実現します。
+
+<h2>必要なバージョン</h2>
+<table border="1" cellpadding="5">
+	<caption>必要な Subversion のバージョン</caption>
+	<tr>
+		<th></th>
+		<th>必要な バージョン</th>
+	</tr>
+	<tr>
+		<td>マスターサーバー</td>
+		<td>任意 (ただし svnsync を使用する場合 1.4 以降)</td>
+	</tr>
+	<tr>
+		<td>スレーブサーバー</td>
+		<td>ver 1.5 以降</td>
+	</tr>
+	<tr>
+		<td>クライアント</td>
+		<td>任意</td>
+	</tr>
+</table>
+</p>
+
+参考:
+<ul>
+<li>
+	<a href="http://svn.haxx.se/users/archive-2008-02/0266.shtml">
+	Re: webdav proxy compatible with 1.4.x master?
+	</a>
+</li>
+<li>
+	<a href="http://subversion.apache.org/docs/release-notes/1.5.html#new-feature-compatibility-table">
+	New Feature Compatibility Table
+	</a>
+</li>
+</ul>
+
+<h2>WebDAV Write Through Proxy の設定方法</h2>
+<ol>
+<li>マスターサーバーの httpd.conf 設定</li>
+<li>スレーブサーバーの httpd.conf 設定</li>
+<li>スレーブサーバーの pre-revprop-change フックスクリプト設定</li>
+<li>スレーブサーバーを svnsync が使えるように初期化</li>
+<li>マスターサーバーの post-commit フックスクリプト設定</li>
+<li>マスターサーバーの post-revprop-change フックスクリプト設定</li>
+</ol>
+
+<h3>マスターサーバーの httpd.conf 設定</h3>
+特に注意する点はありません。通常通り Subversion 用の設定を行います。
+
+<h3>スレーブサーバーの httpd.conf 設定</h3>
+設定のポイントは 3点です。
+<ol>
+	<li>
+		<strong>SVNMasterURI</strong> という新しいキーワードを使って
+		マスターサーバーの URI(URL) を指定します。
+	</li>
+	<li>
+		(Apache 2.2 で)mod_proxy.so を有効にする。
+	</li>
+	<li>
+		svnsync を使ってマスターサーバーからスレーブサーバーに
+		最新のデータを反映させるための専用 URL の設定
+	</li>
+</ol>
+
+<h3>マスターサーバーの post-commit フックスクリプト設定</h3>
+svnsync を利用して同期するためのスクリプトを作成します。
+
+<h3>スレーブサーバーの pre-revprop-change フックスクリプト設定</h3>
+pre-revprop-change フックスクリプトを変更して、リビジョン属性の
+変更を許可します。
+
+<h3>マスターサーバーの post-revprop-change フックスクリプト設定</h3>
+Post-revprop-change フックスクリプトを作成して、ユーザーがリビジョン属性を
+変更した場合に svnsync で同期させます。
+
+<h2>WebDAV Write Through Proxy の設定の具体例</h2>
+<h3>例での条件</h3>
+<ul>
+<li>マスターサーバー</li>
+	<ul>
+	<li>IP アドレス 192.168.60.128</li>
+	<li>OS Vine Linux 4</li>
+	<li>クライアントアクセスURL http://192.168.60.128/svn</li>
+	</ul>
+</li
+<li>スレーブサーバー</li>
+	<ul>
+	<li>IP アドレス 192.168.60.1</li>
+	<li>OS Windows XP</li>
+	<li>クライアントアクセスURL http://192.168.60.1/svn</li>
+	<li>svnsync用のURL http://192.168.60.1/sync</li>
+	</ul>
+</li>
+</ul>
+
+<h3>マスターサーバーの httpd.conf</h3>
+<pre>
+# 通常の Subversion で必要なモジュールのロード
+LoadModule dav_module modules/mod_dav.so
+LoadModule dav_fs_module modules/mod_dav_fs.so
+LoadModule dav_svn_module modules/mod_dav_svn.so
+
+&lt;Location /svn&gt;
+	DAV svn
+	SVNPath /var/svn/repos
+&lt;/Location&gt;
+</pre>
+
+<h3>スレーブサーバーの httpd.conf</h3>
+<pre>
+# 通常の Subversion で必要なモジュールのロード
+LoadModule dav_module modules/mod_dav.so
+LoadModule dav_fs_module modules/mod_dav_fs.so
+LoadModule dav_svn_module modules/mod_dav_svn.so
+
+# SVNMasterURI を使用するために mod_proxy のロードする必要があります。
+<strong>LoadModule proxy_module modules/mod_proxy.so</strong>
+
+# クライアントアクセス用
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+	<strong>SVNMasterURI http://192.168.60.128/svn</strong>
+&lt;/Location&gt;
+
+<strong>
+# svnsync 専用
+&lt;Location <strong>/sync</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+&lt;/Location&gt;</strong>
+</pre>
+
+<ul>
+<li>mod_proxy.so を有効にします。</li>
+<li>SVNMasterURI でマスターサーバーの URL を指定します。</li>
+<li>svnsync 専用のパス (/sync) を設定します。</li>
+</ul>
+
+<h3>スレーブサーバーの pre-revprop-change フックスクリプト設定</h3>
+以下のスクリプトを作成して、スレーブサーバーに設置します。
+<p>
+一番手抜きの実装
+<pre>
+exit 0
+</pre>
+</p>
+
+<h3>スレーブサーバーを svnsync 用に初期化</h3>
+
+<pre>
+$ svnsync init http://192.168.60.1/sync http://192.168.60.128/svn
+リビジョン 0 の属性をコピーしました。
+</pre>
+
+<h3>マスターサーバーの post-commit フックスクリプト設定</h3>
+以下のスクリプトを作成して、マスターサーバーに設置します。
+<pre>
+#!/bin/sh
+
+/usr/bin/svnsync sync http://192.168.60.1/sync
+</pre>
+
+<h3>マスターサーバーの post-revprop-change  フックスクリプト設定</h3>
+以下のスクリプトを作成して、マスターサーバーに設置します。
+<pre>
+#!/bin/sh
+
+REPOS="$1"
+REV="$2"
+USER="$3"
+PROPNAME="$4"
+ACTION="$5"
+
+/usr/bin/svnsync copy-revprops http://192.168.60.1/sync $REV
+</pre>
+
+<!--
+<pre>
+D:\tmp\rep\svn> svnsync sync http://192.168.60.1/sync
+ファイルのデータを送信しています
+リビジョン 1 をコミットしました。
+リビジョン 1 の属性をコピーしました。
+</pre>
+-->
+
+<h2>Trouble Shooting</h2>
+
+<h3>svnsync init に失敗する (1)</h3>
+<pre>
+$ svnsync init http://192.168.60.1/svn http://192.168.60.128/svn
+svnsync: リポジトリが、リビジョン属性を変更できるようにはなっていません。
+管理者に pre-revprop-change フックを作成するよう頼んでください
+</pre>
+
+<p>
+エラーメッセージの通り、pre-revprop-change フックスクリプトを作成して
+リビジョン属性を変更できるように設定してください。
+</p>
+
+
+<h3>svnsync init に失敗する (2)</h3>
+<pre>
+$ svnsync init http://192.168.60.1/svn http://192.168.60.128/svn
+svnsync: DAV リクエストに失敗しました。リポジトリの pre-revprop-change フックが機能不全であるか存在
+しない可能性があります
+svnsync: 1 つ以上の属性を変更できませんでした。リポジトリに変更は加えられていません
+svnsync: 属性 sync-lock を設定中にエラーが発生しました:
+could not remove a property
+</pre>
+
+<p>
+SVNMasterURI を使用しているパスに対して svnsync init を設定しようとした場合に起こります。
+設定例で説明しているように svnsync 用に別の URL (http://192.168.60.1/sync ) を用意して
+そこにアクセスするようにしてください。
+</p>
+
+<h3>スレーブサーバーへのコミットに失敗する (1)</h3>
+
+マスターサーバーとスレーブサーバーの Location で
+指定するパスが一致していない場合のエラーメッセージ。
+<pre>
+D:\tmp\svn>svn ci -m "test"
+svn: コミットに失敗しました (詳しい理由は以下のとおりです):
+svn: PROPFIND リクエスト (相手: '/svn/trunk') が失敗しました
+svn: パス '/svn/trunk' が見つかりません
+</pre>
+
+<p>
+マスターサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath /var/svn/repos
+&lt;/Location&gt;
+</pre>
+</p>
+
+<p>
+スレーブサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/test</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+	SVNMasterURI http://192.168.60.128/svn
+&lt;/Location&gt;
+</pre>
+</p>
+
+<p>
+修正後のスレーブサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+	SVNMasterURI http://192.168.60.128/svn
+&lt;/Location&gt;
+</pre>
+</p>
+
+<h3>スレーブサーバーへのコミットに失敗する (2)</h3>
+
+SVNMasterURI の指定が間違っている場合のエラーメッセージ
+<pre>
+D:\tmp\svn>svn ci -m "test"
+svn: コミットに失敗しました (詳しい理由は以下のとおりです):
+svn: サーバが、リクエストへのレスポンスとして予想外の戻り値 (405 Method Not Allowed) を送信してきま
+した (リクエスト: MKACTIVITY, URL: '/svn/!svn/act/89c76672-7906-234d-bfe4-9beaf31bd6ac')
+</pre>
+
+<p>
+マスターサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath /var/svn/repos
+&lt;/Location&gt;
+</pre>
+</p>
+
+<p>
+スレーブサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+	SVNMasterURI http://192.168.60.128<strong>/repos/svn</strong>
+&lt;/Location&gt;
+</pre>
+</p>
+
+<p>
+修正後のスレーブサーバーの httpd.conf
+<pre>
+&lt;Location <strong>/svn</strong>&gt;
+	DAV svn
+	SVNPath D:/subversion/repos
+	SVNMasterURI http://192.168.60.128<strong>/svn</strong>
+&lt;/Location&gt;
+</pre>
+</p>
+
+
+</body>
+</html>

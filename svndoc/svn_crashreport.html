@@ -1,0 +1,226 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Subversion 1.5.0 での新機能 (クラッシュダンプ作成機能)</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="crashhandler" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_externals_relative.html">前に戻る</a>
+	<a href="svn_libserf_vc6.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>クラッシュダンプ作成機能</h1>
+<h2>概要</h2>
+Subversion 1.5.0 での新機能を紹介します。
+クラッシュダンプ作成機能が r23239 (trunk) で導入されています。
+この機能に関して簡単に紹介します。
+</ol>
+
+<h2>前提条件</h2>
+	<ul>
+	<li>Subversion の trunk の r23239 以降のソースコードを入手していること</li>
+	<li>Subversion の コンパイル方法を理解していること</li>
+</ul>
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li><a href="http://www.microsoft.com/japan/whdc/devtools/debugging/installx86.mspx">
+	dbghelp.dll (ver 6.6.7.5 以降) </a>
+	(Debugging Tools for Windows のインストールフォルダに入っています)
+	</li>
+</ul>
+
+<h2 id="prepare">下準備</h2>
+	svn.exe 等の実行ファイルと同じディレクトリに、入手した dbghelp.dll をコピーする。
+	なお、内部で ver 6.6.7.5 以降かどうかバージョンチェックを行っているので
+	これより古いバージョンの場合、適切なクラッシュダンプが作成されません。
+
+<pre>
+│
+├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+├─libapriconv-1.dll (同様に libapriconv.dll )
+├─libaprutil-1.dll  (同様に libaprutil.dll )
+├─libdb44.dll
+├─<strong>dbghelp.dll ← ver 6.6.7.5 以降</strong>
+├─svn.exe
+├─svnadmin.exe
+├─svndumpfilter.exe
+├─svnlook.exe
+├─svnserve.exe
+├─svnsync.exe
+└─svnversion.exe
+</pre>
+
+<h2>クラッシュダンプ作成機能のテスト</h2>
+	クラッシュダンプのテストを行うためにわざと、クラッシュするコードを
+	入れてコンパイルしてみます。
+
+<p>
+以下わざと仕込んだバグです。svn st を実行したときに落ちるようになります。
+変更したソースコードを示します。svn_cl__status で NULL ポインタへのアクセスを
+行います。
+<pre>
+D:\...\trunk>svn di
+Index: subversion/svn/status-cmd.c
+===================================================================
+--- subversion/svn/status-cmd.c (リビジョン 23262)
++++ subversion/svn/status-cmd.c (作業コピー)
+@@ -307,5 +307,10 @@
+   if (opt_state->xml && (! opt_state->incremental))
+     SVN_ERR(svn_cl__xml_print_footer("status", pool));
+
++  {
++       int *p = NULL;
++       *p = 0; <strong>← subversion/svn/status-cmd.c の 312 行め</strong>
++  }
++
+   return SVN_NO_ERROR;
+ }
+</pre>
+</p>
+
+<p>
+以下わざとバグを仕込んだ svn.exe を実行した場合の画面出力です。
+<pre>
+D:\...\trunk\Release\subversion\svn>svn st
+This application has halted due to an unexpected error.
+A crash report and minidump file were saved to disk, you can find them here:
+C:\DOCUME~1\*******\LOCALS~1\Temp\svn-crash-log20070127111959.log
+C:\DOCUME~1\*******\LOCALS~1\Temp\svn-crash-log20070127111959.dmp
+Please send the log file to svnbreakage@subversion.tigris.org to help us analyse
+and solve this problem.
+
+NOTE: The crash report and minidump files can contain some sensitive information
+(filenames, partial file content, usernames and passwords etc.)
+</pre>
+</p>
+
+<p>
+ダンプのログファイルの中身です。
+<pre>
+Process info:
+Cmd line: svn st
+Version:  1.5.0 (dev build), compiled Jan 27 2007, 11:03:09
+Platform: Windows OS version 5.1 build 2600 Service Pack 2
+
+Exception: ACCESS_VIOLATION
+
+Registers:
+eax=00000000 ebx=00b9e6a0 ecx=00000000 edx=000003f7 esi=0013fe10 edi=00b84610
+eip=004083fa esp=0013fd58 ebp=00b84070 efl=00010246
+cd=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000
+
+Stacktrace:
+#1  0x004083fa in svn_cl__status (os=(apr_getopt_t *) 0x00405a3d, baton=0x00ba8df8,
+pool=(apr_pool_t *) 0x00000001) at D:\svnwork\subversion\trunk\<strong>subversion\svn\status-cmd.c:312</strong>
+        os = (apr_getopt_t *) 0x00405a3d
+        baton = 0x00ba8df8
+        pool = (apr_pool_t *) 0x00000001
+        i = 1
+        rev = (svn_opt_revision_t) 0x0013fd74
+        targets = (apr_array_header_t *) 0x00ba8df8
+        sb = (status_baton) 0x0013fd84
+        opt_state = (svn_cl__opt_state_t *) 0x00b84610
+        ctx = (svn_client_ctx_t *) 0x004cbb40
+        key = 0x77be4fd4
+        val = 0x004cbb40
+#2  0x00405a3d in main (argc=4860623, argv=0x00000002) at D:\svnwork\subversion\trunk\subversion\svn\main.c:1559
+        argc = 4860623
+        argv = 0x00000002
+        opt_id = 12075400
+        dash_m_arg = 0x7c810665 "3伃j"
+        path_utf8 = 0x00b840a8 "p@ク"
+        ab = (svn_auth_baton_t *) 0x00000004
+        command_baton = (svn_cl__cmd_baton_t) 0x0013fe04
+        received_opts = (apr_array_header_t *) 0x00000000
+        allocator = (apr_allocator_t *) 0x00000000
+        dash_F_arg = 0x00030288 "・"
+        os = (apr_getopt_t *) 0x00b84610
+        opt_state = (svn_cl__opt_state_t) 0x0013fe0c
+        used_change_arg = 0
+        ctx = (svn_client_ctx_t *) 0x00030270
+        opt_arg = 0x7ffde000 ""
+#3  0x004a2acf in mainCRTStartup ()
+#4  0x7c816fd7 in RegisterWaitForInputIdle ()
+
+
+Loaded modules:
+0x00400000  D:\svnwork\subversion\trunk\Release\subversion\svn\svn.exe (1.5.0.0, 1048576 bytes)
+0x7c940000  C:\WINDOWS\system32\ntdll.dll (5.1.2600.2180, 643072 bytes)
+0x7c800000  C:\WINDOWS\system32\kernel32.dll (5.1.2600.2945, 1249280 bytes)
+0x10000000  D:\svnwork\subversion\trunk\Release\subversion\svn\intl3_svn.dll (0.14.1.1519, 73728 bytes)
+0x77bc0000  C:\WINDOWS\system32\msvcrt.dll (7.0.2600.2180, 360448 bytes)
+0x6eec0000  D:\svnwork\subversion\trunk\Release\subversion\svn\libapr.dll (0.9.12.0, 135168 bytes)
+0x77d80000  C:\WINDOWS\system32\advapi32.dll (5.1.2600.2180, 692224 bytes)
+0x77e30000  C:\WINDOWS\system32\rpcrt4.dll (5.1.2600.2180, 593920 bytes)
+0x719e0000  C:\WINDOWS\system32\ws2_32.dll (5.1.2600.2180, 94208 bytes)
+0x719d0000  C:\WINDOWS\system32\ws2help.dll (5.1.2600.2180, 32768 bytes)
+0x71980000  C:\WINDOWS\system32\mswsock.dll (5.1.2600.2180, 258048 bytes)
+0x00500000  D:\svnwork\subversion\trunk\Release\subversion\svn\libeay32.dll (0.9.8.4, 1142784 bytes)
+0x71a00000  C:\WINDOWS\system32\wsock32.dll (5.1.2600.2180, 45056 bytes)
+0x77ed0000  C:\WINDOWS\system32\gdi32.dll (5.1.2600.2818, 290816 bytes)
+0x77cf0000  C:\WINDOWS\system32\user32.dll (5.1.2600.2622, 585728 bytes)
+0x00380000  D:\svnwork\subversion\trunk\Release\subversion\svn\ssleay32.dll (0.9.8.4, 200704 bytes)
+0x76730000  C:\WINDOWS\system32\shfolder.dll (6.0.2900.2180, 36864 bytes)
+0x6ee60000  D:\svnwork\subversion\trunk\Release\subversion\svn\libaprutil.dll (0.9.12.0, 167936 bytes)
+0x6ee50000  D:\svnwork\subversion\trunk\Release\subversion\svn\libapriconv.dll (0.9.7.0, 36864 bytes)
+0x13000000  D:\svnwork\subversion\trunk\Release\subversion\svn\libdb44.dll (4.0.4.20, 802816 bytes)
+0x75fd0000  C:\WINDOWS\system32\msvcp60.dll (6.2.3104.0, 413696 bytes)
+0x762e0000  C:\WINDOWS\system32\imm32.dll (5.1.2600.2180, 118784 bytes)
+0x60740000  C:\WINDOWS\system32\lpk.dll (5.1.2600.2180, 36864 bytes)
+0x73f80000  C:\WINDOWS\system32\usp10.dll (1.420.2600.2180, 438272 bytes)
+0x77f20000  C:\WINDOWS\system32\shlwapi.dll (6.0.2900.3020, 483328 bytes)
+0x77160000  C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2982_x-ww_ac3f9c03\comctl32.dll (6.0.2900.2982, 1060864 bytes)
+0x5ab60000  C:\WINDOWS\system32\comctl32.dll (5.82.2900.2982, 630784 bytes)
+0x6ee40000  C:\Program Files\Subversion\iconv\_tbl_simple.so (0.0.0.0, 20480 bytes)
+0x6e930000  C:\Program Files\Subversion\iconv\cp932.so (0.0.0.0, 94208 bytes)
+0x6ed50000  C:\Program Files\Subversion\iconv\utf-8.so (0.0.0.0, 20480 bytes)
+0x03000000  D:\svnwork\subversion\trunk\Release\subversion\svn\dbghelp.dll (6.6.7.5, 1134592 bytes)
+0x74a10000  C:\WINDOWS\system32\powrprof.dll (6.0.2900.2180, 32768 bytes)
+</pre>
+</p>
+
+</body>
+</html>

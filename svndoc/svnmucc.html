@@ -1,0 +1,337 @@
+﻿<html>
+<head>
+<title>svnmucc</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="svnmucc" />
+<meta name="keywords" content="作業コピーなし" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>svnmucc (<strong>S</strong>ubversion <strong>M</strong>ultiple <strong>U</strong>RL <strong>C</strong>ommand <strong>C</strong>lient)</h1>
+<h2>概要</h2>
+
+svnmucc は作業コピーなしでコミットできるコマンドラインクライアントです。<br>
+URL に対してコピー、フォルダ作成、削除、ファイルの更新(追加、変更) ができます。<br>
+このページではこのツールの使い方を説明します。<br>
+
+<h2>リンク</h2>
+
+<a href="http://svnbook.red-bean.com/en/1.8/svn.ref.svnmucc.re.html">
+svnmucc Reference-Subversion Multiple URL Command Client
+</a>
+
+<h2>テスト用のリポジトリ作成</h2>
+
+<pre>
+D:\workdir>svnadmin create test
+</pre>
+
+<pre>
+D:\workdir>svn ls file:///D:/workdir/test
+</pre>
+
+<h2>svnmucc のヘルプ</h2>
+
+<pre>
+D:\workdir>svnmucc help
+Subversion multiple URL command client
+usage: svnmucc ACTION...
+
+  Perform one or more Subversion repository URL-based ACTIONs, committing
+  the result as a (single) new revision.
+
+Actions:
+  cp REV SRC-URL DST-URL : copy SRC-URL@REV to DST-URL
+  mkdir URL              : create new directory URL
+  mv SRC-URL DST-URL     : move SRC-URL to DST-URL
+  rm URL                 : delete URL
+  put SRC-FILE URL       : add or modify file URL with contents copied from
+                           SRC-FILE (use "-" to read from standard input)
+  propset NAME VALUE URL : set property NAME on URL to VALUE
+  propsetf NAME FILE URL : set property NAME on URL to value read from FILE
+  propdel NAME URL       : delete property NAME from URL
+
+Valid options:
+  -h, -? [--help]        : display this text
+  -m [--message] ARG     : use ARG as a log message
+  -F [--file] ARG        : read log message from file ARG
+  -u [--username] ARG    : commit the changes as username ARG
+  -p [--password] ARG    : use ARG as the password
+  -U [--root-url] ARG    : interpret all action URLs relative to ARG
+  -r [--revision] ARG    : use revision ARG as baseline for changes
+  --with-revprop ARG     : set revision property in the following format:
+                               NAME[=VALUE]
+  --non-interactive      : do no interactive prompting (default is to
+                           prompt only if standard input is a terminal)
+  --force-interactive    : do interactive prompting even if standard
+                           input is not a terminal
+  --trust-server-cert    : accept SSL server certificates from unknown
+                           certificate authorities without prompting (but
+                           only with '--non-interactive')
+  -X [--extra-args] ARG  : append arguments from file ARG (one per line;
+                           use "-" to read from standard input)
+  --config-dir ARG       : use ARG to override the config directory
+  --config-option ARG    : use ARG to override a configuration option
+  --no-auth-cache        : do not cache authentication tokens
+  --version              : print version information
+</pre>
+
+<h2>svnmucc mkdir によるディレクトリ作成</h2>
+
+mkdir.bat
+<pre>
+D:\workdir>type mkdir.bat
+svnmucc mkdir file:///D:/workdir/test/trunk     ^
+        mkdir file:///D:/workdir/test/tags      ^
+        mkdir file:///D:/workdir/test/branches  ^
+        -m "mkdir initial dir"
+</pre>
+
+ここで ^ (ハット) はコマンドを複数行にわけて記述できるようにするための文字です。<br>
+見やすくするために使用しています。一行で記述するのであれば不要です。<br>
+キャレットが行末にある必要があります。ハットの後ろに空白があってはいけません。<br>
+
+<p>
+参考<br>
+<a href="http://pf-j.sakura.ne.jp/program/dos/doscmd/str_circumflex.htm">
+^ (ハット記号)
+</a>
+</p>
+
+mkdir.bat を実行
+<pre>
+D:\workdir>mkdir.bat
+
+D:\workdir>svnmucc mkdir file:///D:/workdir/test/trunk          mkdir file:///D:
+/workdir/test/tags              mkdir file:///D:/workdir/test/branches
+-m "mkdir initial dir"
+r1 committed by svnuser at 2013-07-17T13:30:44.323247Z
+</pre>
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r1 | svnuser | 2013-07-17 22:30:44 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   A /branches
+   A /tags
+   A /trunk
+
+mkdir initial dir
+------------------------------------------------------------------------
+</pre>
+
+<h2>svnmucc rm によるディレクトリ削除</h2>
+
+rm.bat
+<pre>
+D:\workdir>type rm.bat
+svnmucc rm file:///D:/workdir/test/trunk     ^
+        rm file:///D:/workdir/test/tags      ^
+        rm file:///D:/workdir/test/branches  ^
+        -m "rm initial dir"
+</pre>
+
+<pre>
+D:\workdir>rm.bat
+
+D:\workdir>svnmucc rm file:///D:/workdir/test/trunk             rm file:///D:/wo
+rkdir/test/tags         rm file:///D:/workdir/test/branches             -m "rm i
+nitial dir"
+r2 committed by svnuser at 2013-07-17T13:42:27.280497Z
+</pre>
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r2 | svnuser | 2013-07-17 22:42:27 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   D /branches
+   D /tags
+   D /trunk
+
+rm initial dir
+------------------------------------------------------------------------
+</pre>
+
+<h2>-U オプションによるルート URL の指定</h2>
+
+<pre>
+D:\workdir>type mkdir2.bat
+svnmucc -U file:///D:/workdir/test  ^
+        mkdir trunk                 ^
+        mkdir tags                  ^
+        mkdir branches              ^
+        -m "create initial dir by -U option"
+</pre>
+
+-U オプションでベースとなるルート URL を指定することで mkdir などに渡す引数を
+指定した URL に対する相対パスとして指定できます。
+
+<pre>
+D:\workdir>mkdir2.bat
+
+D:\workdir>svnmucc -U file:///D:/workdir/test          mkdir trunk
+           mkdir tags                          mkdir branches
+   -m "create initial dir by -U option"
+r3 committed by svnuser at 2013-07-17T13:50:08.490713Z
+</pre>
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r3 | svnuser | 2013-07-17 22:50:08 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   A /branches
+   A /tags
+   A /trunk
+
+create initial dir by -U option
+------------------------------------------------------------------------
+</pre>
+
+<h2>svnmucc put によるファイルのコミット</h2>
+
+ローカルにあるファイルを追加します。
+<pre>
+D:\workdir>svnmucc put robots.txt file:///D:/workdir/test/robots.txt -m "add file"
+r4 committed by svnuser at 2013-07-17T13:56:26.955522Z
+</pre>
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r4 | svnuser | 2013-07-17 22:56:26 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   A /robots.txt
+
+add file
+------------------------------------------------------------------------
+</pre>
+
+<h2>svnmucc put によるファイルのコミット (編集)</h2>
+
+svn cat を使うことによりリポジトリに登録されているファイルをローカルに取得します。(チェックアウトはしません)<br>
+エディタでファイルを編集します。<br>
+svnmucc put でコミットします。<br>
+
+<pre>
+D:\workdir>del robots.txt
+
+D:\workdir>svn cat file:///D:/workdir/test/robots.txt > robots.txt
+
+D:\workdir>svnmucc put robots.txt file:///D:/workdir/test/robots.txt -m "modify file"
+r5 committed by svnuser at 2013-07-17T14:02:31.482339Z
+</pre>
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r5 | svnuser | 2013-07-17 23:02:31 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   M /robots.txt
+
+modify file
+------------------------------------------------------------------------
+</pre>
+
+<h2>svnmucc propset によるプロパティの設定</h2>
+
+<pre>
+D:\workdir>svnmucc propset bugtraq:url "http://issues.tortoisesvn.net/?do=details&id=%BUGID%" file:///D:/workdir/test/trunk -m "set bugtraq:url"
+r6 committed by svnuser at 2013-07-17T14:10:18.420699Z
+</pre>
+
+bugtraq:url に関しては<a href="http://tortoisesvn.net/docs/release/TortoiseSVN_ja/tsvn-dug-bugtracker.html">こちら</a> を参照
+
+<pre>
+D:\workdir>svn log -r HEAD -v file:///D:/workdir/test
+------------------------------------------------------------------------
+r6 | svnuser | 2013-07-17 23:10:18 +0900 (2013/07/17 (水)) | 1 line
+変更のあったパス:
+   M /trunk
+
+set bugtraq:url
+------------------------------------------------------------------------
+
+D:\workdir>svn diff -c 6  file:///D:/workdir/test
+Index: trunk
+===================================================================
+--- trunk       (リビジョン 5)
++++ trunk       (リビジョン 6)
+
+属性に変更があったパス: trunk
+___________________________________________________________________
+Added: bugtraq:url
+## -0,0 +1 ##
++http://issues.tortoisesvn.net/?do=details&id=%BUGID%
+\ No newline at end of property
+</pre>
+
+
+<h2>svnmucc propsetf によるプロパティの設定</h2>
+
+<p>
+r1504151 現在では実装されていないみたいだ。
+</p>
+
+<p>
+参考情報<br>
+<ul>
+	<li>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk/subversion/svnmucc/svnmucc.c?p=1504151&r=1504151">
+		http://svn.apache.org/repos/asf/subversion/trunk/subversion/svnmucc/svnmucc.c?p=1504151&r=1504151
+		</a>
+	</li>
+	<li>
+		<a href="mod_dav_svn_browsing.html">
+		mod_dav_svn でのリビジョン指定 (ブラウザでリビジョン指定でアクセス)
+		</a>
+	</li>
+</ul>
+</body>
+</html>
+
+
+

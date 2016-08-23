@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>WinMerge File Compare Report</title>
+</head>
+<style type="text/css">
+<!--
+  HTML, BODY {
+    color: #000000;
+    background-color: #ffffff;
+  }
+  
+  table {
+    width: 100%;
+    margin: 0; 
+    border: none;
+  }
+  A:link    { color: #0000ff; }
+  A:visited { color: #880088; }
+  A:active  { color: #0000ff; }
+  
+  
+  /** Navigation Headers ***/
+  .vc_navheader {
+    background-color: #8888ff;
+  }
+  
+  
+  /*** Table Headers ***/
+  .vc_header {
+    text-align: left;
+    background-color: #cccccc;
+  }
+  .vc_header_sort {
+    text-align: left;
+    background-color: #88ff88;
+  }
+  
+  
+  /*** Table Rows ***/
+  .vc_row_even {
+    background-color: #ffffff;
+  }
+  .vc_row_odd {
+    background-color: #ccccee;
+  }
+  
+  
+  /*** Markup Summary Header ***/
+  .vc_summary {
+    background-color: #eeeeee;
+  }
+  
+  
+  /*** Colour Diff Styles ***/
+  .vc_diff_header {
+    background-color: #ffffff;
+  }
+  .vc_diff_chunk_header {
+    background-color: #99cccc;
+  }
+  .vc_diff_chunk_extra {
+    font-size: smaller;
+  }
+  .vc_diff_empty {
+    background-color: #cccccc;
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  .vc_diff_add {
+    background-color: #aaffaa;
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  .vc_diff_remove {
+    background-color: #ffaaaa;
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  .vc_diff_change {
+    background-color: #ffff77;
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  .vc_diff_change_empty {
+    background-color: #eeee77;
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  .vc_diff_nochange {
+    font-family: sans-serif;
+    font-size: smaller;
+  }
+  
+  
+  /*** Query Form ***/
+  .vc_query_form {
+    background-color: #e6e6e6;
+  }
+  
+  
+  -->
+</style>
+
+<body>
+Left: オリジナルのneon.mak<br />Right: 変更後のneon.mak<br /><br /><table cellspacing="0" cellpadding="0">
+    <tr class="vc_diff_header">
+    <th style="width:50%; vertical-align:top;">Left: Fri Nov 03 07:47:54 2006
+</th>
+    <th style="width:50%; vertical-align:top;">Right: Sat Jan 13 15:30:23 2007
+</th>
+    </tr>
+  <tr class="vc_diff_chunk_header">
+    <td style="width:50%;">
+      <strong>Line 232</strong>&nbsp;
+      <span class="vc_diff_chunk_extra"></span>
+    </td>
+    <td style="width:50%;">
+      <strong>Line 232</strong>&nbsp;
+      <span class="vc_diff_chunk_extra"></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_change">&nbsp; &nbsp;&quot;$(MAKE)&quot; /nologo /f win32\Makefile.msc CFLAGS=&quot;/nologo $(CFLAGS)&quot; LDFLAGS=&quot;$(ZLIB_LDFLAGS)&quot; STATICLIB=$(ZLIB_STATICLIB) $(ZLIB_STATICLIB)
+</td>
+    <td class="vc_diff_change">&nbsp; &nbsp;$(MAKE) /nologo /f win32\Makefile.msc CFLAGS=&quot;/nologo $(CFLAGS)&quot; LDFLAGS=&quot;$(ZLIB_LDFLAGS)&quot; STATICLIB=$(ZLIB_STATICLIB) $(ZLIB_STATICLIB)
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;
+</td>
+    <td class="vc_diff_nochange">&nbsp;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;&quot;$(ZLIB_SRC)\$(ZLIB_IMPLIB)&quot;:
+</td>
+    <td class="vc_diff_nochange">&nbsp;&quot;$(ZLIB_SRC)\$(ZLIB_IMPLIB)&quot;:
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_change">&nbsp; &nbsp;&quot;$(MAKE)&quot; /nologo /f win32\Makefile.msc CFLAGS=&quot;/nologo $(CFLAGS)&quot; LDFLAGS=&quot;$(ZLIB_LDFLAGS)&quot; SHAREDLIB=$(ZLIB_SHAREDLIB) IMPLIB=$(ZLIB_IMPLIB) $(ZLIB_SHAREDLIB) $(ZLIB_IMPLIB)
+</td>
+    <td class="vc_diff_change">&nbsp; &nbsp;$(MAKE) /nologo /f win32\Makefile.msc CFLAGS=&quot;/nologo $(CFLAGS)&quot; LDFLAGS=&quot;$(ZLIB_LDFLAGS)&quot; SHAREDLIB=$(ZLIB_SHAREDLIB) IMPLIB=$(ZLIB_IMPLIB) $(ZLIB_SHAREDLIB) $(ZLIB_IMPLIB)
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;
+</td>
+    <td class="vc_diff_nochange">&nbsp;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;ZLIB_CLEAN:
+</td>
+    <td class="vc_diff_nochange">&nbsp;ZLIB_CLEAN:
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;tempfile.bat
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;@echo off
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+    <td class="vc_diff_nochange">&nbsp; &nbsp;cd /d &quot;$(ZLIB_SRC)&quot;
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_change">&nbsp; &nbsp;&quot;$(MAKE)&quot; /nologo /f win32\Makefile.msc STATICLIB=$(ZLIB_STATICLIB) SHAREDLIB=$(ZLIB_SHAREDLIB) IMPLIB=$(ZLIB_IMPLIB) clean
+</td>
+    <td class="vc_diff_change">&nbsp; &nbsp;$(MAKE) /nologo /f win32\Makefile.msc STATICLIB=$(ZLIB_STATICLIB) SHAREDLIB=$(ZLIB_SHAREDLIB) IMPLIB=$(ZLIB_IMPLIB) clean
+</td>
+  </tr>
+  <tr>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+    <td class="vc_diff_nochange">&nbsp;&lt;&lt;
+</td>
+  </tr>
+</table>
+</body>
+</html>

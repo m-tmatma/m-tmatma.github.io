@@ -1,0 +1,107 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="ping" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>ping</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+
+<h1>リンク</h1>
+
+<ul>
+	<li>
+		<a href="http://d.hatena.ne.jp/perlcodesample/20100519/1276960096">
+		Net::Ping - リモートホストの生存確認 / Perlモジュール徹底解説
+		</a>
+	</li>
+</ul>
+
+<h1>ICMP に対する ping</h1>
+
+以下のスクリプトを実行すれば ping を行える。
+ただし管理者としてコマンドプロンプトを起動することが必要になる。
+
+<pre>
+#!/usr/bin/perl
+use Net::Ping;
+
+my $p = Net::Ping->new(<strong>"icmp"</strong>);
+
+for( $i = 1; $i < 256; $i++ )
+{
+	my $host = "192.168.11.$i";
+	my $alive = $p->ping($host, 1);
+	if( $alive )
+	{
+		print "$host: $alive\n";
+	}
+}
+</pre>
+
+
+<h1>HTTP ポートに対する ping</h1>
+
+<pre>
+#!/usr/bin/perl
+use Net::Ping;
+
+my $p = Net::Ping->new;
+
+<strong>$p->port_number(80);</strong>
+
+for( $i = 1; $i < 256; $i++ )
+{
+	my $host = "192.168.11.$i";
+	my $alive = $p->ping($host, 1);
+	if( $alive )
+	{
+		print "$host: $alive\n";
+	}
+}
+</pre>
+
+</body>
+</html>
+

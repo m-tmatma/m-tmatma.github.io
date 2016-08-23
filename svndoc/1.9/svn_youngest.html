@@ -1,0 +1,132 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../../style.css" type="text/css" rel="stylesheet" />
+<title>svn youngest</title>
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svn" />
+<meta name="keywords" content="yougest" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../../">最初に戻る</a>
+	<a href="../">戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>svn youngest</h1>
+
+<h2>概要</h2>
+
+リポジトリの HEAD リビジョン取得できるコマンドです。
+
+<p>
+これまでリポジトリがローカルディスクにあるときには
+<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnlook.c.youngest.html">svnlook youngest </a>
+で取得できましたが、これを作業コピーまたは URL に対して取得できるコマンドです。
+</p>
+
+<p>
+<strong>Subversion 1.9 以降で利用可能です。</strong>
+</p>
+
+<h2>ヘルプ</h2>
+
+<pre>
+>svn.exe help youngest
+youngest: Print the youngest revision number of a target's repository.
+usage: youngest [TARGET]
+
+  Print the revision number of the youngest revision in the repository
+  with which TARGET is associated.
+
+Valid options:
+  --no-newline             : do not output trailing newline
+
+Global options:
+  --username ARG           : specify a username ARG
+  --password ARG           : specify a password ARG
+  --no-auth-cache          : do not cache authentication tokens
+  --non-interactive        : do no interactive prompting (default is to prompt
+                             only if standard input is a terminal device)
+  --force-interactive      : do interactive prompting even if standard input
+                             is not a terminal device
+  --trust-server-cert      : accept SSL server certificates from unknown
+                             certificate authorities without prompting (but only
+                             with '--non-interactive')
+  --config-dir ARG         : read user configuration files from directory ARG
+  --config-option ARG      : set user configuration option in the format:
+                                 FILE:SECTION:OPTION=[VALUE]
+                             For example:
+                                 servers:global:http-library=serf
+</pre>
+
+<h2>使用例</h2>
+
+作業コピーに対して実行 (引数なし)
+<pre>
+>svn.exe  youngest
+1508252
+</pre>
+
+作業コピーに対して実行 (引数あり)
+<pre>
+>svn.exe  youngest subversion
+1508252
+</pre>
+
+URL に対して実行 (Repository Root ではないパス )
+<pre>
+>svn.exe  youngest http://svn.apache.org/repos/asf/subversion/trunk
+1508252
+</pre>
+
+URL に対して実行 (Repository Root)
+<pre>
+>svn.exe  youngest http://svn.apache.org/repos/asf
+1508252
+</pre>
+
+--no-newline オプションを指定して実行 (改行なしで出力。svnversion の -n と同じ)
+<pre>
+>svn.exe  youngest --no-newline http://svn.apache.org/repos/asf
+1508253
+</pre>
+
+</body>
+</html>

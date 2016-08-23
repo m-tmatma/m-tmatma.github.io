@@ -1,0 +1,105 @@
+﻿<html>
+<head>
+<title>Subversion の操作ログをとる方法</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="SVN-ACTION" />
+<meta name="keywords" content="CustomLog" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversion の操作ログをとる方法</h1>
+<h2>概要</h2>
+
+<h2>設定方法</h2>
+<p>
+Subversion の操作ログをとるためには httpd.conf に以下の記述を追加します。
+</p>
+<pre>
+CustomLog logs/svn.log "%t %u %{<strong>SVN-ACTION</strong>}e %U" env=<strong>SVN-ACTION</strong>
+</pre>
+
+<ul>
+	<li>env=SVN-ACTION</li>
+	<p>
+		<strong>SVN-ACTION</strong> という環境変数が定義されている場合にログを
+		取るという意味です。環境変数 <strong>SVN-ACTION</strong> はmod_dav_svn.so 
+		によって設定されます。Subversion の操作を表します。
+	</p>
+
+	<li>logs/svn.log</li>
+	<p>
+		ログファイル名です。Apache のルートディレクトリを基準にした相対ディレクトリです。
+	</p>
+
+	<li>%t %u %{<strong>SVN-ACTION</strong>}e %U</li>
+	<p>
+	ログファイルに記録するフォーマット指定です。
+	</p>
+	<ul>
+		<li>%t</li>
+		リクエストの時刻
+		<li>%u</li>
+		リモートユーザー名
+		<li>%{SVN-ACTION}e</li>
+		SVN-ACTION という環境変数の値。
+		<li>%U</li>
+		リクエストされた URL パス
+	</ul>
+</ul>
+参考
+<a href="http://httpd.apache.org/docs/2.0/ja/mod/mod_log_config.html">
+Apache モジュール mod_log_config
+</a>
+
+
+<h2>ログの例</h2>
+<pre>
+[19/Oct/2007:08:00:54 +0900] - commit '/trunk/dir2' r6 /relative/trunk/dir2
+[19/Oct/2007:08:00:57 +0900] - update '/trunk/dir2' r6 depth-unknown /relative/!svn/vcc/default
+</pre>
+
+
+</body>
+</html>
+

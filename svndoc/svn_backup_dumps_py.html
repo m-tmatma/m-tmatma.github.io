@@ -1,0 +1,479 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversionリポジトリのバックアップ [svn-backup-dumps.py の利用方法]</title>
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svn-backup-dumps" />
+<meta name="keywords" content="svn-backup-dumps.py" />
+<meta name="keywords" content="backup" />
+<meta name="keywords" content="バックアップ" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_backup.html">前に戻る</a>
+	<a href="svn_backup_dumps_py_svnrdump.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-18 08:57:12 +0900 (2014/08/18 (月)) $<br>
+$Revision: 978 $<br>
+</div>
+
+<h1>Subversionリポジトリのバックアップ [svn-backup-dumps.py の利用方法]</h1>
+<h2>概要</h2>
+<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.svnadmin.c.dump.html">
+svnadmin dump</a> をラップして、容易にフルバックアップ、インクリメンタルバックアップを
+行えるようにした
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/server-side/svn-backup-dumps.py">
+svn-backup-dumps.py</a>というツールがあります。
+
+このページでは、<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/server-side/svn-backup-dumps.py">
+svn-backup-dumps.py</a> の利用方法を説明します。
+
+<!------------------------------------------------------------>
+<!--            svn-backup-dumps.py の特徴                  -->
+<!------------------------------------------------------------>
+<h2>svn-backup-dumps.py の特徴</h2>
+<h3>サポートしている機能</h3>
+svn-backup-dumps.py では、以下の3つのタイプのバックアップをサポートしています。
+	<ol>
+		<li>フルバックアップ</li>
+		<li>リビジョンごとのバックアップ</li>
+		<li>複数リビジョンの差分バックアップ</li>
+	</ol>
+
+<h3>動作原理</h3>
+このスクリプトは 適切なコマンドライン引数を渡して、svnadmin dump を呼び出すだけの
+ラッパースクリプトです。<strong>Python binding は不要</strong>です。
+
+<h3>入手先</h3>
+<ul>
+<li>Subversion のリポジトリから直接取得</li>
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/server-side/svn-backup-dumps.py">
+http://svn.apache.org/repos/asf/subversion/trunk/tools/server-side/svn-backup-dumps.py
+</a>
+<li>
+Subversion 1.4.0 以降のソースコードに付属
+</li>
+</ul>
+
+<h3>対象環境</h3>
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/server-side/svn-backup-dumps.py">
+svn-backup-dumps.py</a> は Windows, Unix 系OS のどちらでも使えます。
+<p>
+<strong>
+cron や post-commit から呼び出す場合、svnadmin へのパスを通す必要があります。<br>
+</strong>
+cron から呼び出す場合、<a href="svn_backup_unix.html">こちら</a> を参照。
+</p>
+
+<!------------------------------------------------------------>
+<!--                                                        -->
+<!------------------------------------------------------------>
+<h2>バックアップの注意事項</h2>
+svn-backup-dumps.py は svnadmin dump を使用してバックアップします。
+svnadmin dump でバックアップする場合に注意事項があります。
+
+<p>バックアップを使用して復旧する状況としては、ハードディスクが
+壊れて復旧したいという場合などが考えられます。しかしその状況では
+ダンプファイル自体が壊れている可能性があります。svnadmin load のときに
+ダンプファイルに対するエラーチェックが行われます。このときにエラーが
+検出されてしまうと正常にリポジトリを復旧することができなくなります。
+</p>
+<p>
+このような事態をさけるために、バックアップに冗長性を持たせるようにしましょう。
+つまり、特定のリビジョンに対するバックアップが複数存在するようにしましょう。
+</p>
+<p>
+例えば最新リビジョンが 120 のリポジトリがあるとした場合、フルダンプを取って
+おけば、OK のはずです。しかしこのダンプファイルの r50 のところにエラーが
+あったとすると r1 〜 r49 までは復旧できますが、r50 以降は復旧することが
+できなくなります。しかし、r50 〜 r120 の範囲を(リビジョンごとの)差分
+バックアップしておけばその範囲のデータを救うことができます。
+</p>
+
+<!------------------------------------------------------------>
+<!--            svn-backup-dumps.py の利用方法              -->
+<!------------------------------------------------------------>
+<h2>svn-backup-dumps.py の利用方法</h2>
+<h3>ヘルプ</h3>
+--help をつけて実行するとヘルプが表示されます。
+<pre>
+C:\>svn-backup-dumps.py --help
+Usage: svn-backup-dumps.py [options] repospath dumpdir
+
+Options:
+  --version        show program's version number and exit
+  -h, --help       show this help message and exit
+  -b               compress the dump using bzip2.
+  --deltas         pass --deltas to svnadmin dump.
+  -c CNT           count of revisions per dumpfile. <strong>← 指定すると "3. 複数リビジョンの差分バックアップ"になる</strong>
+  -o               overwrite files.
+  -O               overwrite all files.
+  -q               quiet.
+  -r REV           revision number for single rev dump. <strong>← 指定すると "2. リビジョンごとのバックアップ"になる</strong>
+  -t TRANSFER      transfer dumps to another machine (s.a. --help-transfer).
+  -z               compress the dump using gzip.
+  --help-transfer  shows detailed help for the transfer option.
+</pre>
+
+<!------------------------------------------------------------>
+<!--            svn-backup-dumps.py を利用したバックアップ  -->
+<!------------------------------------------------------------>
+<h2>svn-backup-dumps.py を利用したバックアップ</h2>
+svn-backup-dumps.py は以下の3つの方法でバックアップができます。
+FTP や Windows の共有フォルダにバックアップする機能もありますが、
+本質的には同じです。
+<ol>
+<li>フルダンプ(フルバックアップ)
+    <p>
+    タスクスケジューラ(Windows) や cron (Unix系OS) でバックアップするのに向いています。
+    この方法は比較的長い時間間隔(例: 1週間に一度)で行うことが想定されます。
+    もちろんデータが少ない場合はもっと頻繁に行っても大丈夫です。
+    </p>
+    <p>
+    例(フルバックアップ)
+<pre>
+svn-backup-dumps.py svnrepos backupdir
+</pre>
+    </p>
+</li>
+<li>リビジョンごとのバックアップ
+    <p>
+    post-commit フックスクリプトからのバックアップに向いています。
+    新たにコミットされるたびに、その分の差分バックアップを行います。
+    </p>
+    <p>
+    例(リビジョン 101 をバックアップ)
+<pre>
+svn-backup-dumps.py -r 101 svnrepos backupdir
+</pre>
+    </p>
+</li>
+<li>複数リビジョンの差分バックアップ
+    <p>
+    タスクスケジューラ(Windows) や cron (Unix系OS) でバックアップするのに向いています。
+    この方法は比較的短い時間間隔(例: 1日に一度)で行うことが想定される。
+    データが少ない場合、フルダンプでも構わない。
+    一定時間ごとに、更新された分の差分バックアップを行うことを想定しています。
+    </p>
+    <p>
+    例(リビジョン 50 個ずつバックアップ)
+<pre>
+svn-backup-dumps.py -c 50 svnrepos backupdir
+</pre>
+    </p>
+</li>
+</ol>
+
+<h3>フルダンプ(フルバックアップ) [svn-backup-dumps.py]</h3>
+<pre>
+svn-backup-dumps.py &lt;repos&gt; &lt;dumpdir&gt;
+</pre>
+<ul>
+	<li>&lt;repos&gt;</li>
+	リポジトリのディレクトリパスを指定します。
+	<li>&lt;dumpdir&gt;</li>
+	バックアップ先のディレクトリパスを指定します。
+	<strong>スクリプト実行前に、作成しておく必要があります。</strong>
+</ul>
+<pre>
+c:\...\svnparent> mkdir backup <strong> ← スクリプト実行前にディレクトリを作成しておく</strong>
+c:\...\svnparent> svn-backup-dumps.py svnrepos backupdir
+writing backupdir/svnrepos.000000-000094.svndmp
+* リビジョン 0 をダンプしました。
+* リビジョン 1 をダンプしました。
+* リビジョン 2 をダンプしました。
+* リビジョン 3 をダンプしました。
+* リビジョン 4 をダンプしました。
+                ...
+* リビジョン 93 をダンプしました。
+* リビジョン 94 をダンプしました。
+Everything OK.
+
+c:\...\svnparent> svn-backup-dumps.py svnrepos backupdir
+<strong>backupdir/svnrepos.000000-000094.svndmp already exists. ← 既にファイルが存在する場合何もしない</strong>
+Everything OK.
+</pre>
+
+<h3>インクリメンタルダンプ(インクリメンタルバックアップ) [svn-backup-dumps.py]</h3>
+<pre>
+svn-backup-dumps.py -r &lt;revnrs&gt; &lt;repos&gt; &lt;dumpdir&gt;
+</pre>
+<ul>
+	<li>&lt;revnrs&gt;</li>
+	バックアップするリビジョンを指定します。
+	<li>&lt;repos&gt;</li>
+	リポジトリのディレクトリパスを指定します。
+	<li>&lt;dumpdir&gt;</li>
+	バックアップ先のディレクトリパスを指定します。
+	<strong>スクリプト実行前に、作成しておく必要があります。</strong>
+</ul>
+
+<pre>
+c:\...\svnparent> svn-backup-dumps.py <strong>-r 94</strong> svnrepos backupdir
+writing backupdir/svnrepos.<strong>000094</strong>.svndmp
+* リビジョン 94 をダンプしました。
+Everything OK.
+
+c:\...\svnparent> svn-backup-dumps.py -r 94 svnrepos backupdir
+<strong>backupdir/svnrepos.000094.svndmp already exists. ← 既にファイルが存在する場合何もしない</strong>
+Everything OK.
+</pre>
+
+
+<h3 id="inc-multi-rev">複数リビジョンでのインクリメンタルバックアップ [svn-backup-dumps.py]</h3>
+<pre>
+svn-backup-dumps.py -c &lt;count&gt; &lt;repos&gt; &lt;dumpdir&gt;
+</pre>
+フルバックアップとインクリメンタルバックアップの中間的な方法です。
+<strong>-c で指定したリビジョンに満たないリビジョンでもバックアップされます。</strong>
+
+<ul>
+	<li>&lt;count&gt;</li>
+	バックアップするリビジョンの数を指定します。
+	<li>&lt;repos&gt;</li>
+	リポジトリのディレクトリパスを指定します。
+	<li>&lt;dumpdir&gt;</li>
+	バックアップ先のディレクトリパスを指定します。
+	<strong>スクリプト実行前に、作成しておく必要があります。</strong>
+</ul>
+
+<strong>-c で指定したリビジョンの境界を意識する必要はありません。</strong>
+
+<h3>具体例1 (-c オプションを使う場合)</h3>
+<h4>シナリオ</h4>
+<p>
+	<ol>
+	<li>リビジョン45 で <code>"-c 10"</code> でバックアップを行う。</li></li>
+	<li>リビジョン48 までリビジョンが進む</li>
+	<li>リビジョン48 で <code>"-c 10"</code> でバックアップを行う。</li>
+	<li>リビジョン54 までリビジョンが進む</li>
+	<li>リビジョン54 で <code>"-c 10"</code> でバックアップを行う。</li>
+	</ol>
+</p>
+
+<h4>生成されるファイル</h4>
+<p>
+	<ol>
+	<li>リビジョン45 で <code>"-c 10"</code> でバックアップを行う。
+<pre>
+svnrepos.000000-000009.svndmp.bz2 ← リビジョン10 ずつバックアップされる。
+svnrepos.000010-000019.svndmp.bz2
+svnrepos.000020-000029.svndmp.bz2
+svnrepos.000030-000039.svndmp.bz2
+<strong>svnrepos.000040-000045.svndmp.bz2</strong> ← -c の引数のリビジョンに満たないものもバックアップされる。
+</pre>
+	</li>
+	<li>リビジョン48 までリビジョンが進む</li>
+	<li>リビジョン48 で <code>"-c 10"</code> でバックアップを行う。
+<pre>
+svnrepos.000000-000009.svndmp.bz2
+svnrepos.000010-000019.svndmp.bz2
+svnrepos.000020-000029.svndmp.bz2
+svnrepos.000030-000039.svndmp.bz2
+svnrepos.000040-000045.svndmp.bz2 ← 不要だけど自動的に消さない。でもディスク容量が許すかぎり残しておきたい
+<strong>svnrepos.000040-000048.svndmp.bz2</strong> ← 新たに作成されるファイル
+</pre>
+	</li>
+	<li>リビジョン54 までリビジョンが進む</li>
+	<li>リビジョン54 で <code>"-c 10"</code> でバックアップを行う。
+<pre>
+svnrepos.000000-000009.svndmp.bz2
+svnrepos.000010-000019.svndmp.bz2
+svnrepos.000020-000029.svndmp.bz2
+svnrepos.000030-000039.svndmp.bz2
+svnrepos.000040-000045.svndmp.bz2 ← 不要だけど自動的に消さない。でもディスク容量が許すかぎり残しておきたい
+svnrepos.000040-000048.svndmp.bz2 ← 不要だけど自動的に消さない。でもディスク容量が許すかぎり残しておきたい
+<strong>svnrepos.000040-000049.svndmp.bz2</strong> ← 新たに作成されるファイル
+<strong>svnrepos.000050-000054.svndmp.bz2</strong> ← 新たに作成されるファイル
+</pre>
+	</li>
+	</ol>
+</p>
+
+<h3>具体例2 (-c と -b オプションを使う場合)</h3>
+<h4>シナリオ</h4>
+<p>
+	<ol>
+	<li>リビジョン94 で <code>"-c 10"</code> でバックアップを行う。</li></li>
+	<li>リビジョン99 までリビジョンが進む</li>
+	<li>リビジョン99 で <code>"-c 10"</code> でバックアップを行う。</li>
+	</ol>
+</p>
+
+<h4>実行例</h4>
+<pre>
+c:\...\svnparent> svn-backup-dumps.py <strong>-b</strong> <strong>-c</strong> 10 svnrepos backupdir
+writing backupdir/svnrepos.<strong>000080-000089</strong>.svndmp.<strong>bz2</strong>
+* リビジョン 80 をダンプしました。
+* リビジョン 81 をダンプしました。
+			...
+* リビジョン 89 をダンプしました。
+writing backupdir/svnrepos.000070-000079.svndmp.bz2
+警告: リビジョン 69 のデータを参照していますが、これは、ダンプされた最も古い
+警告: リビジョン (70 ) よりも古いものです。このダンプを空のリポジトリにロード
+警告: する操作は失敗するでしょう。<strong>← r70 でタグへのコピーを行っています。
+                                  このため r70 は r69 がないと失敗するということです。
+                                  svnadmin dump -r 70 svnrepos としても同じ警告が出ます。</strong>
+                                  <a href="#warning-dump">参照</a>
+* リビジョン 70 をダンプしました。
+* リビジョン 71 をダンプしました。
+			...
+* リビジョン 79 をダンプしました。
+
+			...
+
+writing backupdir/svnrepos.000020-000029.svndmp.bz2
+* リビジョン 20 をダンプしました。
+* リビジョン 21 をダンプしました。
+			...
+* リビジョン 29 をダンプしました。
+writing backupdir/svnrepos.000010-000019.svndmp.bz2
+* リビジョン 10 をダンプしました。
+* リビジョン 11 をダンプしました。
+			...
+* リビジョン 19 をダンプしました。
+writing backupdir/svnrepos.000000-000009.svndmp.bz2
+* リビジョン 0 をダンプしました。
+* リビジョン 1 をダンプしました。
+			...
+* リビジョン 9 をダンプしました。
+writing backupdir/svnrepos.000090-000094.svndmp.bz2
+* リビジョン 90 をダンプしました。
+* リビジョン 91 をダンプしました。
+			...
+* リビジョン 93 をダンプしました。
+* リビジョン 94 をダンプしました。
+Everything OK.
+</pre>
+
+その後、r99 まで進んでから再度実行した場合
+<pre>
+c:\...\svnparent> svn-backup-dumps.py <strong>-b</strong> <strong>-c</strong> 10 svnrepos backupdir
+writing backupdir/svnrepos.000090-000099.svndmp.bz2 <strong>← r90 〜 r99 のみ更新される</strong>
+* リビジョン 90 をダンプしました。
+* リビジョン 91 をダンプしました。
+* リビジョン 92 をダンプしました。
+* リビジョン 93 をダンプしました。
+* リビジョン 94 をダンプしました。
+* リビジョン 95 をダンプしました。
+			...
+* リビジョン 98 をダンプしました。
+* リビジョン 99 をダンプしました。
+Everything OK.
+</pre>
+
+<h2>バックアップデータの復旧 (bzip2圧縮している場合)</h2>
+
+<h3>準備</h3>
+<ul>
+<li>コマンドライン版の <a href="http://gnuwin32.sourceforge.net/packages/bzip2.htm">
+bzip2</a>を入手する(Windows の場合)
+</li>
+<li>bzip2 へのパスを通す。(絶対パス指定してもOK)
+</li>
+</ul>
+
+<h3>復旧手順</h3>
+例1: フルダンプからの復旧
+<pre>
+c:\...\svnparent> svnadmin create svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000000-000099.svndmp.bz2 | svnadmin load svnrepos
+</pre>
+
+例2: フルダンプ + 単一リビジョンのダンプからの復旧
+<pre>
+c:\...\svnparent> svnadmin create svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000000-000090.svndmp.bz2 | svnadmin load svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000091.svndmp.bz2 | svnadmin load svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000092.svndmp.bz2 | svnadmin load svnrepos
+                                          ...
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000099.svndmp.bz2 | svnadmin load svnrepos
+</pre>
+
+例3: 複数リビジョンの差分バックアップからの復旧
+<pre>
+c:\...\svnparent> svnadmin create svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000000-000009.svndmp.bz2 | svnadmin load svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000010-000019.svndmp.bz2 | svnadmin load svnrepos
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000020-000029.svndmp.bz2 | svnadmin load svnrepos
+                                          ...
+c:\...\svnparent> bzip2 -c -d backupdir/svnrepos.000090-000099.svndmp.bz2 | svnadmin load svnrepos
+</pre>
+
+<h2 id="warning-dump">インクリメンタルダンプの警告</h2>
+
+--incremental オプションをつけてダンプを取った場合、以下のような警告が
+出ることがありますが、無害です。
+
+<p>
+英語
+<pre>
+WARNING: Referencing data in revision 69, which is older than the oldest
+WARNING: dumped revision (70).  Loading this dump into an empty repository
+WARNING: will fail.
+</pre>
+日本語
+<pre>
+警告: リビジョン 69 のデータを参照していますが、これは、ダンプされた最も古い
+警告: リビジョン (70 ) よりも古いものです。このダンプを空のリポジトリにロード
+警告: する操作は失敗するでしょう。
+</pre>
+</p>
+
+<p>
+例えば、r70 でタグ付けを行うために svn cp を行っている場合に
+r69 を含まないリビジョン範囲に対して svnadmin dump を行うと
+表示される警告です。
+<pre>
+svnadmin dump --incremental --revision 70:79 svnrepos <strong>← r69 が含まれない</strong>
+</pre>
+</p>
+<p>
+--incremental を指定してダンプした場合、指定リビジョンで更新された
+ファイル以外はダンプに含まれません。タグ付けのために svn cp を
+やっただけだと r69 の trunk を tags 以下にコピーするという情報が
+入っているだけで、実際のデータはダンプファイルに含まれません。
+</p>
+<p>
+このため空のリポジトリ(正確にはこの場合、r69 を含まないリポジトリ) に
+svnadmin load を実行した場合 r69 のデータが含まれないので、処理が
+失敗するという意味の警告です。(至極当たり前です。)
+</p>
+</body>
+</html>

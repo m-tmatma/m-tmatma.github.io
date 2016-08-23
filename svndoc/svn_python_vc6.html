@@ -1,0 +1,473 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="python" />
+<meta name="keywords" content="binding" />
+<meta name="keywords" content="bindings" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion のコンパイル (for Windows) Python binding (VC6)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_i18n_vc6.html">前に戻る</a>
+	<a href="svn_wintest_py.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Python binding をコンパイルする方法 (VC6)</h1>
+<h2>概要</h2>
+Subversion の Python binding をWindows 上でコンパイルする方法を簡単に
+説明します。
+
+<p>
+以下の手順を既に行っていることを前提としています。
+<ol>
+<li><a href="./svn_basic_vc6.html">最小の構成でコンパイルする (VC6)</a></li>
+</ol>
+
+<h2>準備</h2>
+	<ul>
+	<li><strong>Python 2.4 または 2.5 をインストールする</strong></li>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/subversion/bindings/swig/INSTALL">
+	binding のドキュメント
+	</a>を読む
+	</li>
+</ul>
+
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li>swig</li>
+	<a href="http://www.swig.org/">
+	http://www.swig.org/
+	</a>
+</ul>
+
+
+<h2>下準備</h2>
+	以下のような感じでファイルを置くとして以後の説明をする。
+<pre>
+│
+├─common
+│   │
+│   ├─db4-win32
+│   ├─openssl-0.9.8d
+│   ├─httpd-2.2.3
+│   ├─neon-0.26.2
+│   └─zlib-1.2.3
+│
+└─trunk (subversion のソースコード)
+      │
+      ├─INSTALL
+      │  ... (中略) ...
+      └─gen-make.py
+c:\
+ │
+ └─<strong>swigwin-1.3.31</strong>
+</pre>
+
+	<h3 id="vc6_path">Visual C++ 6 の設定</h3>
+	python.exe のディレクトリパスを設定する
+	<ol>
+	<li>Visual C++ のメニューから [ツール] - [オプション]を選ぶ</li>
+
+	<li>[ディレクトリ] タブに移動する。</li>
+	<li>[表示するディレクトリ] で<strong>[実行可能ファイル]</strong>を選ぶ</li>
+	<li><strong>C:\Python24</strong> (python.exe のあるディレクトリ)を追加する</li>
+
+	<li>[表示するディレクトリ] で<strong>[インクルードファイル]</strong>を選ぶ</li>
+	<li><strong>C:\Python24\include</strong> (python関連のヘッダファイルのあるディレクトリ)を追加する</li>
+
+	<li>[表示するディレクトリ] で<strong>[ライブラリファイル]</strong>を選ぶ</li>
+	<li><strong>C:\Python24\libs</strong> (python関連のライブラリファイルのあるディレクトリ)を追加する</li>
+	</ol>
+
+<h3 id="apache2.2.x">apache 2.2.x を使用する場合の準備</h3>
+C:\Python25\include\pyconfig.h に以下のような定義があります。
+この定義をコメントアウトします。
+<pre>
+/* Define to `int' if &lt;sys/types.h&gt; doesn't define.  */
+#if _MSC_VER + 0 &gt;= 1300
+/* VC.NET typedefs socklen_t in ws2tcpip.h. */
+#else
+#define socklen_t int
+#endif
+</pre>
+
+変更後
+<pre>
+<strong>#if 0</strong>
+/* Define to `int' if &lt;sys/types.h&gt; doesn't define.  */
+#if _MSC_VER + 0 &gt;= 1300
+/* VC.NET typedefs socklen_t in ws2tcpip.h. */
+#else
+#define socklen_t int
+#endif
+<strong>#endif</strong>
+</pre>
+
+上記の作業をしないと以下のコンパイルエラーになります。
+<pre>
+-------------------構成: libsvn_swig_py - Win32 Release--------------------
+コンパイル中...
+swigutil_py.c
+C:\Python25\include\pyconfig.h(42) : warning C4005: '_CRT_SECURE_NO_DEPRECATE' : マクロが再定義されました。
+        unknown(0) : '_CRT_SECURE_NO_DEPRECATE' の前の定義を確認してください
+C:\Python25\include\pyconfig.h(43) : warning C4005: '_CRT_NONSTDC_NO_DEPRECATE' : マクロが再定義されました。
+        unknown(0) : '_CRT_NONSTDC_NO_DEPRECATE' の前の定義を確認してください
+C:\Program Files\Microsoft SDK\include\ws2tcpip.h(593) : error C2632: 'int' と 'int' の 2 つの型指定子のあいだにコードがありません。
+C:\Program Files\Microsoft SDK\include\ws2tcpip.h(593) : warning C4091: 空白の宣言が見つかりました。
+cl.exe の実行エラー
+
+__SWIG_PYTHON__ - エラー 1、警告 72
+</pre>
+
+VC 6.0 では _MSC_VER の値は 1200 です。
+
+C:\Program Files\Microsoft SDK\include\ws2tcpip.h で
+以下のように定義されています。
+<pre>
+typedef int socklen_t;
+</pre>
+
+リンク
+<ul>
+	<li>
+		<a href="http://archives.devshed.com/forums/development-94/error-building-python-bindings-with-ms-visual-c-6-0t-2074150.html">
+		Error building python bindings with MS Visual C++ 6.0 for SVN 1.4.0
+		</a>
+	</li>
+	<li>
+		<a href="http://www.ailight.jp/blog/sha256/archive/2009/03/08/27314.aspx">
+		_MSC_VER のメモ (アップデート版)
+		</a>
+	</li>
+	<li>
+		<a href="http://www.ailight.jp/blog/sha256/archive/2005/08/16/9348.aspx">
+		_MSC_VER の値
+		</a>
+	</li>
+	<li>
+		<a href="http://ja.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B">
+		Microsoft Visual C++
+		</a>
+	</li>
+	
+	<!--
+	<li>
+		<a href="http://vsug.jp/tabid/63/forumid/46/postid/9069/view/topic/Default.aspx">
+		_MSC_VER の値
+		</a>
+	</li>
+	-->
+</ul>
+
+<h2>プロジェクトファイルの作成</h2>
+以下のコマンドを subversion のソースコードのルートで実行する
+(見やすくするため改行していますが、実際には１行で入力します。)
+<pre>
+c:\...\trunk> python gen-make.py -t dsp 
+	--with-openssl=..\common\openssl-0.9.8d
+	<strong>--with-swig=C:\swigwin-1.3.31 ←絶対パスで指定する</strong>
+	--with-neon=..\common\neon-0.26.2 
+	--with-zlib=..\common\zlib-1.2.3 
+	--with-berkeley-db=..\common\db4-win32
+	--with-httpd=..\common\httpd-2.2.3
+</pre>
+
+
+<h2>Python binding のコンパイル</h2>
+subversion_msvc.dsw を VC6 で開いて <strong>__SWIG_PYTHON__</strong> の
+構成を選択して、<strong>Release の構成のみ</strong>をビルドする。
+
+<p>
+<u>コマンドラインから行う場合</u>
+<pre>
+msdev subversion_msvc.dsw /MAKE "__SWIG_PYTHON__ - Win32 Release"
+</pre>
+</p>
+
+<p>
+デバッグ版をコンパイルする場合、通常のバイナリ版の Python を使用した場合
+python24_d.lib が存在しないので以下のエラーになります。
+<pre>
+--------------------構成: libsvn_swig_py - Win32 Debug--------------------
+リンク中...
+LINK : fatal error LNK1104: ファイル "python24_d.lib" を開けません。
+link.exe の実行エラー
+
+__SWIG_PYTHON__ - エラー 1、警告 0
+</pre>
+</p>
+
+<!--------------------------------------------------------------->
+<!--                                                           -->
+<!--------------------------------------------------------------->
+<h2 id="install_python_24">Python binding のインストール (for Python 2.4)</h2>
+Subversion ソースツリーのルートで以下のコマンドを実行して必要なファイルをコピーする。
+バッチファイルを作成しておくと便利です。
+( C:\Python24 以下に Python がインストールされている場合 )
+
+<pre>
+c:\...\trunk> mkdir C:\<strong>Python24</strong>\Lib\site-packages\svn
+c:\...\trunk> mkdir C:\<strong>Python24</strong>\Lib\site-packages\libsvn
+c:\...\trunk> copy /Y subversion\bindings\swig\python\svn\*.py      C:\<strong>Python24</strong>\Lib\site-packages\svn
+c:\...\trunk> copy /Y subversion\bindings\swig\python\*.py          C:\<strong>Python24</strong>\Lib\site-packages\libsvn
+c:\...\trunk> copy /Y Release\subversion\bindings\swig\python\*.dll C:\<strong>Python24</strong>\Lib\site-packages\libsvn
+</pre>
+<p>
+<strong>libsvn_swig_py-1.dll</strong> をスクリプトと同じディレクトリに
+コピーするか、パスの通ったディレクトリにコピーする。
+<a href="#not_found_libsvn_swig_py">「libsvn_swig_py が見つからない」</a>
+</p>
+
+<!--------------------------------------------------------------->
+<!--                                                           -->
+<!--------------------------------------------------------------->
+<h2 id="install_python_25">Python binding のインストール (for Python 2.5)</h2>
+Python 2.5 の Windows版 では dll の拡張子を pyd にする必要があるようです。
+
+<pre>
+c:\...\trunk> mkdir C:\<strong>Python25</strong>\Lib\site-packages\svn
+c:\...\trunk> mkdir C:\<strong>Python25</strong>\Lib\site-packages\libsvn
+c:\...\trunk> copy /Y subversion\bindings\swig\python\svn\*.py      C:\<strong>Python25</strong>\Lib\site-packages\svn
+c:\...\trunk> copy /Y subversion\bindings\swig\python\*.py          C:\<strong>Python25</strong>\Lib\site-packages\libsvn
+c:\...\trunk> copy /Y Release\subversion\bindings\swig\python\*.dll C:\<strong>Python25</strong>\Lib\site-packages\libsvn
+
+c:\...\trunk> cd C:\Python25\Lib\site-packages\libsvn
+C:\Python25\Lib\site-packages\libsvn> <strong>move _client.dll _client.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _core.dll   _core.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _delta.dll  _delta.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _fs.dll     _fs.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _ra.dll     _ra.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _repos.dll  _repos.pyd</strong>
+C:\Python25\Lib\site-packages\libsvn> <strong>move _wc.dll     _wc.pyd</strong>
+</pre>
+<p>
+拡張子を dll から pyd に変更し忘れると以下のエラーになります。
+<a href="#import_error_fs">ImportError: No module named _fs</a>
+</p>
+
+<p>
+<strong>libsvn_swig_py-1.dll</strong> をスクリプトと同じディレクトリに
+コピーするか、パスの通ったディレクトリにコピーする。
+<a href="#not_found_libsvn_swig_py">「libsvn_swig_py が見つからない」</a>
+</p>
+
+リンク
+<ul>
+<li>
+	<a href="http://d.hatena.ne.jp/yyamano/200702">
+	http://d.hatena.ne.jp/yyamano/200702
+	</a>
+</li>
+<li>
+	<a href="http://docs.python.org/whatsnew/ports.html#SECTION0001510000000000000000">
+	http://docs.python.org/whatsnew/ports.html#SECTION0001510000000000000000
+	</a>
+</li>
+</ul>
+
+<!--------------------------------------------------------------->
+<!--                                                           -->
+<!--------------------------------------------------------------->
+<h2>python のインストールディレクトリの構成</h2>
+カッコの中は Python 2.5 の場合
+<pre>
+C:\Python24 (Python25)
+     └─Lib
+         └─site-packages
+             │
+             ├─libsvn
+             │   │
+             │   ├─__init__.py
+             │   ├─__init__.pyc
+             │   ├─_client.dll (_client.pyd)
+             │   ├─_core.dll   (_core.pyd  )
+             │   ├─_delta.dll  (_delta.pyd )
+             │   ├─_fs.dll     (_fs.pyd    )
+             │   ├─_ra.dll     (_ra.pyd    )
+             │   ├─_repos.dll  (_repos.pyd )
+             │   ├─_wc.dll     (_wc.pyd    )
+             │   ├─client.py
+             │   ├─core.py
+             │   ├─core.pyc
+             │   ├─delta.py
+             │   ├─delta.pyc
+             │   ├─fs.py
+             │   ├─fs.pyc
+             │   ├─ra.py
+             │   ├─repos.py
+             │   ├─repos.pyc
+             │   └─wc.py
+             │
+             ├─svn
+             │   │
+             │   ├─__init__.py
+             │   ├─__init__.pyc
+             │   ├─client.py
+             │   ├─core.py
+             │   ├─core.pyc
+             │   ├─delta.py
+             │   ├─delta.pyc
+             │   ├─fs.py
+             │   ├─fs.pyc
+             │   ├─ra.py
+             │   ├─repos.py
+             │   ├─repos.pyc
+             │   └─wc.py
+             │
+             └─README.txt
+</pre>
+
+<h2>実行確認</h2>
+Subversion Book に載っているサンプルスクリプトを使用します。このファイルを
+test.py の名前で保存して、以下のように実行します。
+<pre>
+svnadmin create test
+test.py test
+</pre>
+
+スクリプト
+<pre>
+#!/usr/bin/python
+
+"""Crawl a repository, printing versioned object path names."""
+
+import sys
+import os.path
+import svn.fs, svn.core, svn.repos
+
+def crawl_filesystem_dir(root, directory, pool):
+    """Recursively crawl DIRECTORY under ROOT in the filesystem, and return
+    a list of all the paths at or below DIRECTORY.  Use POOL for all 
+    allocations."""
+
+    # Print the name of this path.
+    print directory + "/"
+    
+    # Get the directory entries for DIRECTORY.
+    entries = svn.fs.svn_fs_dir_entries(root, directory, pool)
+
+    # Use an iteration subpool.
+    subpool = svn.core.svn_pool_create(pool)
+
+    # Loop over the entries.
+    names = entries.keys()
+    for name in names:
+        # Clear the iteration subpool.
+        svn.core.svn_pool_clear(subpool)
+
+        # Calculate the entry's full path.
+        full_path = directory + '/' + name
+
+        # If the entry is a directory, recurse.  The recursion will return
+        # a list with the entry and all its children, which we will add to
+        # our running list of paths.
+        if svn.fs.svn_fs_is_dir(root, full_path, subpool):
+            crawl_filesystem_dir(root, full_path, subpool)
+        else:
+            # Else it's a file, so print its path here.
+            print full_path
+
+    # Destroy the iteration subpool.
+    svn.core.svn_pool_destroy(subpool)
+
+def crawl_youngest(pool, repos_path):
+    """Open the repository at REPOS_PATH, and recursively crawl its
+    youngest revision."""
+    
+    # Open the repository at REPOS_PATH, and get a reference to its
+    # versioning filesystem.
+    repos_obj = svn.repos.svn_repos_open(repos_path, pool)
+    fs_obj = svn.repos.svn_repos_fs(repos_obj)
+
+    # Query the current youngest revision.
+    youngest_rev = svn.fs.svn_fs_youngest_rev(fs_obj, pool)
+    
+    # Open a root object representing the youngest (HEAD) revision.
+    root_obj = svn.fs.svn_fs_revision_root(fs_obj, youngest_rev, pool)
+
+    # Do the recursive crawl.
+    crawl_filesystem_dir(root_obj, "", pool)
+    
+if __name__ == "__main__":
+    # Check for sane usage.
+    if len(sys.argv) != 2:
+        sys.stderr.write("Usage: %s REPOS_PATH\n"
+                         % (os.path.basename(sys.argv[0])))
+        sys.exit(1)
+
+    # Call the app-wrapper, which takes care of APR initialization/shutdown
+    # and the creation and cleanup of our top-level memory pool.
+    svn.core.run_app(crawl_youngest, os.path.normpath(sys.argv[1]))
+</pre>
+
+<h1>Trouble Shooting</h1>
+<h2>実行時</h2>
+
+<h3 id="not_found_libsvn_swig_py">『 libsvn_swig_py-1.dll が見つからなかったため、
+このアプリケーションを開始できませんでした。アプリケーションをインストールし直す
+とこの問題は解決される場合があります。 』のエラーが出る
+</h3>
+
+libsvn_swig_py-1.dll のあるディレクトリにパスを通してください。あるいは
+カレントディレクトリにコピーしてください。
+
+<h3 id="import_error_fs">『 ImportError: No module named _fs 』 のエラーが出る</h3>
+<pre>
+Traceback (most recent call last):
+  File "D:\svnwork\subversion\trunk\test.py", line 7, in <module>
+    import svn.fs, svn.core, svn.repos
+  File "C:\<strong>Python25</strong>\lib\site-packages\svn\fs.py", line 19, in <module>
+    from libsvn.fs import *
+  File "C:\<strong>Python25</strong>\lib\site-packages\libsvn\fs.py", line 7, in <module>
+    import _fs
+ImportError: No module named _fs
+</pre>
+
+<a href="#install_python_25">
+Python2.5 を使う場合</a> _fs.dll や _core.dll 等のファイルは 
+_fs.<strong>pyd</strong> や _core.<strong>pyd</strong> の
+ように拡張子を <strong>pyd</strong> に変更する必要があります。
+</body>
+</html>

@@ -1,0 +1,238 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="mailer.py" />
+<meta name="keywords" content="日本語" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>mailer.py でのコミットメール送信 (日本語対応)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	前に戻る
+	<a href="svnmailer.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>mailer.py でのコミットメール送信 (日本語対応)</h1>
+<h2>概要</h2>
+Subversion を使っているとコミットメールを送信すると便利です。
+post-commit フックスクリプトでリポジトリに直接アクセスして
+差分をメール送信することが可能です。このページでは mailer.py という
+コミットメール送信ツールを紹介します。
+
+<h2>セットアップ手順</h2>
+
+<ul>
+<li>mailer.py を入手する</li>
+<li>Subversion Python bindings をインストールする</li>
+<li>mailer.conf でメール送信先等の設定を行う</li>
+<li>日本語文字化け対策</li>
+<ul>
+	<li>diff.pl を作成する</li>
+	<li>mailer.conf の diff を編集する</li>
+</ul>
+<li>post-commit を作成する</li>
+</ul>
+
+<h2>入手先</h2>
+<p>
+mailer.py は以下から入手可能です。
+<a href="http://svn.apache.org/repos/asf/subversion/trunk/tools/hook-scripts/mailer">
+http://svn.apache.org/repos/asf/subversion/trunk/tools/hook-scripts/mailer
+</a>
+</p>
+Subversion のソースコード配布ファイルの中にも含まれています。
+
+<h2>Subversion Python bindings のインストール</h2>
+mailer.py は Subversion Python bindings を使っているので
+Python bindings をインストールする必要があります。
+
+<p>
+参照
+<ul>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/subversion/bindings/swig/INSTALL">
+	subversion/bindings/swig/INSTALL
+	</a>
+	</li>
+	<li>
+	<a href="http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_python_vc6.html">
+	Python binding をコンパイルする方法 (VC6)
+	</a>
+	</li>
+</ul>
+</p>
+<p>
+Python bindings をインストールしたら、mailer.conf という設定ファイルを
+編集する必要があります。mailer.conf.example という設定ファイルのサンプルが
+あるのでこれを元に編集すれば OK です。
+</p>
+
+<h2>メール送信先等の設定</h2>
+
+mailer.conf.example をベースに mailer.conf を作成し、mailer.conf を
+編集して、送信先メールアドレス等を設定します。
+<ul>
+<li>mail_command をコメントアウトする または smtp_hostname を設定する</li>
+<li>from_addr に有効なメールアドレスを設定する</li>
+<li>to_addr   に有効なメールアドレスを設定する</li>
+</ul>
+</ul>
+
+
+<h2>日本語のファイルの文字化け対策</h2>
+<strong>リポジトリの中身のファイルが、Shift JIS や EUC 等 UTF8 以外の文字コードを
+使っているとコミットメールが文字化けしてしまいます。</strong>
+なので文字化けしないようにする必要があります。
+<p>
+mailer.py はメールを送信するとき、ファイルの中身が UTF8 である前提で
+動作するようになっています。
+</p>
+ファイルの中身が Shift-JIS や EUC であれば以下のようになり文字化けしてしまいます。
+<ul>
+	<li>ログメッセージ: UTF8</li>
+	<li>ファイルの中身(差分): Shift-JIS or EUC</li>
+	<li>Content-Type: UTF8</li>
+</ul>
+
+幸いにも、mailer.py ではファイルの差分を表示させるときのコマンドを
+設定ファイルで変更できるようになっています。メールで送信する前に 
+nkf に食わせて UTF8 に統一してしまえば文字化けすることはありません。
+
+<p>
+<strong>ただしメールソフトが UTF8 のメールに対応していないと、コミットメールは
+文字化けして読めません</strong>
+</p>
+
+<h3>mailer.conf の diff プログラムの指定</h3>
+
+mailer.conf.example には general というセクションがあり、そこに
+diff という変数があります。これを編集して nkf の処理を追加します。
+diff に直接 nkf を指定することができればいいのですが、パイプでつないで
+起動するということができないようなので、nkf を呼び出すための
+perl スクリプトを作成することにします。
+
+<p>
+変更前
+<pre>
+diff = /usr/bin/diff -u -L %(label_from)s -L %(label_to)s %(from)s %(to)s
+</pre>
+変更後
+<pre>
+diff = /var/svn/diff.pl -u -L %(label_from)s -L %(label_to)s %(from)s %(to)s
+</pre>
+</p>
+
+diff.pl (渡された引数を /usr/bin/diff にそのまま渡して、nkf をパイプで
+つないで呼び出すスクリプト)
+<pre>
+#!/usr/bin/perl
+
+$diff = "/usr/bin/diff";
+$nkf  = "/usr/bin/nkf";
+
+$cmd = "$diff ";
+foreach $arg ( @ARGV )
+{
+	$cmd = "$cmd \"$arg\"";
+}
+$cmd = "$cmd | $nkf --utf8";
+system $cmd;
+</pre>
+
+<!--
+<pre>
+#!/usr/bin/perl
+
+$cmd = "/usr/bin/diff ";
+foreach $arg ( @ARGV )
+{
+	$cmd = "$cmd \"$arg\"";
+}
+$cmd = "$cmd | /usr/bin/nkf --utf8";
+system $cmd;
+</pre>
+-->
+
+<h2>mailer.py の使い方</h2>
+<pre>
+$ ./mailer.py --help
+USAGE: mailer.py commit      REPOS REVISION [CONFIG-FILE]
+       mailer.py propchange  REPOS REVISION AUTHOR REVPROPNAME [CONFIG-FILE]
+       mailer.py propchange2 REPOS REVISION AUTHOR REVPROPNAME ACTION [CONFIG-FILE]
+       mailer.py lock        REPOS AUTHOR [CONFIG-FILE]
+       mailer.py unlock      REPOS AUTHOR [CONFIG-FILE]
+
+If no CONFIG-FILE is provided, the script will first search for a mailer.conf
+file in REPOS/conf/.  Failing that, it will search the directory in which
+the script itself resides.
+
+ACTION was added as a fifth argument to the post-revprop-change hook
+in Subversion 1.2.0.  Its value is one of 'A', 'M' or 'D' to indicate
+if the property was added, modified or deleted, respectively.
+</pre>
+
+コミットメールを送るには、設定ファイルを編集して
+<pre>
+mailer.py commit      REPOS REVISION [CONFIG-FILE]
+</pre>
+の構文に従って mailer.py を実行すれば OK なのです
+
+<h2>post-commit の設定</h2>
+
+<ul>
+<li>
+post-commit を mailer.py と mailer.conf をリポジトリの hooks ディレクトリに置く場合
+以下の内容で作る。
+<pre>
+REPOS="$1"
+REV="$2"
+
+/usr/bin/python $REPOS/hooks/mailer.py commit "$REPOS" "$REV" &
+</pre>
+</li>
+<li>
+post-commit に実行属性をつける。
+</li>
+</ul>
+
+</body>
+</html>

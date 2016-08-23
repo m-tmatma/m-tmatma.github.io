@@ -1,0 +1,324 @@
+Redmine の取得
+	$ svn co http://redmine.rubyforge.org/svn/tags/0.6.3 redmine
+
+	参考
+		http://redmine.jp/download/
+
+MySQL をインストール
+	パッケージで以下をインストール
+		MySQL-server
+		MySQL-client
+		MySQL-ruby
+		MySQL-shared
+
+MySQL のルートパスワード設定
+	$ mysqladmin -u root password mysql
+
+MySQL 用のデータベース作成
+	$ mysql -u root -p
+	Enter password:
+	Welcome to the MySQL monitor.  Commands end with ; or \g.
+	Your MySQL connection id is 3 to server version: 5.0.27-standard
+
+	Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+	mysql> create database redmine character set utf8;
+	Query OK, 1 row affected (0.02 sec)
+
+	mysql> quit;
+	Bye
+
+	参考
+		http://redmine.jp/guide/RedmineInstall
+
+database.yml 作成
+	$ cp config/database.yml.example  config/database.yml
+	
+database.yml 編集
+	production:
+	  adapter: mysql
+	  database: redmine
+	  host: localhost
+	  username: root
+	  password: mysql
+
+	参考
+		http://redmine.jp/guide/RedmineInstall
+
+rubygems をインストール (rdoc もインストールされる)
+	VineLinux 4.2 の場合パッケージが存在する。
+
+	参考
+		http://redmine.jp/tech_note/install/
+
+Rake をインストール
+	# gem install rake --remote
+	Bulk updating Gem source index for: http://gems.rubyforge.org
+	Successfully installed rake-0.8.1
+	Installing ri documentation for rake-0.8.1...
+	Installing RDoc documentation for rake-0.8.1...
+
+	参考
+		http://www2s.biglobe.ne.jp/~idesaku/sss/tech/rake/#install
+
+Rail をインストール
+	# gem install rails --include-dependencies
+	Successfully installed rails-2.0.2
+	Successfully installed activesupport-2.0.2
+	Successfully installed activerecord-2.0.2
+	Successfully installed actionpack-2.0.2
+	Successfully installed actionmailer-2.0.2
+	Successfully installed activeresource-2.0.2
+	Installing ri documentation for activesupport-2.0.2...
+	Installing ri documentation for activerecord-2.0.2...
+	Installing ri documentation for actionpack-2.0.2...
+	Installing ri documentation for actionmailer-2.0.2...
+	Installing ri documentation for activeresource-2.0.2...
+	Installing RDoc documentation for activesupport-2.0.2...
+	Installing RDoc documentation for activerecord-2.0.2...
+	Installing RDoc documentation for actionpack-2.0.2...
+	Installing RDoc documentation for actionmailer-2.0.2...
+	Installing RDoc documentation for activeresource-2.0.2...
+
+	参考
+		http://www.srcw.net/blog/2007/09/redmine.html
+
+Redmine の初期化
+	$ rake load_default_data RAILS_ENV="production"
+	(in /home/redmine/redmine)
+
+	Select language: bg, cs, de, en, es, fr, he, it, ja, ko, nl, pl, pt, pt-br, ro, ru, sr, sv, zh, zh-tw [en] ja
+	====================================
+	Loading default configuration data for language: ja
+
+	Note: The rake task load_default_data has been deprecated, please use the replacement version redmine:load_default_data
+
+	参考
+		http://www.srcw.net/blog/2007/09/redmine.html
+		http://www.nslabs.jp/redmine.rhtml
+		http://blogs.dion.ne.jp/koko/archives/5731471.html
+		http://ysky.vox.com/library/post/centos%E3%81%ABredmine%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.html
+
+■ Webrick での起動
+	* Webrick で起動
+		$ script/server -e production start
+		=> Booting WEBrick...
+		=> Rails application started on http://0.0.0.0:3000
+		=> Ctrl-C to shutdown server; call with --help for options
+		[2008-02-28 21:45:36] INFO  WEBrick 1.3.1
+		[2008-02-28 21:45:36] INFO  ruby 1.8.5 (2006-08-25) [i386-linux]
+		[2008-02-28 21:45:36] INFO  WEBrick::HTTPServer#start: pid=3007 port=3000
+
+	* ブラウザで動作確認
+		http://192.168.60.129:3000/
+
+	* Webrick を停止
+		Control + C を押して Webrick を停止する。
+
+■ Mongrel での起動
+	* Mongrel のインストール
+		# gem install mongrel_cluster
+		Install required dependency gem_plugin? [Yn]  y
+		Install required dependency mongrel? [Yn]  y
+		Select which gem to install for your platform (i386-linux)
+		 1. mongrel 1.1.3 (i386-mswin32)
+		 2. mongrel 1.1.3 (ruby)
+		 3. mongrel 1.1.3 (java)
+		 4. mongrel 1.1.2 (java)
+		 5. mongrel 1.1.2 (ruby)
+		 6. mongrel 1.1.2 (mswin32)
+		 7. Skip this gem
+		 8. Cancel installation
+		> 5
+		Install required dependency daemons? [Yn]  Y
+		Install required dependency fastthread? [Yn]  Y
+		Select which gem to install for your platform (i386-linux)
+		 1. fastthread 1.0.1 (mswin32)
+		 2. fastthread 1.0.1 (ruby)
+		 3. Skip this gem
+		 4. Cancel installation
+		> 2
+		Building native extensions.  This could take a while...
+		Install required dependency cgi_multipart_eof_fix? [Yn]  Y
+		Building native extensions.  This could take a while...
+		Successfully installed mongrel_cluster-1.0.5
+		Successfully installed gem_plugin-0.2.3
+		Successfully installed mongrel-1.1.2
+		Successfully installed daemons-1.0.9
+		Successfully installed fastthread-1.0.1
+		Successfully installed cgi_multipart_eof_fix-2.5.0
+		Installing ri documentation for gem_plugin-0.2.3...
+		Installing ri documentation for mongrel-1.1.2...
+		Installing ri documentation for daemons-1.0.9...
+		Installing ri documentation for fastthread-1.0.1...
+
+		No definition for dummy_dump
+
+		No definition for dummy_dump
+
+		No definition for rb_queue_marshal_load
+
+		No definition for rb_queue_marshal_dump
+		Installing ri documentation for cgi_multipart_eof_fix-2.5.0...
+		Installing RDoc documentation for gem_plugin-0.2.3...
+		Installing RDoc documentation for mongrel-1.1.2...
+		Installing RDoc documentation for daemons-1.0.9...
+		Installing RDoc documentation for fastthread-1.0.1...
+
+		No definition for dummy_dump
+
+		No definition for dummy_dump
+
+		No definition for rb_queue_marshal_load
+
+		No definition for rb_queue_marshal_dump
+		Installing RDoc documentation for cgi_multipart_eof_fix-2.5.0...
+
+		参考
+			http://rubyist.g.hatena.ne.jp/muscovyduck/20070402/p1
+
+		※ # gem install mongrel_cluster --include-dependencies
+
+	* Mongrel の設定
+	mongrel_rails cluster::configure を使用して、mongrel_cluster.yml を
+	作成する。
+	
+	一番簡単な方法
+		$ mongrel_rails cluster::configure
+		** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+		Writing configuration file to config/mongrel_cluster.yml.
+
+		$ less config/mongrel_cluster.yml
+		---
+		log_file: log/mongrel.log
+		port: 3000
+		pid_file: tmp/pids/mongrel.pid
+		servers: 2
+
+	いくつかパラメータを指定する。
+		$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd`
+		** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+		Writing configuration file to config/mongrel_cluster.yml.
+
+		$ cat config/mongrel_cluster.yml
+		---
+		cwd: /home/redmine/redmine
+		log_file: log/mongrel.log
+		port: "3000"
+		environment: production
+		pid_file: tmp/pids/mongrel.pid
+		servers: 2
+
+	-N オプションを追加してみる。
+		$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd` -N 5
+		** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+		Writing configuration file to config/mongrel_cluster.yml.
+
+		$ cat config/mongrel_cluster.yml
+		---
+		cwd: /home/redmine/redmine
+		log_file: log/mongrel.log
+		port: "3000"
+		environment: production
+		pid_file: tmp/pids/mongrel.pid
+		servers: 5
+
+	* mongrel の起動(対話モード)
+		$ mongrel_rails start -e production -p 3000
+		** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+		** Starting Mongrel listening at 0.0.0.0:3000
+		** Starting Rails with production environment...
+		** Rails loaded.
+		** Loading any Rails specific GemPlugins
+		** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+		** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+		** Mongrel 1.1.2 available at 0.0.0.0:3000
+		** Use CTRL-C to stop.
+
+		参考
+			http://d.hatena.ne.jp/hayori/20071029/1193650726
+
+	* mongrel の起動(デーモン)
+		$ mongrel_rails start -d -e production -p 3000
+		** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+
+	* ブラウザで動作確認
+		http://192.168.60.129:3000/
+
+■ Apache のリバースプロキシの設定
+	目的
+		ユーザーに見せるサーバーには Apache を使用する。
+		そして Apache へのリクエストを mongrel サーバーに
+		転送する。
+	メリット
+		- Apache の提供する豊富な機能が利用できる。
+		  (アクセスログ、SSL、認証、IP ごとのアクセス制限、バーチャルホスト等)
+		- static なデータ(例えばスタイルシート)を Apache に処理
+		  させることができる。
+
+	* 設定ファイル ( httpd.conf ) を編集
+
+	/etc/apache2/conf/httpd.conf に以下の記述を追加する。
+		ProxyPass        / http://localhost:3000/
+		ProxyPassReverse / http://localhost:3000/
+
+	参考
+		http://httpd.apache.org/docs/2.2/ja/mod/mod_proxy.html
+		http://www.slogical.co.jp/tech/apache_proxypass.html
+		http://www.redout.net/data/reverseproxy.html
+
+	* Apache を起動
+		# /etc/init.d/apache2 start
+		httpdを起動中:                                             [  OK  ]
+
+	* ブラウザで動作確認
+		http://192.168.60.129/
+
+■ Redmine の設定 (ブラウザベース)
+	* admin ユーザーでのログイン
+		- ユーザー: admin パスワード: admin でログインする。
+	
+	* ユーザーの作成
+		- トップメニューの 「Administration」 を選ぶ
+		- 「Settings」 を選ぶ
+		- 「Default language」で「日本語」 を選ぶ
+		- 「Repositories encodings」で以下の値を設定する。
+			utf-8,shift_jis,euc-jp
+		- Save を選ぶ
+		- 「Users | New」の New」を選んでユーザーを作成する。
+		- 一端ログアウトする。
+		- 作成したユーザーでログインする。
+		- そうすると、メニューが日本語で表示される。
+
+	* プロジェクトの作成
+		- トップメニューの「管理」を選ぶ
+		- 「プロジェクト | 新しく作成」の 新しく作成」を選びプロジェクトを作成する。
+	
+	* リポジトリの設定
+		- トップメニューの 「プロジェクト」を選ぶ
+		- 作成したプロジェクトを選ぶ
+		- 「設定」を 選ぶ
+		- 「リポジトリ」を 選ぶ
+		- 「SCM」で「Subversion」を選ぶ
+		- 「URL」にリポジトリルートの URL を設定する。
+		- 何か別のメニュー項目をクリックすると、「設定」の
+		  横に「リポジトリ」という項目が現れる。
+
+	参考
+		http://redmine.jp/faq/repository/shift_jisutf-8/
+
+■ redmineをサブディレクトリで動かす
+
+  $ mongrel_rails cluster::stop
+  $ mongrel_rails cluster::configure -e production -p 3000 --prefix=/redmine
+  $ mongrel_rails start -d -e production -p 3000 --prefix=/redmine
+
+	参考
+		http://d.hatena.ne.jp/hayori/20071030/1193754439
+		http://www.kurano.jp/blog/sadayuki/articles/search?q=redmine
+
+	* 設定ファイル ( httpd.conf ) を編集
+
+	/etc/apache2/conf/httpd.conf を以下のように書き換える
+		ProxyPass        /redmine http://localhost:3000/redmine
+		ProxyPassReverse /redmine http://localhost:3000/redmine

@@ -1,0 +1,397 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Redmineのインストール</title>
+<meta name="keywords" content="Redmine" />
+<meta name="keywords" content="インストール" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	<a href="apache.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-17 11:48:29 +0900 (2014/08/17 (日)) $<br>
+$Revision: 974 $<br>
+</div>
+
+<h1>Redmine のインストール (Vine Linux)</h1>
+<h2>概要</h2>
+Redmine のインストール方法を解説します。
+
+<h2>参考ページ</h2>
+<ul>
+<li><a href="apache.html">Redmine をApache 経由で動かす方法</a></li>
+<li><a href="subdir.html">Redmine をサブディレクトリで動かす</a></li>
+</ul>
+
+<h2>必要なもの</h2>
+<ul>
+	<li>SQLサーバー</li>
+	<li>Ruby</li>
+	<li>rubygems</li>
+	<li>rake</li>
+	<li>Ruby on Rails</li>
+	<li>Redmine</li>
+	<li>Subversion (オプション)</li>
+	<li>Mongrel (オプション)</li>
+	<li>Apache (オプション)</li>
+</ul>
+
+<h2>インストール手順</h2>
+<h3>Ruby</h3>
+パッケージでインストールする。(もしインストールされていなければ)
+<pre>
+# apt-get -y install rubygems
+</pre>
+
+<h3>rubygems</h3>
+パッケージでインストールする。
+<pre>
+# apt-get -y install rubygems
+</pre>
+
+<h3>rake</h3>
+gem コマンドでインストールする。
+<pre>
+# gem install rake
+Bulk updating Gem source index for: http://gems.rubyforge.org
+Successfully installed rake-0.8.1
+Installing ri documentation for rake-0.8.1...
+Installing RDoc documentation for rake-0.8.1...
+</pre>
+
+<p>
+	参考
+	<a href="http://www2s.biglobe.ne.jp/~idesaku/sss/tech/rake/#install">
+	http://www2s.biglobe.ne.jp/~idesaku/sss/tech/rake/#install
+	</a>
+</p>
+
+<h3>Ruby on Rails</h3>
+gem コマンドでインストールする。
+<pre>
+# gem install rails --include-dependencies
+Successfully installed rails-2.0.2
+Successfully installed activesupport-2.0.2
+Successfully installed activerecord-2.0.2
+Successfully installed actionpack-2.0.2
+Successfully installed actionmailer-2.0.2
+Successfully installed activeresource-2.0.2
+Installing ri documentation for activesupport-2.0.2...
+Installing ri documentation for activerecord-2.0.2...
+Installing ri documentation for actionpack-2.0.2...
+Installing ri documentation for actionmailer-2.0.2...
+Installing ri documentation for activeresource-2.0.2...
+Installing RDoc documentation for activesupport-2.0.2...
+Installing RDoc documentation for activerecord-2.0.2...
+Installing RDoc documentation for actionpack-2.0.2...
+Installing RDoc documentation for actionmailer-2.0.2...
+Installing RDoc documentation for activeresource-2.0.2...
+</pre>
+
+<p>
+	参考
+	<a href="http://www.srcw.net/blog/2007/09/redmine.html">
+	http://www.srcw.net/blog/2007/09/redmine.html
+	</a>
+</p>
+
+<h3>Redmine</h3>
+Subversion で取得する。
+<pre>
+$ svn co http://svn.redmine.org/redmine/tags/0.6.3 redmine
+</pre>
+
+<h3>SQLサーバー</h3>
+<h4>MySQL のインストール</h4>
+ここでは MySQL を使うこととします。以下のパッケージをインストールします。
+<ul>
+	<li>MySQL-server</li>
+	<li>MySQL-client</li>
+	<li>MySQL-ruby</li>
+	<li>MySQL-shared</li>
+</ul>
+<pre>
+# apt-get -y install MySQL-shared
+# apt-get -y install MySQL-server
+# apt-get -y install MySQL-client
+# apt-get -y install MySQL-ruby
+</pre>
+
+<h4>ルートパスワード設定</h4>
+<pre>
+$ mysqladmin -u root password mysql
+</pre>
+ここでは、ユーザー root のパスワードを mysql に設定します。
+適宜適切なパスワードを設定します。
+
+<h4>MySQL 用のデータベース作成</h4>
+<pre>
+$ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3 to server version: 5.0.27-standard
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> create database redmine character set utf8;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> quit;
+Bye
+</pre>
+<p>
+	参考
+	<a href="http://redmine.jp/guide/RedmineInstall">
+	http://redmine.jp/guide/RedmineInstall
+	</a>
+</p>
+
+<h4>database.yml 作成</h4>
+<pre>
+	$ cp config/database.yml.example  config/database.yml
+</pre>
+
+<h4>database.yml 編集</h4>
+<pre>
+production:
+  adapter: mysql
+  database: redmine
+  host: localhost
+  username: root
+  password: <strong>mysql</strong>
+</pre>
+
+<p>
+	参考
+	<a href="http://redmine.jp/guide/RedmineInstall">
+	http://redmine.jp/guide/RedmineInstall
+	</a>
+</p>
+
+<h3>Redmine の初期化</h3>
+<pre>
+$ rake db:migrate RAILS_ENV="production"
+
+$ rake load_default_data RAILS_ENV="production"
+(in /home/redmine/redmine)
+
+Select language: bg, cs, de, en, es, fr, he, it, ja, ko, nl, pl, pt, pt-br, ro, ru, sr, sv, zh, zh-tw [en] ja
+====================================
+Loading default configuration data for language: ja
+
+Note: The rake task load_default_data has been deprecated, please use the replacement version redmine:load_default_data
+</pre>
+
+<p>
+	参考
+	<ul>
+	<li>
+		<a href="http://www.srcw.net/blog/2007/09/redmine.html">
+		http://www.srcw.net/blog/2007/09/redmine.html
+		</a>
+	</li>
+	<li>
+		<a href="http://www.nslabs.jp/redmine.rhtml">
+		http://www.nslabs.jp/redmine.rhtml
+		</a>
+	</li>
+	<li>
+		<a href="http://blogs.dion.ne.jp/koko/archives/5731471.html">
+		http://blogs.dion.ne.jp/koko/archives/5731471.html
+		</a>
+	</li>
+	<li>
+		<a href="http://ysky.vox.com/library/post/centos%E3%81%ABredmine%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.html">
+		http://ysky.vox.com/library/post/centos%E3%81%ABredmine%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.html
+		</a>
+	</li>
+	</ul>
+</p>
+
+<h3>Webrick</h3>
+<h4>Webrick で起動</h4>
+<pre>
+$ script/server -e production start
+=> Booting WEBrick...
+=> Rails application started on http://0.0.0.0:3000
+=> Ctrl-C to shutdown server; call with --help for options
+[2008-02-28 21:45:36] INFO  WEBrick 1.3.1
+[2008-02-28 21:45:36] INFO  ruby 1.8.5 (2006-08-25) [i386-linux]
+[2008-02-28 21:45:36] INFO  WEBrick::HTTPServer#start: pid=3007 port=3000
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost:3000/
+</pre>
+
+<h4>Webrick を停止</h4>
+Control + C を押して Webrick を停止する。
+
+<h3>Mongrel</h3>
+<h4>Mongrel のインストール</h4>
+<pre>
+# gem install mongrel_cluster --include-dependencies
+</pre>
+
+<p>
+	参考
+	<a href="http://rubyist.g.hatena.ne.jp/muscovyduck/20070402/p1">
+	http://rubyist.g.hatena.ne.jp/muscovyduck/20070402/p1
+	</a>
+</p>
+
+<h4>Mongrel の設定</h4>
+<p>
+mongrel_rails cluster::configure を使用して、mongrel_cluster.yml を
+作成する。
+</p>
+
+<h5>一番簡単な方法</h5>
+<pre>
+$ mongrel_rails cluster::configure
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ less config/mongrel_cluster.yml
+---
+log_file: log/mongrel.log
+port: 3000
+pid_file: tmp/pids/mongrel.pid
+servers: 2
+</pre>
+
+<h5>いくつかパラメータを追加</h5>
+<pre>
+$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd`
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ cat config/mongrel_cluster.yml
+---
+cwd: /home/redmine/redmine
+log_file: log/mongrel.log
+port: "3000"
+environment: production
+pid_file: tmp/pids/mongrel.pid
+servers: 2
+</pre>
+
+<h5>-N オプションを追加してみる。</h5>
+<pre>
+$ mongrel_rails cluster::configure -e production -p 3000 -c `pwd` -N 5
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+Writing configuration file to config/mongrel_cluster.yml.
+
+$ cat config/mongrel_cluster.yml
+---
+cwd: /home/redmine/redmine
+log_file: log/mongrel.log
+port: "3000"
+environment: production
+pid_file: tmp/pids/mongrel.pid
+servers: 5
+</pre>
+
+<h4>mongrel の起動(対話モード)</h4>
+<pre>
+$ mongrel_rails start -e production -p 3000
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+** Starting Mongrel listening at 0.0.0.0:3000
+** Starting Rails with production environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel 1.1.2 available at 0.0.0.0:3000
+** Use CTRL-C to stop.
+</pre>
+
+<p>
+	参考
+	<a href="http://d.hatena.ne.jp/hayori/20071029/1193650726">
+	http://d.hatena.ne.jp/hayori/20071029/1193650726
+	</a>
+</p>
+
+<h4>mongrel の起動(デーモン)</h4>
+<pre>
+$ mongrel_rails start -d -e production -p 3000
+** Ruby version is not up-to-date; loading cgi_multipart_eof_fix
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost:3000/
+</pre>
+
+<h2>全手順</h2>
+<pre>
+# apt-get -y install subversion
+# apt-get -y install MySQL-shared
+# apt-get -y install MySQL-ruby
+# apt-get -y install MySQL-server
+# apt-get -y install MySQL-client
+# apt-get -y install rubygems
+# chkconfig apache2 on
+# chkconfig mysql   on
+# /etc/init.d/mysql start
+# gem install rake
+# gem install mongrel_cluster --include-dependencies
+# gem install rails --include-dependencies
+# adduser redmine
+# passwd  redmine
+
+$ svn co http://redmine.rubyforge.org/svn/tags/0.6.3 redmine
+$ mysqladmin -u root password mysql
+$ mysql -u root -p
+$ cd redmine/
+$ cp config/database.yml.example  config/database.yml
+$ vi config/database.yml
+
+$ rake db:migrate RAILS_ENV="production"
+$ rake load_default_data RAILS_ENV="production"
+$ mongrel_rails cluster::configure -e production -p 3000
+$ mongrel_rails start -d -e production -p 3000
+</pre>
+
+</body>
+</html>

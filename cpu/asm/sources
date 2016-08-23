@@ -1,0 +1,3 @@
+USER_C_FLAGS=$(USER_C_FLAGS) /Fa
+I386_SOURCES	= i386\my_cpuid.asm
+AMD64_SOURCES	= amd64\my_cpuid.asm

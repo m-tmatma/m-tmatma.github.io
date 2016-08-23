@@ -1,0 +1,186 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="merge-tracking" />
+<meta name="keywords" content="vc6" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion 1.5.0 での新機能 (merge-tracking 機能)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_multi_ra_vc6.html">前に戻る</a>
+	<a href="svn_mergeinfo.html">次に進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>merge-tracking 機能</h1>
+<h2>概要</h2>
+<p>
+merge-tracking とは <a href="../svnmerge/">svnmerge.py</a> で行っている処理を Subversion が
+直接サポートします。svn merge コマンドでマージした修正を Subversion が覚えておいて、次に
+マージしようとしたときにマージ済みの修正を適用しないようにする機能です。
+</p>
+
+<h2>merge-tracking に関するドキュメント</h2>
+<ul>
+	<li>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/merge-tracking/index.html">
+		http://svn.apache.org/repos/asf/subversion/trunk/notes/merge-tracking/index.html
+		</a>
+	</li>
+	<li>
+		<a href="http://subversion.apache.org/docs/release-notes/1.5.html#merge-tracking">
+		[Subversion 1.5 Release Notes] Merge tracking 
+		</a>
+	</li>
+	<li>
+		<a href="http://subversion.tigris.org/issues/show_bug.cgi?id=820">
+		Merge Tracking(issue 820)
+		</a>
+	</li>
+	<li>
+		<a href="http://blogs.open.collab.net/svn/2007/05/the_subversion__1.html">
+		Merge tracking in 1.5
+		</a>
+	</li>
+	<li>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/merge-tracking/index.htmlrequirements.html">
+		Merge Tracking Requirements and Use Cases
+		</a>
+	</li>
+	<li>
+		<a href="http://subversion.apache.org/docs/release-notes/1.5.html#mt-known-issues">
+		Known Issues(Subversion 1.5 の Merge Tracking の制限事項)
+		</a>
+	</li>
+</ul>
+
+<h2>ブランチの種類</h2>
+
+通常使用するブランチは以下の2種類があります。
+<ul>
+	<li>
+	リリースブランチ
+	</li>
+	<li>
+	機能ブランチ
+	</li>
+</ul>
+
+<h3>リリースブランチ</h3>
+<p>
+リリース版のハージョンの管理のために作成するブランチをリリースブランチと呼びます。
+</p>
+<p>
+通常ある時点の trunk からコピーされて分岐します。通常の利用方法は
+何かバグが見つかったときに、まず trunk でバグ修正を行い、そして
+必要なリビジョンだけリリースブランチにマージします。
+</p>
+<p>
+このような利用目的のためマージの方向は trunk → リリースブランチ の
+一定方向です。
+</p>
+
+<h3>機能ブランチ</h3>
+<p>
+ある程度大きく長期間にわたる修正を行いたい場合など作業用に
+使用するブランチのことを機能ブランチと呼びます。
+</p>
+<p>
+trunk で作業してしまうと長期間trunk を不安定な状態にしてしまい
+他の開発作業に支障を来します。そのような場合に作業用に使用します。<br>
+※ リリースブランチから作成することもあります。
+</p>
+<p>
+機能ブランチでの作業が終了したときには 機能ブランチ → trunk にマージを
+行い、機能ブランチを削除します。<br>
+しかし機能ブランチが作成された後、trunk で修正が行われた場合、
+trunk → 機能ブランチに変更をマージする必要があります。
+</p>
+
+<h2>Subversion 1.5 でサポートしている merge tracking 機能</h2>
+<ul>
+	<li>
+	<a href="svn_cherry_picking.html">
+	特定のリビジョンだけマージ(Cherry Picking)
+	</a>
+	</li>
+	<li>
+	繰り返しマージ(Repeated Merge)
+	</li>
+	<li>
+	手動でマージしたリビジョンを記録(Record Manual Merge)
+	</li>
+	<li>
+	<a href="svn_merge_reintegrate.html">
+	ブランチの修正を全部マージ(ブランチの再結合)
+	</a>
+	</li>
+</ul>
+
+<h2>Subversion 1.5 でサポートしていない merge tracking 機能</h2>
+<ul>
+	<li>
+	<a href="http://subversion.apache.org/docs/release-notes/1.5.html#mt-known-limitations">
+	特定のリビジョンのマージのブロック/アンブロック
+	</a>
+	</li>
+</ul>
+
+<!--
+<h2>内部的なこと</h2>
+<ul>
+<li>svn:mergeinfo というプロパティによってマージした履歴が保存される。</li>
+</ul>
+-->
+
+<!--
+<h2>参考情報</h2>
+<ul>
+	<li>svn:mergeinfo</li>
+	SVN_PROP_MERGE_INFO (svn_props.h で定義 )
+</ul>
+->
+
+<!-- SVN_RA_SVN_CAP_MERGE_INFO (svn_ra_svn.h) もそのうち解説できるといいな -->
+
+</body>
+</html>

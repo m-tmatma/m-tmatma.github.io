@@ -1,0 +1,262 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="merge-tracking" />
+<meta name="keywords" content="Cherry Picking" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>特定のリビジョンだけマージ(Cherry Picking)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_mergetracking.html">前に戻る</a>
+	次に進む
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>特定のリビジョンだけマージ(Cherry Picking)</h1>
+<h2>概要</h2>
+<p>
+trunk で行った修正を特定のリビジョンの修正だけリリースブランチに反映したい場合など
+リビジョンを指定して行うマージを、Cherry Picking と呼びます。
+</p>
+<p>
+Subversion 1.5 では Merge Tracking 機能をサポートしています。
+Subversion は、マージ元 URL とマージ済みリビジョンを記録します。
+次にマージするときに同じ修正を再度マージしようとしても自動的にマージ対象から除外します。
+Subversion が行うのは、記録した情報を元に単に特定のリビジョンを含めるかあるいは含めないか
+の判断のみ行います。
+</p>
+<p>
+Subversion 1.5 では
+<strong>
+マージしていない修正のすべてをマージするときに特定のリビジョンだけマージしない
+ように、マージしないリビジョンを指定することはできません。つまり svnmerge.py block の
+機能は実装していません。
+</strong>
+
+たぶん Subversion 1.6 でサポートされると思います。
+</p>
+
+<h2>操作方法</h2>
+<p>
+マージするためには svn merge コマンドを使います。これは Subversion 1.4 以前と同じです。
+違うのは svn merge コマンドでマージしたときに svn:mergeinfo というプロパティでどの
+リビジョンをマージしたかを Subversion が自動的に記録して、2 回同じ修正をマージしない
+ように保証してくれるという点です。
+</p>
+
+<h2>具体例</h2>
+
+コマンドは <a href="cherry-picking.txt">こちら</a>
+
+<p>
+処理の流れ
+<ol>
+<li><a href="#create_repos">[準備] リポジトリ作成</a></li>
+<li><a href="#comit_to_trunk">[準備] trunk を修正</a></li>
+<li><a href="#create_branch">[準備] ブランチを作成</a></li>
+<li><a href="#comit_to_trunk2">[準備] trunk を修正</a></li>
+<li><a href="#merge_branch_from_trunk">リビジョン4 を trunk → ブランチ 1.0.x にマージする</a></li>
+<li><a href="#check_merge_info">マージ情報の確認</a></li>
+<li><a href="#merge_branch_from_trunk2">再度、リビジョン4 を trunk → ブランチ 1.0.x にマージしてみる</a></li>
+</ol>
+</p>
+
+<p>
+-c オプションは -r の省略表現です。<br>
+例えば -c 4 とすると -r 3:4 と同じ意味です。
+また -c -4 というように負のリビジョンを指定すると -r 4:3 と同じ意味です。
+svn merge で指定すると逆マージを指します。
+</p>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="create_repos">[準備] リポジトリ作成</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp>cd /d D:\tmp
+
+D:\tmp>svnadmin create repos
+
+D:\tmp>svn co file:///D:/tmp/repos work
+リビジョン 0 をチェックアウトしました。
+
+D:\tmp>
+D:\tmp>cd work
+
+D:\tmp\work>svn mkdir tags branches trunk
+A         tags
+A         branches
+A         trunk
+
+D:\tmp\work>svn ci -m "initial dir"
+追加しています              branches
+追加しています              tags
+追加しています              trunk
+
+リビジョン 1 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="comit_to_trunk">[準備] trunk を修正</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\work>cd /d D:\tmp
+
+D:\tmp>svn co  file:///D:/tmp/repos/trunk
+リビジョン 1 をチェックアウトしました。
+
+D:\tmp>cd trunk
+
+D:\tmp\trunk>echo 1 > test.txt
+
+D:\tmp\trunk>svn add test.txt
+A         test.txt
+
+D:\tmp\trunk>svn ci -m "add test.txt"
+追加しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 2 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="create_branch">[準備] ブランチを作成</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\trunk>svn cp  file:///D:/tmp/repos/trunk  file:///D:/tmp/repos/branches/1.0.x -m "make 1.0.x branc"
+
+リビジョン 3 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="comit_to_trunk2">[準備] trunk を修正</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\trunk>echo 2 >> test.txt
+
+D:\tmp\trunk>svn ci -m "fix bug"
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 4 をコミットしました。
+
+D:\tmp\trunk>echo 3 >> test.txt
+
+D:\tmp\trunk>svn ci -m "fix bug 2"
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 5 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="merge_branch_from_trunk">リビジョン4 を trunk → ブランチ 1.0.x にマージする</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\trunk>cd /d D:\tmp
+
+D:\tmp>svn co  file:///D:/tmp/repos/branches/1.0.x
+A    1.0.x\test.txt
+リビジョン 5 をチェックアウトしました。
+
+D:\tmp>
+D:\tmp>cd 1.0.x
+
+D:\tmp\1.0.x><strong>svn merge -c 4 file:///D:/tmp/repos/trunk
+--- r4 を '.' にマージしています:
+U    test.txt
+</strong>
+D:\tmp\1.0.x>svn di
+
+<strong>属性に変更があったパス: .
+___________________________________________________________________
+追加: svn:mergeinfo
+   /trunk:r4 をマージしました
+</strong>
+Index: test.txt
+===================================================================
+--- test.txt    (リビジョン 5)
++++ test.txt    (作業コピー)
+@@ -1 +1,2 @@
+ 1
++2
+
+D:\tmp\1.0.x>svn ci -m "merge from trunk"
+送信しています              .
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 6 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="check_merge_info">マージ情報の確認</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\1.0.x>svn up
+リビジョン 6 です。
+
+D:\tmp\1.0.x>svn pg svn:mergeinfo file:///D:/tmp/repos/branches/1.0.x
+/trunk:4
+
+D:\tmp\1.0.x>svn pg svn:mergeinfo .
+/trunk:4
+
+D:\tmp\1.0.x><strong>svn mergeinfo file:///D:/tmp/repos/trunk</strong>
+r4 <strong>← マージ済みのリビジョン</strong>
+
+D:\tmp\1.0.x>svn mergeinfo <strong>--show-revs merged</strong>   file:///D:/tmp/repos/trunk
+r4 <strong>← マージ済みのリビジョン</strong>
+
+D:\tmp\1.0.x>svn mergeinfo <strong>--show-revs eligible</strong> file:///D:/tmp/repos/trunk
+r5 <strong>← 未マージのリビジョン</strong>
+</pre>
+
+<!---------------------------------------------------------------------------------------->
+<h3 id="merge_branch_from_trunk2">再度、リビジョン4 を trunk → ブランチ 1.0.x にマージしてみる</h3>
+<!---------------------------------------------------------------------------------------->
+<pre>
+D:\tmp\1.0.x>svn merge -c 4 file:///D:/tmp/repos/trunk
+                                                     <strong>← 何も行われない。</strong>
+D:\tmp\1.0.x>svn di
+
+D:\tmp\1.0.x>
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Redmine をサブディレクトリで動かす</title>
+<meta name="keywords" content="Redmine" />
+<meta name="keywords" content="サブディレクトリ" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="apache.html">戻る</a>
+	<a href="newfeature.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Redmine をサブディレクトリで動かす</h1>
+<h2>概要</h2>
+Redmine をサブディレクトリを説明します。
+
+<h2>手順</h2>
+
+<h3>前提</h3>
+以下の手順を行っているとします
+<ul>
+<li><a href="install_linux.html">Redmine の VineLinux へのインストール方法</a></li>
+<li><a href="apache.html">Redmine をApache 経由で動かす方法</a></li>
+</ul>
+
+<h3>mongrel</h3>
+
+<h4>mongrel の停止</h4>
+mongrelデーモンを起動している場合、デーモンを停止します。
+<pre>
+$ mongrel_rails cluster::stop
+</pre>
+
+<h4>mongrel の再設定</h4>
+mongrel の再設定を行います。
+<pre>
+$ mongrel_rails cluster::configure -e production -p 3000 <strong>--prefix=/redmine</strong>
+</pre>
+
+<h4>mongrel の起動</h4>
+mongrel を起動します。
+<pre>
+$ mongrel_rails start -d -e production -p 3000 <strong>--prefix=/redmine</strong>
+</pre>
+<p>
+	参考
+	<ul>
+	<li>
+		<a href="http://d.hatena.ne.jp/hayori/20071030/1193754439">
+		http://d.hatena.ne.jp/hayori/20071030/1193754439
+		</a>
+	</li>
+	<li>
+		<a href="http://www.kurano.jp/blog/sadayuki/articles/search?q=redmine">
+		http://www.kurano.jp/blog/sadayuki/articles/search?q=redmine
+		</a>
+	</li>
+	</ul>
+</p>
+
+<h3>Apache</h3>
+<h4>Apache 設定ファイル ( httpd.conf ) を編集</h4>
+/etc/apache2/conf/httpd.conf を以下のように書き換える
+<pre>
+ProxyPass        /redmine http://localhost:3000/redmine
+ProxyPassReverse /redmine http://localhost:3000/redmine
+</pre>
+
+<h4>Apache を再起動</h4>
+<pre>
+# /etc/init.d/apache2 restart
+httpdを停止中:                                             [  OK  ]
+httpdを起動中:                                             [  OK  ]
+</pre>
+
+<h4>ブラウザで動作確認</h4>
+以下の URL にブラウザでアクセスする。
+<pre>
+http://localhost/redmine/
+</pre>
+
+<h2>全手順</h2>
+<pre>
+# apt-get -y install subversion
+# apt-get -y install MySQL-shared
+# apt-get -y install MySQL-ruby
+# apt-get -y install MySQL-server
+# apt-get -y install MySQL-client
+# apt-get -y install rubygems
+# chkconfig apache2 on
+# chkconfig mysql   on
+# /etc/init.d/mysql start
+# gem install rake
+# gem install mongrel_cluster --include-dependencies
+# gem install rails --include-dependencies
+# adduser redmine
+# passwd  redmine
+
+$ svn co http://redmine.rubyforge.org/svn/tags/0.6.3 redmine
+$ mysqladmin -u root password mysql
+$ mysql -u root -p
+$ cd redmine/
+$ cp config/database.yml.example  config/database.yml
+$ vi config/database.yml
+
+$ rake db:migrate RAILS_ENV="production"
+$ rake load_default_data RAILS_ENV="production"
+$ mongrel_rails cluster::configure -e production -p 3000 --prefix=/redmine
+$ mongrel_rails start -d -e production -p 3000 --prefix=/redmine
+
+# cd ~apache/
+# vi /etc/apache2/conf/httpd.conf
+
+# /etc/init.d/apache2 restart
+</pre>
+
+</body>
+</html>

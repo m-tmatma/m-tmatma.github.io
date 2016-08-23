@@ -1,0 +1,263 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="backup" />
+<meta name="keywords" content="svnsync" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversionリポジトリのバックアップ( svnsync )</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_backup_unix.html">前に戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2016-01-27 20:13:05 +0900 (2016/01/27 (水)) $<br>
+$Revision: 989 $<br>
+</div>
+
+<h1>Subversionリポジトリのバックアップ( svnsync )</h1>
+<h2>概要</h2>
+svnsync によって、リポジトリのレプリケーション(複製)を作成することで
+バックアップを取ります。
+
+<h2>必要な条件</h2>
+<ul>
+	<li>
+	レプリケーション元(バックアップするリポジトリ) に対して、
+	クライアントとして読み込み権限があること。
+	</li>
+	<li>
+	レプリケーション元が <strong>Subversion 1.4 以降</strong>を使用していること。
+	(勿論、svnsync は <strong>Subversion 1.4 以降</strong>に含まれているので、
+	バックアップする側も 1.4 以降である必要がある)
+	</li>
+</ul>
+
+<h2>リンク</h2>
+<ul>
+	<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnsync.html">
+	svnsync
+	</a>
+	</li>
+</ul>
+
+<h2>svnsync の長所/短所</h2>
+<h3>長所</h3>
+<ul>
+	<li>
+	リポジトリへの直接のアクセス権(リポジトリがあるファイルシステムへの直接のアクセス権)が
+	なくても、Subversion サーバーへの読み込み権限があるだけで、バックアップがとれる。
+	</li>
+	<li>
+	メインのサーバーがクラッシュしても、複製したSubversion サーバーをすぐに
+	実稼働させることができる。
+	</li>
+</ul>
+
+<h3>短所</h3>
+Subversion 1.4 以降のサーバーが必要。(複製元だけ必要。複製先は 1.4 以前でも OK)
+
+<h2>処理の流れ</h2>
+ここでは、例として Subversion リポジトリを指定していますが、
+<strong>適宜自分のリポジトリ</strong>に読み替えてください。
+<ol>
+	<li>
+	バックアップ先のリポジトリを作成する。
+<pre>
+D:\tmptmp> svnadmin create test
+</pre>
+	</li>
+	<li>
+	バックアップ先のリポジトリの hooks/pre-revprop-change (Windows では
+	hooks/pre-revprop-change.bat )を編集する。
+    <p>
+hooks/pre-revprop-change の中身
+<pre>
+#!/bin/sh
+exit 0
+</pre>
+    </p>
+    <p>
+hooks/pre-revprop-change.bat の中身
+<pre>
+exit 0
+</pre>
+    </p>
+	</li>
+	<li>
+	Linux/UNIXの場合はスクリプトに実行属性をつける。忘れがちな手順です。(windows では不要)
+	<pre><strong>$ chmod +x hooks/pre-revprop-change</strong></pre>
+	</li>
+	<li>
+	<code>svnsync init</code> でバックアップ先のリポジトリを初期化する。
+<pre>
+D:\tmptmp> svnsync init file:///tmptmp/test http://svn.apache.org/repos/asf/subversion
+リビジョン 0 の属性をコピーしました (属性 svn:sync-* は飛ばしました)。
+
+D:\tmptmp> 
+</pre>
+もし以下のエラーになった場合、pre-revprop-change(pre-revprop-change.bat) が
+正しく設定されていません。pre-revprop-change が正しく設定されているか
+確認してください。
+<pre>
+D:\tmptmp> svnsync init file:///tmptmp/test http://svn.apache.org/repos/asf/subversion
+svnsync: リポジトリが、リビジョン属性を変更できるようにはなっていません。
+管理者に pre-revprop-change フックを作成するよう頼んでください
+</pre>
+	</li>
+	<li>
+	<code>svnsync sync</code> で同期する。
+<pre>
+D:\tmptmp> svnsync sync file:///tmptmp/test
+リビジョン 1 をコミットしました。
+リビジョン 1 の属性をコピーしました。
+リビジョン 2 をコミットしました。
+リビジョン 2 の属性をコピーしました。
+リビジョン 3 をコミットしました。
+リビジョン 3 の属性をコピーしました。
+リビジョン 4 をコミットしました。
+              ...
+</pre>
+	</li>
+</ol>
+
+<h2 id="svnsync_prop">svnsync の管理用データ</h2>
+svnsync では以下のプロパティで、同期元リポジトリURL、同期リビジョン等の情報を
+管理しています。pre-revprop-change hook が必要になるのはこれらのプロパティを
+設定するためです。
+<ul>
+	<li>svn:sync-from-uuid</li>
+	<li>svn:sync-last-merged-rev</li>
+	<li>svn:sync-from-url</li>
+</ul>
+
+<h3>管理用プロパティの確認</h3>
+svnsync の同期用のリポジトリ作成
+<pre>
+D:\tmptmp>svnadmin create syncrepos
+</pre>
+
+バージョン管理されていない属性の確認
+<pre>
+D:\tmptmp>svn co file:///D:/tmptmp/syncrepos work
+リビジョン 0 をチェックアウトしました。
+
+D:\tmptmp>cd work
+
+D:\tmptmp\work>svn proplist --revprop -r 0
+リビジョン 0 においてバージョン管理されていない属性です:
+  svn:date
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:date
+<strong>2007-09-29T04:31:40.046875Z</strong> ← 同期先リポジトリの作成時刻
+</pre>
+
+以下の内容で hooks/pre-revprop-change.bat を作成
+<pre>
+exit 0
+</pre>
+
+svnsync の初期化
+<pre>
+D:\tmptmp\work>svnsync init file:///d:/tmptmp/syncrepos http://localhost/svn
+リビジョン 0 の属性をコピーしました。
+</pre>
+
+バージョン管理されていない属性の確認
+<pre>
+D:\tmptmp\work>svn proplist --revprop -r 0
+リビジョン 0 においてバージョン管理されていない属性です:
+  svn:sync-from-uuid
+  svn:sync-last-merged-rev
+  svn:date
+  svn:sync-from-url
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-from-uuid
+be1bd259-9a4c-394c-8e57-718af5975d4d
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-last-merged-rev
+<strong>0</strong>
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-from-url
+<strong>http://localhost/svn</strong>
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:date
+<strong>2007-01-08T01:34:11.187500Z</strong> ← 同期元リポジトリの作成時刻
+</pre>
+
+svnsync による同期
+<pre>
+D:\tmptmp\work>svnsync sync file:///d:/tmptmp/syncrepos
+ファイルのデータを送信しています ...........
+リビジョン 1 をコミットしました。
+リビジョン 1 の属性をコピーしました。
+ファイルのデータを送信しています ..
+リビジョン 2 をコミットしました。
+リビジョン 2 の属性をコピーしました。
+ファイルのデータを送信しています .
+リビジョン 3 をコミットしました。
+リビジョン 3 の属性をコピーしました。
+             ...
+ファイルのデータを送信しています .
+リビジョン 316 をコミットしました。
+リビジョン 316 の属性をコピーしました。
+ファイルのデータを送信しています .
+リビジョン 317 をコミットしました。
+リビジョン 317 の属性をコピーしました。
+</pre>
+
+バージョン管理されていない属性の確認
+<pre>
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-from-uuid
+be1bd259-9a4c-394c-8e57-718af5975d4d
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-last-merged-rev
+<strong>317</strong> ← 同期したリビジョン
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:sync-from-url
+http://localhost/svn
+
+D:\tmptmp\work>svn pg --revprop -r 0  svn:date
+2007-01-08T01:34:11.187500Z
+</pre>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="wintest.py" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>win-test.py (Subversion の回帰テストツール)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_python_vc6.html">前に戻る</a>
+	<a href="svn_libserf_vc6.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>win-test.py</h1>
+<h2>概要</h2>
+<p>
+Subversion のテストツールである win-test.py を紹介します。
+</p>
+
+<p>
+このツールでは Subversion の各種ライブラリの単体テストを
+行います。通常リリース版では、このテストに PASS します。
+しかし、trunk ではしばしば FAIL する場合があります。
+このスクリプトを実行することにより何か問題があった
+場合に容易に問題を把握することができるようになっています。
+</p>
+
+<h2>前提</h2>
+以下の手順を既に行っていることを前提としています。
+<ol>
+<li><a href="./svn_basic_vc6.html">最小の構成でコンパイルする (VC6)</a></li>
+<li><a href="./svn_python_vc6.html">Python bindings のコンパイル (VC6)</a></li>
+</ol>
+
+<h2>Subversionのコンパイル</h2>
+subversion_msvc.dsw を VC6 で開いて <strong>__ALL__TESTS__</strong> の
+構成を選択してビルドする。(__SWIG_PYTHON__ は既にコンパイル済みのはず)
+
+<h2>実行例</h2>
+ヘルプを表示
+<pre>
+D:\svnwork\subversion\trunk>win-tests.py --help
+Driver for running the tests on Windows.
+Usage: python win-tests.py [option] [test-path]
+
+Valid options:
+  -r, --release        : test the Release configuration
+  -d, --debug          : test the Debug configuration (default)
+  -u URL, --url=URL    : run ra_dav or ra_svn tests against URL; will
+                         start svnserve for ra_svn tests
+  -v, --verbose        : talk more
+  -f, --fs-type=type   : filesystem type to use (fsfs is default)
+  -c, --cleanup        : cleanup after running a test
+                  ...
+</pre>
+
+リリース版でテスト
+<pre>
+D:\svnwork\subversion\trunk>win-tests.py -r
+Testing Release configuration on local repository.
+Running all tests in compat-test.exe [1/48]...success
+Running all tests in config-test.exe [2/48]...success
+Running all tests in diff-diff3-test.exe [3/48]...success
+Running all tests in error-test.exe [4/48]...success
+Running all tests in fs-test.exe [5/48]...success
+Running all tests in hashdump-test.exe [6/48]...success
+Running all tests in locks-test.exe [7/48]...success
+Running all tests in opt-test.exe [8/48]...success
+Running all tests in path-test.exe [9/48]...success
+Running all tests in ra-local-test.exe [10/48]...success
+Running all tests in random-test.exe [11/48]...success
+                    ...
+</pre>
+
+</body>
+</html>

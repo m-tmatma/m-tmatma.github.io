@@ -1,0 +1,291 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="merge-tracking" />
+<meta name="keywords" content="svn:mergeinfo" />
+<meta name="keywords" content="start-commit" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>start-commit によるSubversion 1.4 クライアントから Subversion 1.5 サーバーへのコミットを拒否する方法</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_mergeinfo.html">前に戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<div align="right">
+<ul>
+<li>二版: 2010/01/10</li>
+<li>初版: 2007/11/08</li>
+</ul>
+</div>
+
+<h1>start-commit によるSubversion 1.4 クライアントから Subversion 1.5 サーバーへのコミットを拒否する方法</h1>
+<h2>概要</h2>
+<p>
+<strong>Subversion 1.5 では merge-tracking がサポートされています。</strong>
+merge-tracking のための情報は svn:mergeinfo というプロパティで管理されています。
+</p>
+
+<p>
+しかし、Subversion 1.4 以前のクライアントから、Subversion 1.5 サーバーに
+コミットすると、svn:mergeinfo の情報を正しく更新しないため、せっかくの 
+merge-tracking が正常に機能しなくなってしまいます。
+</p>
+
+<p>
+この文章では、<strong>(merge-tracking をサポートしない) Subversion 1.4 以前のクライアントからの
+コミットを拒否できるように、サーバーを設定する方法</strong>を説明します。コミットを拒否するか
+しないかはサーバー管理者が制御することができます。
+</p>
+<p>
+サーバーに Subversion 1.5 を使うのであれば、<strong>個人的には Merge Tracking を正しく動作させるために
+Subversion 1.4 以前のクライアントからのコミットを拒否することをおすすめします。
+</strong>
+</p>
+
+
+<h2>参考リンク</h2>
+
+<ul>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.start-commit.html">
+		start-commit コミット実行前通知 (トランザクションが作られる前に呼ばれるので今回の用途には使えない)
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.pre-commit.html">
+		pre-commit コミット実行前通知 (今回使用するもの)
+		</a>
+	</li>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.post-commit.html">
+		post-commit コミット成功通知
+		</a>
+	</li>
+	<li>
+		<a href="./svn_hook_script.html">
+		Subversion フックスクリプト
+		</a>
+	</li>
+	<li>
+		<a href="./svn_pre-commit.html">
+		pre-commit によるコミットの拒否の方法
+		</a>
+	</li>
+	<li>
+		<a href="./svn_pre-commit2.html">
+		pre-commit によるコミットの拒否の方法 (Part2)
+		</a>
+	</li>
+</ul>
+
+<h2>start-commit に関して</h2>
+
+<p>
+コミットを拒否するために、
+<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.start-commit.html">
+start-commit</a>
+フックスクリプトを使用します。ユーザがコミット権限があるかどうかを決定するフック
+スクリプトです。このスクリプトが0 以外の値を返すと、トランザクションが作成される前
+にコミットが失敗します。
+</p>
+
+参考
+<ul>
+	<li>
+		<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.reposhooks.html">
+		フックスクリプト (日本語)
+		</a>
+	</li>
+	<li>
+		<a href="http://svnbook.red-bean.com/en/1.4/svn-book.html#svn.ref.reposhooks.start-commit">
+		Subversion 1.4 用の start-commit (英語)
+		</a>
+	</li>
+</ul>
+
+<h2>start-commit の引数</h2>
+
+Subversion 1.5 サーバーでは、start-commit は以下の3つの引数を渡されて呼び出されます。
+(Subversion 1.4 以前のサーバーでは 2 つの引数です)
+
+<p>
+<table border="1" cellpadding="5">
+	<caption>start-commit の引数</caption>
+	<tr>
+		<th></th>
+		<th>引数の名前</th>
+		<th>値</th>
+	</tr>
+	<tr>
+		<td>第1引数</td>
+		<td>REPOS-PATH</td>
+		<td>リポジトリのパスです。</td>
+	</tr>
+	<tr>
+		<td>第2引数</td>
+		<td>USER</td>
+		<td>コミットしようとしているユーザーの名前です。</td>
+	</tr>
+	<tr>
+		<td>第3引数</td>
+		<td>CAPABILITIES</td>
+		<td>クライアントがサポートしている機能のリストです。
+		(コロンで区切られています)<br>
+		<strong>(ハッシュで実装されているため、順番は未定義です。)</strong>
+		</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<table border="1" cellpadding="5">
+	<caption>実際の start-commit の引数の例</caption>
+	<tr>
+		<th></th>
+		<th>引数の名前</th>
+		<th>Subversion 1.5 クライアント</th>
+		<th>Subversion 1.4 クライアント</th>
+	</tr>
+	<tr>
+		<td>第1引数</td>
+		<td>REPOS-PATH</td>
+		<td>/var/svn/repos</td>
+		<td>/var/svn/repos</td>
+	</tr>
+	<tr>
+		<td>第2引数</td>
+		<td>USER</td>
+		<td>user1</td>
+		<td>user1</td>
+	</tr>
+	<tr>
+		<td>第3引数</td>
+		<td>CAPABILITIES</td>
+		<td>mergeinfo</td>
+		<td>""</td>
+	</tr>
+</table>
+</p>
+
+第３引数が mergeinfo という値を含むかどうかで、merge-tracking サポートの有無を判断できます。
+
+<h2>merge-tracking 非サポートの Subversion クライアントからのコミット拒否</h2>
+
+以下のスクリプトは、CAPABILITIES に "mergeinfo" が含まれないときに
+コミットを失敗させるためのスクリプトの例です。
+
+<ul>
+<li>UNIX 系の OS の場合</li>
+start-commit というファイル名で保存して実行権限をつければ OK です。
+<li>Windows の場合</li>
+<a href="http://www.perl.com/doc/manual/html/win32/bin/pl2bat.pl.html">
+pl2bat
+</a> でバッチファイルに変換します。
+<pre>
+pl2bat start-commit.pl
+</pre>
+</ul>
+
+<p>
+start-commit.pl 手抜き版
+<pre>
+<span class="comment">#!/usr/bin/perl</span>
+
+$capa  = $ARGV[2];
+if( $capa =~ /mergeinfo/ ){
+	exit 0;
+}
+else{
+	print STDERR "commit fail: you must use Subversion 1.5 or later\n";
+	exit 1;
+}
+</pre>
+</p>
+
+<p>
+start-commit.pl (将来のバージョンも考慮したバージョン)
+<pre>
+<span class="comment">#!/usr/bin/perl
+#
+#   [1] REPOS-PATH   (the path to this repository) <strong>← start-commit.tmpl のコメントを引用</strong>
+#   [2] USER         (the authenticated user attempting to commit)
+#   [3] CAPABILITIES (a colon-separated list of capabilities reported
+#                     by the client; see note below)
+#
+# Note: The CAPABILITIES parameter is new in Subversion 1.5, and 1.5
+# clients will typically report at least the "mergeinfo" capability.
+# If there are other capabilities, then the list is colon-separated,
+# e.g.: "mergeinfo:some-other-capability" (the order is undefined).
+#</span>
+$repos = $ARGV[0];
+$user  = $ARGV[1];
+$capa  = $ARGV[2];
+
+<span class="comment"># CAPABILITIES は ':' (コロン) で区切られたリストなので
+# コロンをセパレータとして分離する。</span>
+@capa  = split /:/, $capa;
+
+<span class="comment">
+# 処理するために、一度ハッシュに入れておく</span>
+foreach my $tmp ( @capa ){
+	$capa{ $tmp }++;
+}
+
+<span class="comment">
+# "mergeinfo" を含むかどうかで判断する。
+# コミットを許可する場合   => 0 を返す
+# コミットを失敗させる場合 => 0 以外を返す。
+#</span>
+if( $capa{ "mergeinfo" } ){
+	exit 0;
+}
+else{
+	print STDERR "commit fail: you must use Subversion 1.5 or later\n";
+	exit 1;
+}
+</pre>
+
+</body>
+</html>
+

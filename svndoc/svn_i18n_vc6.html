@@ -1,0 +1,440 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Subversion のコンパイル (for Windows) 国際化対応 (VC6)</title>
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="i18n" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="vc6" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_ssl_vc6.html">前に戻る</a>
+	<a href="svn_python_vc6.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>国際化対応を入れてコンパイルする方法 (VC6)</h1>
+<h2>概要</h2>
+Subversion を 国際化対応を有効にして Windows で(VC6で)コンパイルする方法を簡単に
+説明します。
+
+<p>
+以下の手順を既に行っていることを前提としています。
+<ol>
+<li><a href="./svn_basic_vc6.html">最小の構成でコンパイルする (VC6)</a></li>
+<li><a href="./svn_ssl_vc6.html">SSLのサポート付きでコンパイルする (VC6)</a></li>
+</ol>
+
+
+<h2>準備</h2>
+	<ul>
+	<li>Python 2.4 or 2.5 をインストールする(してるよね?)
+	</li>
+</ul>
+
+<h2 id="requirements">必要なファイルの入手</h2>
+<ul>
+	<li>svn-win32-libintl.zip</li>
+	<a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=2627&expandFolder=2627&folderID=260">
+	http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=2627&expandFolder=2627&folderID=260
+	</a>
+
+	<li>
+	gettext-0.14.4-bin.zip
+	</li>
+	<a href="http://gnuwin32.sourceforge.net">
+		http://gnuwin32.sourceforge.net
+	</a>
+	<br>
+	<a href="http://gnuwin32.sourceforge.net/packages/gettext.htm">
+		http://gnuwin32.sourceforge.net/packages/gettext.htm
+	</a>
+	<li>
+		gettext-0.14.4-dep.zip
+	</li>
+     ( 上に同じ )
+</ul>
+
+<h2 id="prepare">下準備</h2>
+	<h3>gettext の展開</h3>
+	gettext-0.14.4-bin.zip と gettext-0.14.4-dep.zip を解凍して
+	適当なディレクトリに置く。(以下の説明では C:\gettext-0.14.4-bin )
+
+
+	以下のような感じでファイルを置くとして以後の説明をする。
+<pre>
+│
+├─common
+│   │
+│   ├─db4-win32
+│   ├─<strong>svn-win32-libintl</strong>
+│   ├─openssl-0.9.8d
+│   ├─httpd-2.2.3
+│   ├─neon-0.26.2
+│   └─zlib-1.2.3
+│
+└─trunk (subversion のソースコード)
+      │
+      ├─INSTALL
+      │  ... (中略) ...
+      └─gen-make.py
+</pre>
+
+<pre>
+svn-win32-libintl\
+│
+├─bin
+│   │
+│   ├─intl3_svn.dll
+│   └─intl3_svn.pdb
+│
+├─inc
+│   │
+│   └─libintl.h
+│
+├─lib
+│   │
+│   └─intl3_svn.lib
+│
+├─<strong>diff-0.14.1.txt ← patch を当てたバージョンを使用しているらしい。これがその修正内容。</strong>
+└─README.txt
+</pre>
+
+<pre>
+C:\
+└─ gettext-0.14.4-bin
+     │
+     ├─bin
+     │   │
+     │   │ ... (中略) ...
+     │   └─msgfmt.exe
+    ... (以下略) ...
+</pre>
+
+	<h3 id="vc6_exe_path">Visual C++ 6 の設定</h3>
+	msgfmt.exe と python.exe のディレクトリパスを設定する
+	<ol>
+	<li>Visual C++ のメニューから [ツール] - [オプション]を選ぶ</li>
+	<li>[ディレクトリ] タブに移動する。</li>
+	<li>[表示するディレクトリ] で[実行可能ファイル]を選ぶ</li>
+	<li><strong>C:\Python25</strong> (python.exe のあるディレクトリ)を追加する</li>
+	<li><strong>C:\gettext-0.14.4-bin\bin</strong> (msgfmt.exe のあるディレクトリ)を追加する</li>
+	</ol>
+<h2>プロジェクトファイルの作成</h2>
+以下のコマンドを subversion のソースコードのルートで実行する
+(見やすくするため改行していますが、実際には１行で入力します。)
+<pre>
+c:\...\trunk> python gen-make.py -t dsp 
+	--with-openssl=..\common\openssl-0.9.8d
+	<strong>--with-libintl=..\common\svn-win32-libintl</strong>
+	--with-neon=..\common\neon-0.26.2 
+	--with-zlib=..\common\zlib-1.2.3 
+	--with-berkeley-db=..\common\db4-win32
+	--with-httpd=..\common\httpd-2.2.3
+</pre>
+
+ルートディレクトリにプロジェクトワークスペースができる
+<pre>
+subversion_msvc.dsw
+</pre>
+
+以下のディレクトリにプロジェクトファイルができる
+<pre>
+build\win32\msvc-dsp
+</pre>
+
+<h2>Subversionのコンパイル</h2>
+subversion_msvc.dsw を VC6 で開いて __ALL__ または __ALL__TESTS__ の
+構成を選択して<strong>リビルド</strong>する。
+SSL のときと同様に、一度コンパイルしたことがある場合、リビルドします。
+
+<h3>注意</h3>
+locale の構成をビルドするときに *.mo ファイルを作成される。
+python の実行ファイルへのパスが通っていないと、『コマンドが見つからない』と
+いうエラーが出て、ビルドに失敗する。
+
+<!--------------------------------------------------------------->
+<!--                                                           -->
+<!--------------------------------------------------------------->
+<h2>Subversion のインストール</h2>
+以下のような構成でファイルをコピーする。
+
+国際化対応の Subversion をインストールするにあたり注意点があります。
+
+<strong>APR_ICONV_PATH</strong> という環境変数を iconv の各モジュール
+のあるディレクトリのパスを指すようにする必要があります。
+指定するディレクトリの iconv と apr-iconv のバージョンが
+異なる場合もうまくいかないようです。
+
+<p>
+Subversion 1.5 では apr-iconv を使わなくなったので、
+APR_ICONV_PATH の環境変数をセットする必要はありません。
+</p>
+
+<h3>インストール手順</h3>
+	<h4>
+	intl3_svn.dll
+	</h4>
+	intl3_svn.dll を svn.exe 等の実行ファイルと同じディレクトリに置く
+
+	<h4>
+	mo ファイルの名前変更とディレクトリの構成
+	</h4>
+	svn.exe のディレクトリからの相対バスで ../share/locale に以下の
+	ようなディレクトリ構造で mo ファイルを置く。
+	なお、コンパイルしたディレクトリ( Debug\mo または Release\mo )には
+	ja.mo や ko.mo 等の名前になっているので対応したディレクトリに
+	コピーした後、subversion.mo に名前変更すること。
+
+<pre>
+share\
+ │
+ └─locale
+      │
+      ├─de
+      │   │
+      │   └─LC_MESSAGES
+      │        │
+      │        └─subversion.mo
+      │
+      │ ... (中略) ...
+      │
+      │
+      ├─ja
+      │   │
+      │   └─LC_MESSAGES
+      │        │
+      │        └─subversion.mo
+      │
+      │ ... (中略) ...
+      │
+      └─zh_TW
+           │
+           └─LC_MESSAGES
+                │
+                └─subversion.mo
+</pre>
+
+    以下のようなスクリプトを作成して *.mo ファイルがあるディレクトリで
+    実行すると上記のようなディレクトリ構造を作成できる。
+<pre>
+#!/usr/bin/perl
+
+use File::Copy;
+use File::Path;
+
+@mo_files = <*.mo>;
+foreach $mo_file ( @mo_files ){
+	$lang = $mo_file;
+	$lang =~ s!\.mo$!!;
+	$dir      = "../share/locale/$lang/LC_MESSAGES";
+	$mov_file = "$dir/subversion.mo";
+	
+	mkpath $dir;
+	copy $mo_file, $mov_file;
+}
+</pre>
+
+	<h4>
+	環境変数 APR_ICONV_PATH
+	</h4>
+	apr-iconv のコンパイルしたディレクトリ(cp932.so や
+	utf-8.so のあるディレクトリ) からすべての *.so ファイルをコピーする。
+	コピー先のディレクトリパスを環境変数 <strong>APR_ICONV_PATH</strong> にセットする。
+	<strong>!!! 重要 !!!</strong>
+
+<h3>ディレクトリ構成の例(gen-make.py を実行するときに --disable-shared を指定した場合)</h3>
+<ul>
+	<li>
+		subversion.mo ファイルの構成は must。ソースコード上で実行ファイルからの
+		相対パスで .../share/locale と決めうちされている。
+	</li>
+	<li>
+		iconv の位置は任意。
+		ただし iconv のパスを絶対パスで環境変数 APR_ICONV_PATH にセットすべし。
+	</li>
+</ul>
+
+<pre>
+subversion
+ │
+ ├─bin
+ │   │
+ │   ├─<strong>intl3_svn.dll</strong>
+ │   ├─libapr-1.dll ( APR 0.9.x の場合 libapr.dll)
+ │   ├─libapriconv-1.dll (同様に libapriconv.dll )
+ │   ├─libaprutil-1.dll  (同様に libaprutil.dll )
+ │   ├─libdb44.dll
+ │   ├─libeay32.dll
+ │   ├─ssleay32.dll
+ │   ├─svn.exe
+ │   ├─svnadmin.exe
+ │   ├─svndumpfilter.exe
+ │   ├─svnlook.exe
+ │   ├─svnserve.exe
+ │   ├─svnsync.exe
+ │   └─svnversion.exe
+ │
+ ├─iconv <strong>← このディレクトリの絶対パスを APR_ICONV_PATH に設定する</strong>
+ │   │
+ │   │   ... (中略)
+ │   ├─cp932.so
+ │   │   ... (中略)
+ │   ├─utf-16.so
+ │   └─utf-8.so
+ │
+ └─share
+      │
+      └─locale <strong>← svn.exe 等からの相対パスで ../share/locale になるようにする </strong>
+           │
+           ├─de
+           │   │
+           │   └─LC_MESSAGES
+           │        │
+           │        └─subversion.mo
+           │
+           │ ... (中略) ...
+           │
+           ├─ja
+           │   │
+           │   └─LC_MESSAGES
+           │        │
+           │        └─subversion.mo <strong>← ja.mo を名前変更したもの </strong>
+           │
+           │
+           │ ... (中略) ...
+           │
+           └─zh_TW
+                │
+                └─LC_MESSAGES
+                     │
+                     └─subversion.mo
+</pre>
+
+<!--------------------------------------------------------------->
+<!--                                                           -->
+<!--------------------------------------------------------------->
+<h2>動作確認</h2>
+
+以下のように出力されれば OK
+<pre>
+c:\...\trunk\Release\subversion\svn> svn --version
+svn, バージョン 1.5.0 (dev build)
+   コンパイル日時: Nov 18 2007, 16:21:05
+
+Copyright (C) 2000-2007 CollabNet.
+Subversion はオープンソースソフトウェアです。
+http://subversion.tigris.org/ を参照してください。
+この製品には、CollabNet (http://www.Collab.Net/) によって開発されたソフトウェア
+が含まれています。
+
+以下のリポジトリアクセス (RA) モジュールが利用できます:
+
+* ra_neon : Neon を利用して WebDAV (DeltaV) プロトコルでリポジトリにアクセスするモジュール。
+  - 'http' スキームを操作します
+  - 'https' スキームを操作します
+* ra_svn : svn ネットワークプロトコルを使ってリポジトリにアクセスするモジュール。
+  - 'svn' スキームを操作します
+* ra_local : ローカルディスク上のリポジトリにアクセスするモジュール。
+  - 'file' スキームを操作します
+</pre>
+
+<h1>Trouble Shooting</h1>
+<h2>コンパイル時の問題</h2>
+<h3>locale のプロジェクトのコンパイルに失敗する</h3>
+以下のようなエラーメッセージが出て locale のコンパイルに失敗する
+<pre>
+--------------------構成: locale - Win32 Release--------------------
+Running msgfmt on de.po...
+'python' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+(null): error while opening "de.spo" for reading: No such file or directory
+D:\svnwork\subversion\trunk\subversion\po\de.spo が見つかりませんでした。
+Running msgfmt on es.po...
+'python' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+(null): error while opening "es.spo" for reading: No such file or directory
+D:\svnwork\subversion\trunk\subversion\po\es.spo が見つかりませんでした。
+
+                      ... 中略 ...
+
+Running msgfmt on zh_TW.po...
+'python' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+(null): error while opening "zh_TW.spo" for reading: No such file or directory
+D:\svnwork\subversion\trunk\subversion\po\zh_TW.spo が見つかりませんでした。
+
+svn_locale.exe - エラー 12、警告 0
+</pre>
+python.exe へのパスが通っていません。<a href="#vc6_exe_path">Visual C++ 6 の設定</a> を参照してください。
+
+<h2>実行時の問題</h2>
+<h3>英語で表示される場合</h3>
+subversion.mo が正しい場所にあるかどうか確認してください。
+
+<h3>文字化けする場合</h3>
+環境変数 APR_ICONV_PATH の設定が正しいディレクトリを指しているか確認してください。
+
+<ul>
+<li>
+文字化けする場合
+<pre>
+c:\...\trunk\Release\subversion\svn> svn
+?\228?\189?\191?\231?\148?\168?\230?\150?\185?\230?\179?\149?\227?\130?\146?\231
+?\159?\165?\227?\130?\138?\227?\129?\159?\227?\129?\132?\227?\129?\168?\227?\129
+?\141?\227?\129?\175 'svn help'
+?\227?\129?\168?\230?\137?\147?\227?\129?\163?
+\227?\129?\166?\227?\129?\143?\227?\129?\160?\227?\129?
+\149?\227?\129?\132?\227?\128?\130
+</pre>
+</li>
+
+<li>
+正しく動作している場合
+<pre>
+c:\...\trunk\Release\subversion\svn> svn
+使用方法を知りたいときは 'svn help' と打ってください。
+</pre>
+</li>
+
+</body>
+</html>

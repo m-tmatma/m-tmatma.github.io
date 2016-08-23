@@ -1,0 +1,136 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>sqlite3 のコンパイル (VC6)</title>
+<meta name="keywords" content="sqlite3" />
+<meta name="keywords" content="vc6" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+
+<h1>sqlite3 のコンパイル (VC6)</h1>
+<h2>概要</h2>
+<a href="http://www.sqlite.org/">sqlite</a> を Visual C++ 6 (VC6) でコンパイルする方法を説明します。
+sqlite3 は SQL の簡易データベース用のライブラリです。なおこのページで sqlite3 のコンパイル方法を
+説明するのは、一時期 Subversion 1.5 のソースコードで sqlite3 が mergeinfo というデータ構造の記録に
+使われていたためです。
+
+<h2>準備</h2>
+<ul>
+	<li>Visual C++ 6 をインストールする
+	(ServicePack もインストールしておいた方がよい)
+	</li>
+	<li>
+	Platform SDK 2003 Febrary Edition をインストールする。(必須かどうかは未検証)
+	</li>
+	<li>
+	<a href="http://www.sqlite.org/">sqlite3</a><br>
+	(sqlite-source-3_3_12.zip)
+	</li>
+</ul>
+
+<h2>sqlite3 のコンパイル</h2>
+<ol>
+<li>sqlite-source-3_3_13.zip を入手し、解凍する。</li>
+<li>VC6 で DLL のプロジェクトを作成する。(プロジェクト名は sqlite3) </li>
+<li>プロジェクトファイルにすべてのソースを追加する</li>
+<li><strong>ランタイムライブラリの設定を変更する。</strong> (これをしないとリンカーエラーになります)
+    <ol>
+	    <li>プロジェクトの設定を開く</li>
+	    <li>C/C++ タブに移動</li>
+	    <li>カテゴリで<strong>コード生成</strong>を選択</li>
+	    <li>使用するラインタイムライブラリで、<strong>マルチスレッド (DLL、デバッグ)</strong>
+	    または<strong>マルチスレッド (DLL)</strong>を選ぶ
+	    </li>
+    </ol>
+</li>
+<li>プロジェクトをコンパイルする</li>
+<!--
+<li>sqlite3.h と sqlite3.lib を下のようなディレクトリ構造を作成してコピーする
+<p>
+<pre>
+sqlite3
+ │
+ ├─inc
+ │   │
+ │   └─sqlite3.h
+ ├─bin
+ │   │
+ │   └─sqlite3.dll
+ └─lib
+      │
+      └─sqlite3.lib
+</pre>
+-->
+    参考
+    <p>
+    <a href="sqlite3.dsp">手元で作成したプロジェクトファイル(ver 3.3.13 用)</a>
+    </p>
+</p>
+</li>
+</ol>
+
+<h2>sqlite3 のDEF ファイルからインポートライブラリを作成する)</h2>
+
+メモ
+<pre>
+lib  /def:sqlite3.def
+</pre>
+
+<ul>
+<li>
+<a href="http://support.microsoft.com/kb/131313">
+.OBJs のないインポート ライブラリを 32 ビットまたはソースを作成する方法
+</a>
+</li>
+<li>
+<a href="http://marupeke296.com/SQLITE_No2_InstallSQLite.html">
+その２ SQLiteのインストール (SQLiteが使用するsqlite3.libファイルを作成)
+</a>
+</li>
+</ul>
+
+</body>
+
+

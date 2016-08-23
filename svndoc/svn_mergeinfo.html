@@ -1,0 +1,394 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Subversion" />
+<meta name="keywords" content="mergeinfo" />
+<meta name="keywords" content="merge tracking" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>svn mergeinfo</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_mergetracking.html">前に戻る</a>
+	<a href="svn_reject_commit.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>svn mergeinfo</h1>
+
+<!---------------------------------------------->
+<h2>概要</h2>
+<!---------------------------------------------->
+<p>
+Subversion 1.5 でサポートされる merge tracking で mergeinfo サブコマンドが
+追加されました。 mergeinfo サブコマンドに関して説明します。
+</p>
+
+<h2>必要な環境</h2>
+<ul>
+	<li>Subversion 1.5 以降</li>
+</ul>
+
+<!---------------------------------------------->
+<h2>説明</h2>
+<!---------------------------------------------->
+svn mergeinfo は svn:mergeinfo プロパティを解析して、指定したブランチ(または trunk) から
+マージされた修正とマージされていない修正を表示するためのコマンドです。
+
+
+<h2>具体例</h2>
+
+コマンドは <a href="mergeinfo.txt">こちら</a>
+
+<p>
+処理の流れ
+<ol>
+ 	<li><a href="#create_repos">リポジトリ作成、初期ディレクトリ構成作成</a></li>
+	<li><a href="#comit_to_trunk">trunk にいくつかコミット</a></li>
+	<li><a href="#create_branch">HEAD の trunk からブランチ作成</a></li>
+	<li><a href="#comit_to_trunk2">trunk にいくつかコミット</a></li>
+	<li><a href="#comit_to_branch">ブランチにいくつかコミット</a></li>
+	<li><a href="#merge_from_trunk">ブランチを trunk に同期</a></li>
+	<li><a href="#merge_branch_to_trunk">ブランチを trunk にマージ</a></li>
+</ol>
+</p>
+
+<p>
+<table border="1" cellpadding="5">
+	<caption>実行例で使うコマンドの説明</caption>
+	<tr>
+		<th>コマンド</th>
+		<th>説明</th>
+	</tr>
+	<tr>
+		<td>svn mergeinfo merge-source-URL</td>
+		<td>merge-source-URL からカレントディレクトリにある作業コピーの URL に
+ 		対して既にマージされたリビジョンを表示するためのコマンドです。
+ 		作業コピーが trunk のもので、merge-source-URL がブランチの URL の場合
+ 		ブランチに行った修正のうち、まだ trunk にマージされていないリビジョンが
+ 		表示されます。</td>
+	</tr>
+	<tr>
+		<td>svn mergeinfo --show-revs merged   merge-source-URL</td>
+		<td>svn mergeinfo merge-source-URL と同じ。</td>
+	</tr>
+	<tr>
+		<td>svn mergeinfo --show-revs eligible merge-source-URL</td>
+		<td>merge-source-URL からカレントディレクトリにある作業コピーの URL に
+ 		対してまだマージされていないリビジョンを表示するためのコマンドです。</td>
+	</tr>
+	<tr>
+		<td>svn merge --reintegrate branch-URL</td>
+		<td>branch-URL からカレントディレクトリにある作業コピーに
+ 		まだマージされていない修正をすべてマージするためのコマンドです。
+ 		機能ブランチをすべて trunk にマージする場合などに使います。</td>
+	</tr>
+</table>
+</p>
+
+<!---------------------------------------------------------------->
+<h3 id="create_repos">リポジトリ作成、初期ディレクトリ構成作成</h3>
+<!---------------------------------------------------------------->
+
+<pre>
+D:\svntest>svnadmin create repos
+
+D:\svntest>svn co file:///D:/svntest/repos work
+リビジョン 0 をチェックアウトしました。
+
+D:\svntest>
+D:\svntest>cd work
+
+D:\svntest\work>svn mkdir tags branches trunk
+A         tags
+A         branches
+A         trunk
+
+D:\svntest\work>svn ci -m "add initial dir"
+追加しています              branches
+追加しています              tags
+追加しています              trunk
+
+リビジョン 1 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------->
+<h3 id="comit_to_trunk">trunk にいくつかコミット</h3>
+<!---------------------------------------------------------------->
+
+<pre>
+D:\svntest\work>cd D:\svntest
+
+D:\svntest>svn co file:///D:/svntest/repos/trunk
+リビジョン 1 をチェックアウトしました。
+
+D:\svntest>cd trunk
+
+D:\svntest\trunk>echo 1 > test.txt
+
+D:\svntest\trunk>svn add test.txt
+A         test.txt
+
+D:\svntest\trunk>svn ci -m "add test.txt"
+追加しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 2 をコミットしました。
+
+D:\svntest\trunk>echo 2 >> test.txt
+
+D:\svntest\trunk>svn ci -m "update test.txt"
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 3 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------->
+<h3 id="create_branch">HEAD の trunk からブランチ作成</h3>
+<!---------------------------------------------------------------->
+
+<pre>
+D:\svntest\trunk>svn cp file:///D:/svntest/repos/trunk file:///D:/svntest/repos/branches/feature1 -m "create branch"
+
+リビジョン 4 をコミットしました。
+</pre>
+
+<h3 id="comit_to_trunk2">trunk にいくつかコミット</h3>
+<pre>
+D:\svntest\trunk>echo 3 >> test.txt
+
+D:\svntest\trunk>svn ci -m "update test.txt"
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 5 をコミットしました。
+
+D:\svntest\trunk>
+D:\svntest\trunk>echo 4 >> test.txt
+
+D:\svntest\trunk>svn ci -m "update test.txt"
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 6 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------->
+<h3 id="comit_to_branch">ブランチにいくつかコミット</h3>
+<!---------------------------------------------------------------->
+<pre>
+D:\svntest\trunk>cd D:\svntest
+
+D:\svntest>svn co  file:///D:/svntest/repos/branches/feature1
+A    feature1\test.txt
+リビジョン 6 をチェックアウトしました。
+
+D:\svntest>cd feature1
+
+D:\svntest\feature1>echo A >  test2.txt
+
+D:\svntest\feature1>svn add   test2.txt
+A         test2.txt
+
+D:\svntest\feature1>svn ci -m "add test2.txt"
+追加しています              test2.txt
+ファイルのデータを送信しています .
+リビジョン 7 をコミットしました。
+
+D:\svntest\feature1>echo B >> test2.txt
+
+D:\svntest\feature1>svn ci -m "update test2.txt"
+送信しています              test2.txt
+ファイルのデータを送信しています .
+リビジョン 8 をコミットしました。
+</pre>
+
+<!---------------------------------------------------------------->
+<h3 id="merge_from_trunk">ブランチを trunk に同期</h3>
+<!---------------------------------------------------------------->
+<pre>
+D:\svntest\feature1><strong>svn mergeinfo file:///D:/svntest/repos/trunk</strong>
+                                     <strong>← マージ済みの修正はなし</strong>
+
+D:\svntest\feature1><strong>svn mergeinfo --show-revs merged    file:///D:/svntest/repos/trunk</strong>
+                                     <strong>← マージ済みの修正はなし</strong>
+
+D:\svntest\feature1><strong>svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/trunk</strong>
+r5                                   <strong>← 未マージ修正はこの2つ</strong>
+r6
+
+D:\svntest\feature1>svn merge file:///D:/svntest/repos/trunk
+--- r4 から r8 までを '.' にマージしています:
+U    test.txt
+
+D:\svntest\feature1>svn di
+
+属性に変更があったパス: .
+___________________________________________________________________
+追加: svn:mergeinfo
+   /trunk:r4-8 をマージしました
+
+Index: test.txt
+===================================================================
+--- test.txt    (リビジョン 6)
++++ test.txt    (作業コピー)
+@@ -1,2 +1,4 @@
+ 1
+ 2
++3
++4
+
+D:\svntest\feature1>svn up
+リビジョン 8 です。
+
+D:\svntest\feature1>svn ci -m "merge from trunk"
+送信しています              .
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 9 をコミットしました。
+
+D:\svntest\feature1>svn ci -m "merge from trunk"
+送信しています              .
+送信しています              test.txt
+ファイルのデータを送信しています .
+リビジョン 9 をコミットしました。
+
+D:\svntest\feature1>svn di
+
+D:\svntest\feature1>svn merge file:///D:/svntest/repos/trunk
+
+D:\svntest\feature1>svn st
+ M     .
+
+D:\svntest\feature1>svn di
+
+属性に変更があったパス: .
+___________________________________________________________________
+変更: svn:mergeinfo
+   /trunk:r9 をマージしました
+
+
+D:\svntest\feature1>svn ci -m "merge from trunk"
+送信しています              .
+
+リビジョン 10 をコミットしました。
+
+D:\svntest\feature1>svn mergeinfo --show-revs merged    file:///D:/svntest/repos/trunk
+r5
+r6
+
+D:\svntest\feature1>svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/trunk
+</pre>
+
+<!---------------------------------------------------------------->
+<h3 id="merge_branch_to_trunk">ブランチを trunk にマージ</h3>
+<!---------------------------------------------------------------->
+ブランチに行った修正を trunk に再マージするときには <strong>--reintegrate</strong> を
+指定します。TortoiseSVN 上ではマージするときに「マージタイプ」に
+「<strong>ブランチを再統合する</strong>」を選んだのと同じです。
+<pre>
+D:\svntest\trunk>cd D:\svntest\trunk
+
+D:\svntest\trunk>svn up
+リビジョン 9 です。
+
+D:\svntest\trunk>svn mergeinfo --show-revs merged    file:///D:/svntest/repos/branches/feature1
+
+D:\svntest\trunk>svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/branches/feature1
+r4
+r7
+r8
+r9
+
+D:\svntest\trunk>svn merge file:///D:/svntest/repos/branches/feature1 <strong>← --reintegrate を指定しなかった</strong>
+
+--- r4 から r9 までを '.' にマージしています:
+A    test2.txt
+U    test.txt
+
+D:\svntest\trunk>svn di
+
+属性に変更があったパス: .
+___________________________________________________________________
+<strong>追加: svn:mergeinfo
+   /branches/feature1:r4-9 をマージしました
+   /trunk:r2-3 をマージしました  ← 余計な情報が含まれる</strong> 
+
+
+D:\svntest\trunk>svn revert -R .
+'.' を元に戻しました
+'test2.txt' を元に戻しました
+
+D:\svntest\trunk>del test2.txt
+
+D:\svntest\trunk>svn merge <strong>--reintegrate</strong>      file:///D:/svntest/repos/branches/feature1
+--- リポジトリ URL 間の差分を '.' にマージしています:
+A    test2.txt
+U    test.txt
+ U   .
+
+D:\svntest\trunk>svn di
+
+属性に変更があったパス: .
+___________________________________________________________________
+<strong>追加: svn:mergeinfo
+   /branches/feature1:r4-9 をマージしました</strong>
+
+
+D:\svntest\trunk>svn st
+ M     .
+A  +   test2.txt
+
+D:\svntest\trunk>svn ci -m "merge from feature branch"
+送信しています              .
+追加しています              test2.txt
+
+リビジョン 10 をコミットしました。
+
+D:\svntest\trunk>svn mergeinfo --show-revs merged    file:///D:/svntest/repos/branches/feature1
+r4
+r7
+r8
+r9
+
+D:\svntest\trunk>svn mergeinfo --show-revs eligible  file:///D:/svntest/repos/branches/feature1
+
+</pre>
+
+</body>
+</html>
+

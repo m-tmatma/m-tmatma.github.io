@@ -1,0 +1,218 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="ASF" />
+<meta name="keywords" content="日本語" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion の Apache への移管</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	前に戻る
+	次へ進む
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<div align="right">
+<ul>
+<li> 2版: 2009/11/28</li>
+<li>初版: 2009/11/18</li>
+</ul>
+</div>
+
+<h1>Subversion の Apache への移管</h1>
+
+<h2>概要</h2>
+Subversion が ASF (Apache Software Foundation) に移管されることになりました。(2009/11/15 〜)
+<p>
+変更点をまとめておきます。
+
+<h2>ASF への移管での変更点</h2>
+
+<p>
+<table border="1" cellpadding="5">
+	<caption>ASF への移管での変更点</caption>
+	<tr>
+		<th></th>
+		<th>変更前</th>
+		<th>変更後</th>
+		<th>備考</th>
+	</tr>
+	<tr>
+		<td>プロジェクトのWeb サイト</td>
+		<td>
+		<a href="http://subversion.tigris.org/">
+		http://subversion.tigris.org/
+		</a>
+		</td>
+		<td>
+		<a href="http://subversion.apache.org/">
+		http://subversion.apache.org/
+		</a>
+		</td>
+		<td>
+			<ul>
+				<li>
+				2009/11/28 時点ではプレースホルダのみ
+				</li>
+				<li>
+				<a href="http://svn.apache.org/repos/asf/subversion/site/">
+				http://svn.apache.org/repos/asf/subversion/site/
+				</a>
+				で管理されている
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>リポジトリURL</td>
+		<td>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk">
+		http://svn.apache.org/repos/asf/subversion/trunk
+		</a>
+		</td>
+		<td>
+		<a href="http://svn.apache.org/repos/asf/subversion/trunk">
+		http://svn.apache.org/repos/asf/subversion/trunk
+		</a>
+		</td>
+		<td>
+		svn switch --relocate は使えない
+		</td>
+	</tr>
+	<tr>
+		<td>dev Mailing list</td>
+		<td>dev@subversion.tigris.org</td>
+		<td>dev@subversion.apache.org</td>
+		<td>dev-subscribe@subversion.apache.org にメールを投げると購読できる</td>
+	</tr>
+	<tr>
+		<td>users Mailing list</td>
+		<td>users@subversion.tigris.org</td>
+		<td>users@subversion.apache.org</td>
+		<td>users-subscribe@subversion.apache.org にメールを投げると購読できる</td>
+	</tr>
+	<tr>
+		<td>commit Mailing list</td>
+		<td>commits@subversion.tigris.org</td>
+		<td>commits@subversion.apache.org</td>
+		<td>commits-subscribe@subversion.apache.org にメールを投げると購読できる</td>
+	</tr>
+	<tr>
+		<td>dev Mailing list アーカイブ</td>
+		<td>
+			<a href="http://svn.haxx.se/dev/">
+			http://svn.haxx.se/dev/
+			</a>
+		</td>
+		<td>
+			<ul>
+				<li>
+					<a href="http://mail-archives.apache.org/mod_mbox/subversion-dev/">
+					http://mail-archives.apache.org/mod_mbox/subversion-dev/
+					</a>
+				</li>
+				<li>
+					<a href="http://www.mail-archive.com/dev@subversion.apache.org/">
+					http://www.mail-archive.com/dev@subversion.apache.org/
+					</a>
+				</li>
+			</ul>
+		</td>
+		<td>
+			<a href="http://www.mail-archive.com/dev@subversion.apache.org/msg00478.html">
+			http://www.mail-archive.com/dev@subversion.apache.org/msg00478.html
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>users Mailing list アーカイブ</td>
+		<td>
+			<a href="http://svn.haxx.se/users/">
+			http://svn.haxx.se/users/
+			</a>
+		</td>
+		<td>
+			<ul>
+				<li>
+					<a href="http://mail-archives.apache.org/mod_mbox/subversion-users/">
+					http://mail-archives.apache.org/mod_mbox/subversion-users/
+					</a>
+				</li>
+				<li>
+					<a href="http://www.mail-archive.com/users@subversion.apache.org/">
+					http://www.mail-archive.com/users@subversion.apache.org/
+					</a>
+				</li>
+			</ul>
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>commits Mailing list アーカイブ</td>
+		<td>
+			<a href="http://subversion.tigris.org/ds/viewForumSummary.do?dsForumId=495">
+			http://subversion.tigris.org/ds/viewForumSummary.do?dsForumId=495
+			</a>
+		</td>
+		<td>
+			<ul>
+				<li>
+					<a href="http://mail-archives.apache.org/mod_mbox/subversion-commits/">
+					http://mail-archives.apache.org/mod_mbox/subversion-commits/
+					</a>
+				</li>
+				<li>
+					<a href="http://www.mail-archive.com/commits@subversion.apache.org/">
+					http://www.mail-archive.com/commits@subversion.apache.org/
+					</a>
+				</li>
+			</ul>
+		</td>
+		<td></td>
+	</tr>
+</table>
+</p>
+
+
+
+</body>
+</html>

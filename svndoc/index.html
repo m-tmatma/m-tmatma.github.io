@@ -1,0 +1,193 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversion のコンパイル (for Windows)</title>
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="windows" />
+<meta name="keywords" content="build" />
+<meta name="keywords" content="compile" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<!--
+<IMG SRC="http://cgi.asahi-net.or.jp/cgi-bin/Count.cgi?df=svndoc.dat" ALT=""> 
+since 2007/01/07
+-->
+
+<div class="index">
+	<a href="../">最初に戻る</a>
+	<a href="../">戻る</a>
+	<a href="svn_basic_vc6.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-18 09:17:26 +0900 (2014/08/18 (月)) $<br>
+$Revision: 980 $<br>
+</div>
+
+<h1><a href="http://subversion.apache.org">Subversion</a>のコンパイル (for Windows)</h1>
+<h2>概要</h2>
+<a href="http://subversion.apache.org">Subversion</a> をWindows 上
+でコンパイルするのは非常に面倒なので、まず最小の構成でコンパイル
+する手順を説明し、徐々にオプションの機能を追加していく形で説明します。
+
+<h2 id="compile_vc6">コンパイル手順 (VC6)</h2>
+<ol>
+<li id="svn_basic_vc6" ><a href="./svn_basic_vc6.html">最小の構成でコンパイルする (VC6)</a></li>
+<li id="svn_apache_vc6"><a href="./svn_apache_vc6.html">Subversion 用に Apache2を構築 (VC6)</a></li>
+<li id="svn_ssl_vc6"   ><a href="./svn_ssl_vc6.html">SSLのサポート付きでコンパイルする (VC6)</a></li>
+<li id="svn_i18n_vc6"  ><a href="./svn_i18n_vc6.html">国際化対応付きでコンパイルする (VC6)</a></li>
+<li id="svn_python_vc6"><a href="./svn_python_vc6.html">python binding をコンパイルする (VC6)</a></li>
+<li id="svn_wintest_py"><a href="./svn_wintest_py.html">win-test.py (Subversion の回帰テストツール)</a></li>
+</ol>
+
+<h2 id="compile_vs2005">コンパイル手順 (Visual Studio 2005 [VS2005と省略] )</h2>
+<ol>
+<li id="svn_basic_2005" ><a href="./svn_basic_2005.html">最小の構成でコンパイルする (VS2005)</a></li>
+<li id="svn_apache_2005"><a href="./svn_apache_2005.html">Subversion 用に Apache2.xを構築 (VS2005)</a></li>
+<li id="svn_ssl_2005"   ><a href="./svn_ssl_2005.html">SSLのサポート付きでコンパイルする (VS2005)</a></li>
+<li id="svn_i18n_2005"  ><a href="./svn_i18n_2005.html">国際化対応を入れてコンパイルする方法 (VS2005)</a></li>
+</ol>
+
+<h2 id="compile_linux">コンパイル手順 (Linux)</h2>
+<ol>
+<li><a href="./svn_install_linux.html">Vine Linux 4.2 でのSubverion コンパイル</a></li>
+</ol>
+
+
+<h2 id="svn_features">Subversion の機能</h2>
+
+<ul>
+<li><a href="svn_1.5.html">Subversion 1.5</a></li>
+<li><a href="svn_1.6.html">Subversion 1.6</a></li>
+<li><a href="svn_1.7.html">Subversion 1.7</a></li>
+</ul>
+
+<h2 id="backup">Subversion リポジトリのバックアップ</h2>
+<ol>
+<li><a href="./svn_backup.html">概略</a></li>
+<li><a href="./svn_backup_dumps_py.html">svn-backup-dumps.py の利用方法</a></li>
+<li><a href="./svn_backup_dumps_py_svnrdump.html">svn-backup-dumps.py カスタム版の利用方法</a></li>
+<li><a href="./svn_backup_svnrdump.html">svnrdump の利用方法</a></li>
+<li><a href="./svn_backup_unix.html">UNIX編</a></li>
+<li><a href="./svn_svnsync.html">svnsync の利用方法</a></li>
+</ol>
+
+<h2>その他</h2>
+<ol>
+<li><a href="./mod_dav_svn_browsing.html">mod_dav_svn でのリビジョン指定 (ブラウザでリビジョン指定でアクセス)</a></li>
+<li><a href="./svnmucc.html">svnmucc (<strong>S</strong>ubversion <strong>M</strong>ultiple <strong>U</strong>RL <strong>C</strong>ommand <strong>C</strong>lient)</a></li>
+<li><a href="./svn_hook_script.html">フックスクリプト</a></li>
+<li><a href="./svn_po.html">Subversion の ja.po を更新する方法</a></li>
+<li><a href="../svnmerge/">svnmerge.py</a></li>
+<li><a href="./svn_repo_link.html">Subversion リポジトリのリンク集</a></li>
+<li><a href="./sqlite_vc6.html">sqlite3 のコンパイル (VC6)</a></li>
+<li><a href="./svn_mailer_py.html">mailer.py でのコミットメール送信</a></li>
+<li><a href="./svnmailer.html">svnmailer でのコミットメール送信</a></li>
+<li><a href="./svnmailer-gmail.html">svnmailer (カスタム版) でのコミットメール送信 SSL 対応 (gmail)</a></li>
+<li><a href="./svn_ASF.html">Subversion の Apache への移管</a></li>
+<li><a href="./svn_pre-commit.html">pre-commit によるコミットの拒否の方法</a></li>
+<li><a href="./svn_pre-commit2.html">pre-commit によるコミットの拒否の方法 (Part2)</a></li>
+</ol>
+
+<h2 id="links">リンク</h2>
+
+<h3 id="svn">本家</h3>
+
+<ul>
+<li><a href="http://subversion.apache.org">Subversion の本家サイト</a></li>
+<li><a href="http://subversion.apache.org/faq.html">Subversion FAQ</a></li>
+<li><a href="http://subversion.tigris.org/project_tools.html">Subversion Announcements</a></li>
+</ul>
+
+<h3 id="SVN_BOOK">Subversion Book</h3>
+
+<ul>
+<li><a href="http://code.google.com/p/svnbook/">Version Control With Subversion</a></li>
+<li><a href="http://svnbook.red-bean.com/index.en.html">Subversion Book (英語)</a></li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/">
+	Subversion によるバージョン管理 For Subversion 1.4
+	</a>
+</li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/">
+	Subversion によるバージョン管理 For Subversion 1.5
+	</a>
+</li>
+<li>
+	<a href="http://www.caldron.jp/~nabetaro/hiki.cgi?SubversionWork">
+	Subversionによるバージョン管理 (Subversion Book) の翻訳 (トップページ)
+	</a>
+</li>
+</ul>
+
+<h3 id="TSVN">TortoiseSVN</h3>
+
+<ul>
+<li><a href="http://tortoisesvn.tigris.org/">TortoiseSVN の本家サイト</a></li>
+<li><a href="http://nightlybuilds.tortoisesvn.net/latest/">TortoiseSVN Nightly build</a></li>
+</ul>
+
+<h3 id="release_note">リリースノートなど</h3>
+
+<ul>
+<li><a href="http://subversion.apache.org/docs/release-notes/1.5.html">Subversion 1.5 Release Notes</a></li>
+<li><a href="http://subversion.apache.org/docs/release-notes/1.6.html">Subversion 1.6 Release Notes</a></li>
+<li><a href="http://subversion.apache.org/docs/release-notes/1.7.html">Subversion 1.7 Release Notes</a></li>
+<li><a href="http://subversion.apache.org/docs/release-notes/1.8.html">Subversion 1.8 Release Notes</a></li>
+<li><a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/webdav-protocol">notes/webdav-protocol</a></li>
+<li><a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/fsfs">notes/fsfs</a></li>
+<li><a href="http://www.farside.org.uk/200704/tree_structured_fsfs">Tree-structured FSFS repositories</a></li>
+<li><a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/merge-tracking.txt">merge-tracking.txt</a></li>
+<li><a href="http://svn.apache.org/repos/asf/subversion/trunk/notes/merge-tracking/index.html">Merge Tracking</a></li>
+</ul>
+
+<h3 id="tips">Subversion に関する TIPS など</h3>
+
+<ul>
+<li><a href="http://cia.vc/stats/project/svn/.rss">Subversion コミットログ (RSS)</a></li>
+<li><a href="http://blogs.open.collab.net/svn/">Submerged blog</a></li>
+</ul>
+
+<h3 id="newinfo">Subversion に関する新情報</h3>
+
+<ul>
+<li><a href="http://subversion.jp/">Subversion.JPコミュニティ・ポータル</a></li>
+<li><a href="http://www.mail-archive.com/dev@subversion.apache.org/msg01306.html">Subversion in 2010 and Beyond (ML archive)</a></li>
+<li><a href="http://www.slideshare.net/wandisco/subversion-in-2010-and-beyond">Subversion in 2010 and Beyond</a></li>
+<li><a href="http://subversion.wandisco.com/">Subversion Community</a></li>
+</ul>
+</body>
+</html>

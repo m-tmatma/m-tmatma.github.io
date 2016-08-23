@@ -1,0 +1,250 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Subversionリポジトリのバックアップ( UNIX編 )</title>
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svn-backup-dumps.py" />
+<meta name="keywords" content="backup" />
+<meta name="keywords" content="cron" />
+<meta name="keywords" content="バックアップ" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_backup_dumps_py.html">前に戻る</a>
+	<a href="svn_svnsync.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>Subversionリポジトリのバックアップ( UNIX系OS編 )</h1>
+<h2>概要</h2>
+<a href="svn_backup_dumps_py.html">前のページ</a> で svn_backup_dumps_py.py を
+紹介しましたが、実運用で使用する場合のやり方を簡単に説明します。
+
+<p>
+バックアップは以下の二種類の方法で行います。
+<ul>
+<li><a href="#cron_backup">cron によるバックアップ</a></li>
+<li><a href="#post-commit">post-commit によるバックアップ</a></li>
+</ul>
+
+バックアップしたデータを <a href="#rsync">rsync</a> で別マシンにコピーします。
+</p>
+
+<h2 id="cron_backup">cron によるバックアップ</h2>
+<h3>cron の設定</h3>
+
+<ul>
+	<li>
+	cron で指定したスクリプトを起動する方法はいくつかありますが、
+	ここでは、各ユーザーごとに設定できる方法で行うことにします。
+	</li>
+
+	<li>
+	バックアップを行うための専用ユーザー (svnbackup) を
+	作成しているとします。また Subversion のリポジトリへの
+	リードアクセスのパーミションが与えられていると仮定します。
+	</li>
+</ul>
+
+以下のコマンドを実行します。
+<pre>
+$ crontab -e
+</pre>
+
+起動したエディタに以下のような感じで入力する。
+<pre>
+SHELL=/bin/sh
+
+# 毎日朝6時にバックアップする。
+0 6 * * * /home/svnbackup/backup_svn.sh
+</pre>
+
+<h3>実際にバックアップを行うスクリプトの例</h3>
+
+backup_svn.sh
+<pre>
+#!/bin/sh
+
+# svnadmin のある場所を指定する。
+# <strong>svn-backup-dumps.py は 内部で svnadmin を呼び出すので</strong>
+# <strong>svnadmin へのパスを通す必要があります。</strong>
+PATH=$PATH:<strong>/usr/bin</strong>
+
+# python のパス
+PYTHON=<strong>/usr/bin/python</strong>
+
+# repository path
+REPOS=<strong>/var/svn/svnrepos</strong>
+
+# svn-backup-dumps.py のパス
+SVNBACKUPDUMPS=<strong>/usr/bin/svn-backup-dumps.py</strong>
+
+# バックアップ先
+BACKUPDIR=<strong>/home/svnbackup/fullbackup</strong>
+
+# スクリプトの実行前にディレクトリを作成しておく
+mkdir -p $BACKUPDIR
+
+# backup svn repository
+$PYTHON $SVNBACKUPDUMPS $REPOS $BACKUPDIR
+</pre>
+<ul>
+	<li>
+		<strong>強調表示している箇所は、環境に合わせて変えてください。</strong>
+	</li>
+	<li>
+		<strong>svn-backup-dumps.py は 内部で svnadmin を呼び出すのでパスを通す必要があります。</strong>
+	</li>
+</ul>
+
+<h3>リンク</h3>
+cron の設定ガイド<br>
+<a href="http://www.express.nec.co.jp/linux/distributions/knowledge/system/crond.html">
+http://www.express.nec.co.jp/linux/distributions/knowledge/system/crond.html
+</a>
+
+<h2 id="post-commit">post-commit によるバックアップ</h2>
+
+post-commit の例
+<pre>
+#!/bin/sh
+#
+# POST-COMMIT HOOK
+#
+# The post-commit hook is invoked after a commit.  Subversion runs
+# this hook by invoking a program (script, executable, binary, etc.)
+# named 'post-commit' (for which this file is a template) with the 
+# following ordered arguments:
+#
+#   [1] REPOS-PATH   (the path to this repository)
+#   [2] REV          (the number of the revision just committed)
+#    ....
+#
+REPOS="$1"
+REV="$2"
+
+# svnadmin のある場所を指定する。
+# <strong>svn-backup-dumps.py は 内部で svnadmin を呼び出すので</strong>
+# <strong>svnadmin へのパスを通す必要があります。</strong>
+PATH=$PATH:<strong>/usr/bin</strong>
+
+# python のパス
+PYTHON=<strong>/usr/bin/python</strong>
+
+# svn-backup-dumps.py のパス
+SVNBACKUPDUMPS=<strong>/usr/bin/svn-backup-dumps.py</strong>
+
+# バックアップ先
+BACKUPDIR=<strong>/home/svnbackup/incbackup</strong>
+
+# スクリプトの実行前にディレクトリを作成しておいてください。
+# このスクリプトのなかで以下のコマンドを実行するようにしても
+# いいかもしれません。
+#	mkdir -p $BACKUPDIR
+#
+# その際、post-commit が実行されるユーザーの権限で書き込みが
+# できるように設定しておいてください。
+# 例:
+#	Apache(mod_dav_svn) を使う場合 : apache or nobody
+#	svnserve を使う場合            : 多分 svn (未確認)
+#
+
+# backup svn repository
+$PYTHON $SVNBACKUPDUMPS -r $REV $REPOS $BACKUPDIR
+</pre>
+<ul>
+	<li>
+		上記スクリプトで、強調表示している箇所は、環境に合わせて変えてください。
+	</li>
+	<li>
+		うまく動作しない場合、だいたい以下の問題が原因のことが多いです。
+		<ul>
+			<li>svnadmin, svn-backup-dumps.py, python のパスは正しいですか?</li>
+			<li>post-commit に実行権限をつけましたか?</li>
+			<li>Apache のユーザーに対して、保存先ディレクトリへの書き込み権限がありますか?</li>
+		</ul>
+	例(Apacheの場合)
+<pre>
+# chown svnbackup:apache /home/svnbackup/incbackup
+$ chmod 7<strong>7</strong>5 /home/svnbackup/incbackup
+$ chmod 7<strong>5</strong>5 /home/svnbackup
+</pre>
+	</li>
+</ul>
+
+<h2 id="rsync">rsync によるバックアップ</h2>
+<p>
+リポジトリをダンプしてファイルにバックアップした後、可能なら
+rsync で別マシンにバックアップしましょう。
+</p>
+<p>
+同じマシンの同じハードディスクにバックアップを置いている場合、
+ハードディスククラッシュからデータを救うことはできません。
+同じマシン内でも、別のバードディスクに保存すれば、リスクを
+軽減できますが、別マシンにした方が安心です。
+</p>
+<p>
+rsync を使うことにより、効率的に別マシンにバックアップを
+取ることができます。このページでは rsync の具体的な方法は
+説明しませんので、以下のリンク等を参照してください。
+</p>
+
+<h3>リンク</h3>
+<ul>
+<li>
+	<a href="http://www.aconus.com/~oyaji/backup/rsync.htm">
+	http://www.aconus.com/~oyaji/backup/rsync.htm
+	</a>
+</li>
+<li>
+	<a href="http://ash.jp/freebsd/rsync.htm">
+	http://ash.jp/freebsd/rsync.htm
+	</a>
+</li>
+<li>
+	<a href="http://www.jitaku-server.net/backup_rsync.html">
+	http://www.jitaku-server.net/backup_rsync.html
+	</a>
+</li>
+</ul>
+
+</body>
+</html>

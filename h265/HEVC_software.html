@@ -1,0 +1,104 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="H.265" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>H.265</title>
+</head>
+<body>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>HEVC software</h1>
+
+<ul>
+	<li>
+		<a href="http://hevc.hhi.fraunhofer.de/svn/svn_HEVCSoftware/trunk">
+		HEVC software repository (main at HHI)
+		</a>
+	</li>
+	<li>
+		<a href="https://hevc.hhi.fraunhofer.de/svn/svn_HEVCSoftware/branches/HM-9.2-dev/doc/software-manual.pdf">
+		JCTVC-Software Manual
+		</a>
+	</li>
+	<li>
+		<a href="http://blog.livedoor.jp/abars/archives/52166489.html">
+		HEVC(H.265)を使ってみた
+		</a>
+	</li>
+</ul>
+
+<ol>
+	<li>
+	build\HM_vc10.sln を開く
+	</li>
+	<li>
+	ビルドする
+	</li>
+</ol>
+
+
+エンコードする (かなりの時間がかかる)
+<pre>
+TAppEncoder -c encoder_intra_main.cfg -i in.yuv -b str.bin -wdt 1360 -hgt 768 -fr 30 -f 30 -q 1
+</pre>
+
+エンコードする (かなりの時間がかかる)
+
+<pre>
+TAppEncoder.exe -i in.yuv        ^
+-c encoder_randomaccess_main.cfg ^
+-o out.yuv                       ^
+--SourceWidth=1360               ^
+--SourceHeight=768               ^
+--FramesToBeEncoded=30           ^
+-fr 30                           ^
+</pre>
+
+デコードする (かなりの時間がかかる)
+<pre>
+TAppDecoder -b str.bin -o out.yuv
+</pre>
+
+
+</body>
+</html>

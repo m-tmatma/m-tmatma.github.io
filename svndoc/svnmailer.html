@@ -1,0 +1,292 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="subversion" />
+<meta name="keywords" content="svnmailer" />
+<meta name="keywords" content="日本語" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>svnmailer (カスタム版) でのコミットメール送信 (日本語対応)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="svn_mailer_py.html">前に戻る</a>
+	<a href="svnmailer-gmail.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2014-08-14 17:26:53 +0900 (2014/08/14 (木)) $<br>
+$Revision: 973 $<br>
+</div>
+
+<h1>svnmailer でのコミットメール送信 (日本語対応)</h1>
+<h2>概要</h2>
+Subversion を使っているとコミットメールを送信すると便利です。
+post-commit フックスクリプトでリポジトリに直接アクセスして
+差分をメール送信することが可能です。このページでは <a href="http://opensource.perlig.de/en/svnmailer/">svnmailer</a>
+を日本語を扱えるように拡張したものを使ってコミットメールを送信する方法を説明します。
+
+<h2>セットアップ手順</h2>
+
+<ul>
+<li><a href="#get_svnmailer">svnmailer を入手する</a></li>
+<li><a href="#install_bindings">Subversion Python bindings をインストールする</a></li>
+<li><a href="#basic_svnmailer_conf">基本的な svnmailer.conf の設定</a></li>
+<li><a href="#setup_post_commit">post-commit を作成する</a></li>
+</ul>
+
+<h2 id="get_svnmailer">拡張バージョンの svnmailer を入手する</h2>
+
+svnmailer で日本語を扱えるように独自に拡張したものです。<br>
+
+拡張バージョンの svnmailer は <a href="https://github.com/m-tmatma/svnmailer">
+github
+</a>
+に登録しています。<br>
+
+<p>
+</p>
+
+<p>
+<pre>
+$ git clone https://github.com/m-tmatma/svnmailer
+</pre>
+</p>
+
+または
+
+<p>
+<pre>
+$ svn co https://github.com/m-tmatma/svnmailer/trunk
+</pre>
+</p>
+
+または
+
+<p>
+<a href="https://github.com/m-tmatma/svnmailer">
+https://github.com/m-tmatma/svnmailer
+</a>
+にアクセスして 
+<a href="https://github.com/m-tmatma/svnmailer/archive/master.zip">
+Download ZIP
+</a>
+をクリックします。
+</p>
+
+<p>
+オリジナルのバージョンの svnmailer は以下から入手可能です。<br>
+<a href="http://opensource.perlig.de/en/svnmailer/">
+http://opensource.perlig.de/en/svnmailer/
+</a>
+
+<h2 id="install_bindings">Subversion Python bindings のインストール</h2>
+svnmailer は Subversion Python bindings を使っているので
+Python bindings をインストールする必要があります。
+
+Fedora 19 などでは yum でインストールできます。
+<pre>
+[root ~]# yum install subversion-python.x86_64
+</pre>
+
+<p>
+参照
+<ul>
+	<li>
+	<a href="http://svn.apache.org/repos/asf/subversion/trunk/subversion/bindings/swig/INSTALL">
+	subversion/bindings/swig/INSTALL
+	</a>
+	</li>
+	<li>
+	<a href="http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_python_vc6.html">
+	Python binding をコンパイルする方法 (VC6)
+	</a>
+	</li>
+</ul>
+</p>
+
+<h2 id="install_svnmailer">svnmailer のインストール</h2>
+
+setup.py を実行して svnmailer をインストールします。<br>
+
+<pre>
+python setup.py install
+</pre>
+
+--root を指定することによってインストール先を変更できます。<br>
+
+<pre>
+python setup.py install --root /home/svnuser/root
+</pre>
+
+<h2 id="basic_svnmailer_conf">基本的な svnmailer.conf の設定</h2>
+
+<p>
+設定ファイル(svnmailer.conf) を編集する必要があります。
+</p>
+
+default_charsets の設定で適用したい文字コードを指定する。
+
+<p>
+<a href="https://github.com/m-tmatma/svnmailer/blob/master/test/default_charsets.conf">
+https://github.com/m-tmatma/svnmailer/blob/master/test/default_charsets.conf
+</a>
+</p>
+
+<p>
+svnmailer.conf
+<pre>
+[general]
+#sendmail_command = /usr/sbin/sendmail
+smtp_host = localhost
+
+[defaults]
+<strong>default_charsets = utf-8 shift-jis euc-jp</strong>
+show_applied_charset = yes
+mail_transfer_encoding = 8bit
+from_addr = %(author)s@example.org
+to_addr = commit@example.org
+generate_diffs = add copy modify propchange
+
+for_repos = .*/(?P<project>.*)
+commit_subject_prefix     = [%(project)s commit]
+propchange_subject_prefix = [%(project)s propchange]
+lock_subject_prefix       = [%(project)s lock]
+unlock_subject_prefix     = [%(project)s unlock]
+</pre>
+</p>
+
+from_addr, to_addr, smtp_host を適切なものに変更する
+
+<h2>svn-mailer の使い方</h2>
+<pre>
+$ svn-mailer --help
+Usage: svn-mailer &lt;options&gt;
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+
+  COMMON PARAMETERS:
+    --debug             Run in debug mode (means basically that all messages are sent to STDOUT)
+    -d REPOSITORY, --repository=REPOSITORY
+                        The repository directory
+    -f CONFIG, --config=CONFIG
+                        The configuration file
+    -e PATH_ENCODING, --path-encoding=PATH_ENCODING
+                        Specifies the character encoding to be used for filenames. By default the encoding is tried to be
+                        determined automatically depending on the locale.
+
+  BEHAVIOUR OPTIONS:
+    The behaviour options are mutually exclusive, i.e. the last one wins.
+
+    -c, --commit        This is a regular commit of versioned data (post-commit hook). This is default.
+    -p, --propchange    This is a modification of unversioned properties (post-revprop-change hook)
+    -l, --lock          (svn 1.2 and later) This is a locking call (post-lock hook)
+    -u, --unlock        (svn 1.2 and later) This is a unlocking call (post-unlock hook)
+
+  SUPPLEMENTAL PARAMETERS:
+    -r REVISION, --revision=REVISION
+                        The modified/committed revision number
+    -a AUTHOR, --author=AUTHOR
+                        The author of the modification
+    -n PROPNAME, --propname=PROPNAME
+                        The name of the modified property
+    -o ACTION, --action=ACTION
+                        (svn 1.2 and later) The property change action
+
+Alternatively you can use the old style compatibility command lines (options described above don't apply then):
+
+svn-mailer commit &lt;repos&gt; &lt;revision&gt; [&lt;config&gt;]
+svn-mailer propchange &lt;repos&gt; &lt;revision&gt; &lt;author&gt; &lt;propname&gt; [&lt;config&gt;]
+
+svn 1.2 and later:
+svn-mailer propchange2 &lt;repos&gt; &lt;revision&gt; &lt;author&gt; &lt;propname&gt; &lt;action&gt; [&lt;config&gt;]
+svn-mailer lock &lt;repos&gt; &lt;author&gt; [&lt;config&gt;]
+svn-mailer unlock &lt;repos&gt; &lt;author&gt; [&lt;config&gt;]
+</pre>
+
+svn-mailer は mailer.py 互換の引数に対応しているのと拡張のパラメータに対応しています。
+
+<pre>
+svn-mailer --commit --repository svnrepos --revision 869 --config simple.conf --debug
+</pre>
+
+
+<h2 id="setup_post_commit">post-commit を作成する</h2>
+
+<ul>
+<li>
+以下の内容で作る。
+<pre>
+#!/bin/sh
+REPOS="$1"
+REV="$2"
+
+/usr/bin/svn-mailer commit "$REPOS" "$REV" "$REPOS/svnmailer.conf" &
+</pre>
+</li>
+<li>
+以下の内容で作る。
+<pre>
+#!/bin/sh
+REPOS="$1"
+REV="$2"
+
+/usr/bin/svn-mailer --commit --repository "$REPOS" --revision "$REV" --config "$REPOS/svnmailer.conf" &
+</pre>
+</li>
+<li>
+post-commit に実行属性をつける。
+</li>
+</ul>
+
+標準のインストール先とは違うディレクトリにインストールした場合は<br>
+PYTHONPATH を指定して svnmailer 用のモジュールディレクトリを指定します。<br>
+python のバージョンが異なる場合は適宜変えてください。<br>
+
+
+<pre>
+#!/bin/sh
+REPOS="$1"
+REV="$2"
+
+export PYTHONPATH=/home/svnuser/root/usr/lib/python2.7/site-packages
+
+/home/svnuser/root/usr/bin/svn-mailer --commit --repository "$REPOS" --revision "$REV" --config "$REPOS/svnmailer.conf" &
+</pre>
+
+</body>
+</html>
