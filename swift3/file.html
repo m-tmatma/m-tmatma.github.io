@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="swift" />
+<meta name="keywords" content="swift 3" />
+<meta name="keywords" content="ファイル操作" />
+<meta name="keywords" content="ファイル削除" />
+<title>swift のファイル操作</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h1>swift 3 でのファイル操作</h1>
+
+<h2>ファイル削除</h2>
+
+<pre>
+let filemgr = FileManager.default
+do {
+    try filemgr.removeItem(atPath: path)
+    print("Removal successful")
+} catch let error {
+    print("Error: \(error.localizedDescription)")
+}
+</pre>
+
+
+<a href="http://www.techotopia.com/index.php/Working_with_Files_in_Swift_on_iOS_8#Removing_a_File">Working with Files in Swift on iOS 10</A>
