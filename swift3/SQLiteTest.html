@@ -53,8 +53,8 @@ since 2007/01/07
 	次へ進む
 </div>
 <div align="right">
-$Date: 2016-12-10 16:37:45 +0900 (2016/12/10 (土)) $<br>
-$Revision: 1034 $<br>
+$Date: 2016-12-11 10:19:04 +0900 (2016/12/11 (日)) $<br>
+$Revision: 1035 $<br>
 </div>
 
 <h1>swift 3 での SQLite3 の操作</h1>
@@ -82,7 +82,10 @@ SQLiteTest.xcodeproj を Xcode のプロジェクトペインにドラッグア�
 import SQLite
 </pre>
 
-以下のようなコードを貼り付けます。
+以下のようなコードを貼り付けます。<br>
+
+\ はバックスラッシュにします。<a href="http://qiita.com/miyohide/items/6cb8967282d4b2db0f61">Macにおけるバックスラッシュ（\）の入力方法</a>
+
 <p>
 
 このコードはプロジェクトごと <a href="https://github.com/m-tmatma/SQLiteTest.git">https://github.com/m-tmatma/SQLiteTest.git</a> で公開しています。
@@ -93,8 +96,7 @@ import SQLite
             ).first! + Bundle.main.bundleIdentifier!
         
         print("\(path)")
-        if FileManager.default.fileExists(atPath: path)
-        {
+        if FileManager.default.fileExists(atPath: path) {
             do {
                 try FileManager.default.removeItem(atPath: path)
                 print("Removal successful")
