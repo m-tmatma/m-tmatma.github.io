@@ -53,8 +53,8 @@ since 2007/01/07
 	次へ進む
 </div>
 <div align="right">
-$Date: 2016-12-11 10:19:04 +0900 (2016/12/11 (日)) $<br>
-$Revision: 1035 $<br>
+$Date: 2016-12-11 10:43:04 +0900 (2016/12/11 (日)) $<br>
+$Revision: 1036 $<br>
 </div>
 
 <h1>swift 3 での SQLite3 の操作</h1>
@@ -82,9 +82,12 @@ SQLiteTest.xcodeproj を Xcode のプロジェクトペインにドラッグア�
 import SQLite
 </pre>
 
-以下のようなコードを貼り付けます。<br>
+以下のようなコードを貼り付けます。
 
-\ はバックスラッシュにします。<a href="http://qiita.com/miyohide/items/6cb8967282d4b2db0f61">Macにおけるバックスラッシュ（\）の入力方法</a>
+<p>
+参考<br>
+<a href="http://qiita.com/miyohide/items/6cb8967282d4b2db0f61">Macにおけるバックスラッシュ（<span style="font-family: Arial;">\</span>）の入力方法</a><br>
+<a href="http://singoro.net/note/backslash-yen_sign/">html上でバックスラッシュと円マークを共存表示する方法</a>
 
 <p>
 
@@ -95,13 +98,13 @@ import SQLite
             .applicationSupportDirectory, .userDomainMask, true
             ).first! + Bundle.main.bundleIdentifier!
         
-        print("\(path)")
+        print("<span style="font-family: Arial;">\</span>(path)")
         if FileManager.default.fileExists(atPath: path) {
             do {
                 try FileManager.default.removeItem(atPath: path)
                 print("Removal successful")
             } catch let error {
-                print("Error: \(error.localizedDescription)")
+                print("Error: <span style="font-family: Arial;">\</span>(error.localizedDescription)")
             }
         }
         
@@ -116,7 +119,7 @@ import SQLite
                 atPath: path, withIntermediateDirectories: true, attributes: nil
             )
             
-            let db = try Connection("\(path)/db.sqlite3")
+            let db = try Connection("<span style="font-family: Arial;">\</span>(path)/db.sqlite3")
             
             try db.run(users.create { t in     // CREATE TABLE "users" (
                 t.column(id, primaryKey: true) //     "id" INTEGER PRIMARY KEY NOT NULL,
@@ -131,12 +134,12 @@ import SQLite
             // INSERT INTO "users" ("email", "name") VALUES ('test@mac.com', 'test')
             
             for user in try db.prepare(users.select(id, email)) {
-                print("id: \(user[id]), email: \(user[email])")
+                print("id: <span style="font-family: Arial;">\</span>(user[id]), email: <span style="font-family: Arial;">\</span>(user[email])")
                 // id: 1, email: alice@mac.com
                 // id: 2, email: test@mac.com
             }
         } catch {
-            print("insertion failed: \(error)")
+            print("insertion failed: <span style="font-family: Arial;">\</span>(error)")
         }
 </pre>
 
