@@ -1,0 +1,162 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<meta name="keywords" content="swift" />
+<meta name="keywords" content="swift 3" />
+<meta name="keywords" content="SQLite3" />
+<meta name="keywords" content="SQLite.swift" />
+<title>swift 3 での HTTP アクセス</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<!--
+<IMG SRC="http://cgi.asahi-net.or.jp/cgi-bin/Count.cgi?df=svndoc.dat" ALT=""> 
+since 2007/01/07
+-->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="./file.html">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2016-12-11 16:14:20 +0900 (2016/12/11 (日)) $<br>
+$Revision: 1037 $<br>
+</div>
+
+<h1>swift 3 での HTTP アクセス</h1>
+
+<h2>HTTP アクセスの実装</h2>
+
+
+<p>
+
+このコードはプロジェクトごと <a href="https://github.com/m-tmatma/URLSessionTest.git">https://github.com/m-tmatma/URLSessionTest.git</a> で公開しています。
+
+<pre>
+import Foundation
+
+class Request {
+    let session: URLSession = URLSession.shared
+    
+    // GET METHOD
+    func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        var request: URLRequest = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    // POST METHOD
+    func post(url: URL, body: NSMutableDictionary, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: JSONSerialization.WritingOptions.prettyPrinted)
+        
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    // PUT METHOD
+    func put(url: URL, body: NSMutableDictionary, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        request.httpMethod = "PUT"
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: JSONSerialization.WritingOptions.prettyPrinted)
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    // PATCH METHOD
+    func patch(url: URL, body: NSMutableDictionary, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        request.httpMethod = "PATCH"
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: JSONSerialization.WritingOptions.prettyPrinted)
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    // DELETE METHOD
+    func delete(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        var request: URLRequest = URLRequest(url: url)
+        
+        request.httpMethod = "DELETE"
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+}
+</pre>
+
+Request を使うコード
+<pre>
+        let request: Request = Request()
+        
+        let url: URL = URL(string: "http://www.asahi.com")!
+        
+        request.get(url: url, completionHandler: { data, response, error in
+            if let res = response {
+                print(res)
+            }
+            if let dat = data {
+                print(dat)
+            }
+            if let err = error {
+                print(err)
+            }
+        })
+</pre>
+
+<h2>App Transport Security で http アクセスを有効化する</h2>
+
+以下画面で右クリックする<br>
+
+<img src="plist-org.png" /><br>
+
+以下の画面が出るので Add Row を選択する<br>
+
+<img src="AddRow.png" /><br>
+
+App Transport Security Setting を選ぶ。App Transport Security Setting で右クリックして
+Add Row を選ぶ。Allow Arbitrary Loads を選ぶ。<br>
+
+<img src="plist.png" /><br>
+
+
+<p>
+参考<br>
+<a href="http://www.lac.co.jp/blog/category/security/20161017.html">必須化まで約2ヵ月半！App Transport Securityについて</a><br>
+
+
+</body>
+</html>
