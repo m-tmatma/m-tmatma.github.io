@@ -1,0 +1,175 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="OpenCover" />
+<meta name="keywords" content="ReportGenerator" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>OpenCover (複数のテスト結果のマージ)</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="OpenCover1.html">前に戻る</a>
+	次に進む
+</div>
+<div align="right">
+$Date: 2017-02-19 15:38:50 +0900 (2017/02/19 (日)) $<br>
+$Revision: 1053 $<br>
+</div>
+
+<h1>OpenCover の複数の結果を統合</h1>
+
+OpenCover のインストール方法に関しては <a href="OpenCover1.html">ここ</a> を参照してください。<br>
+
+<h2>テストに使用するプログラム</h2>
+
+テストプログラムとして <a href="https://github.com/m-tmatma/OpenCoverTest">https://github.com/m-tmatma/OpenCoverTest</a> を用意しました。<br>
+これを git clone して OpenCoverTest2\OpenCoverTest2.sln を開いてコンパイルします。
+
+<pre>
+namespace OpenCoverTest2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                try
+                {
+                    int index = Int32.Parse(args[0]);
+                    Console.WriteLine(Class1.GetString(index));
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("{0}: Bad Format", args[0]);
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("{0}: Overflow", args[0]);
+                }
+            }
+        }
+    }
+}
+</pre>
+
+<pre>
+namespace OpenCoverTest2
+{
+    public class Class1
+    {
+        public static string GetString(int index)
+        {
+            if (index == 0)
+            {
+                return "String1";
+            }
+            else
+            {
+                return "String2";
+            }
+        }
+    }
+}
+</pre>
+
+<h2>複数の実行結果をマージして結果に整形する</h2>
+
+-output で出力先の xml ファイルを指定する
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest2.exe" -register:user "-targetargs:0" -output:results0.xml
+Executing: C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug\OpenCoverTest2.exe
+String1
+Committing...
+Visited Classes 2 of 2 (100)
+Visited Methods 2 of 2 (100)
+Visited Points 14 of 24 (58.33)
+Visited Branches 4 of 6 (66.67)
+
+==== Alternative Results (includes all methods including those without corresponding source) ====
+Alternative Visited Classes 2 of 2 (100)
+Alternative Visited Methods 2 of 4 (50)
+</pre>
+
+-output で出力先の xml ファイルを指定する
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest2.exe" -register:user "-targetargs:1" -output:results1.xml
+Executing: C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug\OpenCoverTest2.exe
+String2
+Committing...
+Visited Classes 2 of 2 (100)
+Visited Methods 2 of 2 (100)
+Visited Points 14 of 24 (58.33)
+Visited Branches 4 of 6 (66.67)
+
+==== Alternative Results (includes all methods including those without corresponding source) ====
+Alternative Visited Classes 2 of 2 (100)
+Alternative Visited Methods 2 of 4 (50)
+</pre>
+
+* 指定で複数の結果ファイルを指定して HTML に整形する
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug>ReportGenerator.exe  --reports:results*.xml --targetdir:html3
+Loading report 'C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug\results0.xml'
+ Preprocessing report
+ Initiating parser for OpenCover
+  Current Assembly: ClassLibrary
+  Current Assembly: OpenCoverTest2
+Loading report 'C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug\results1.xml'
+ Preprocessing report
+ Initiating parser for OpenCover
+  Current Assembly: ClassLibrary
+  Current Assembly: OpenCoverTest2
+Initializing report builders for report types: Html
+Analyzing 2 classes
+ Creating report 1/2 (Assembly: ClassLibrary, Class: OpenCoverTest2.Class1)
+ Creating report 2/2 (Assembly: OpenCoverTest2, Class: OpenCoverTest2.Program)
+ Creating summary
+Report generation took 0.4 seconds
+</pre>
+
+<h2>テスト結果</h2>
+
+<a href="html3/index.htm">生成した html ファイル</a> です。<br>
+
+</body>
+</html>
+

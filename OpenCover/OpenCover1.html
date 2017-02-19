@@ -2,6 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="OpenCover" />
+<meta name="keywords" content="ReportGenerator" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
 <title>OpenCover</title>
 </head>
@@ -42,10 +43,12 @@
 	<a href="../contact.html">連絡先</a>
 	<a href="../">トップに戻る</a>
 	<a href="./">最初に戻る</a>
+	<a href="index.html">前に戻る</a>
+	<a href="OpenCover2.html">次に進む</a>
 </div>
 <div align="right">
-$Date: 2017-02-19 13:24:57 +0900 (2017/02/19 (日)) $<br>
-$Revision: 1050 $<br>
+$Date: 2017-02-19 15:38:50 +0900 (2017/02/19 (日)) $<br>
+$Revision: 1053 $<br>
 </div>
 
 <h1>OpenCover</h1>
@@ -77,6 +80,24 @@ PATH 変数にインストールフォルダのパスを追加します。
 
 テストプログラムとして <a href="https://github.com/m-tmatma/OpenCoverTest">https://github.com/m-tmatma/OpenCoverTest</a> を用意しました。<br>
 これを git clone して OpenCoverTest1\OpenCoverTest1.sln を開いてコンパイルします。
+
+<pre>
+namespace OpenCoverTest1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Test");
+
+            foreach (var str in args)
+            {
+                Console.WriteLine(str);
+            }
+        }
+    }
+}
+</pre>
 
 <h2>OpenCover の実行</h2>
 
