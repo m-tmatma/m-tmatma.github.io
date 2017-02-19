@@ -47,8 +47,8 @@
 	次に進む
 </div>
 <div align="right">
-$Date: 2017-02-19 15:38:50 +0900 (2017/02/19 (日)) $<br>
-$Revision: 1053 $<br>
+$Date: 2017-02-19 15:45:42 +0900 (2017/02/19 (日)) $<br>
+$Revision: 1054 $<br>
 </div>
 
 <h1>OpenCover の複数の結果を統合</h1>
@@ -110,7 +110,8 @@ namespace OpenCoverTest2
 
 <h2>複数の実行結果をマージして結果に整形する</h2>
 
--output で出力先の xml ファイルを指定する
+-output で出力先の xml ファイルを指定する<br>
+コマンドライン引数で 0 を渡す
 
 <pre>
 C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest2.exe" -register:user "-targetargs:0" -output:results0.xml
@@ -127,7 +128,8 @@ Alternative Visited Classes 2 of 2 (100)
 Alternative Visited Methods 2 of 4 (50)
 </pre>
 
--output で出力先の xml ファイルを指定する
+-output で出力先の xml ファイルを指定する<br>
+コマンドライン引数で 1 を渡す
 
 <pre>
 C:\gitwork\OpenCoverTest\OpenCoverTest2\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest2.exe" -register:user "-targetargs:1" -output:results1.xml
