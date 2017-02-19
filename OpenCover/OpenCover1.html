@@ -1,0 +1,161 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="OpenCover" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>OpenCover</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2017-02-19 13:06:48 +0900 (2017/02/19 (日)) $<br>
+$Revision: 1049 $<br>
+</div>
+
+<h1>OpenCover</h1>
+
+.Net のカバレッジ計測ツールである <a href="https://github.com/OpenCover/opencover">OpenCover<a/> の使い方を説明します。
+
+<h2>OpenCover のインストール</h2>
+
+<a href="https://github.com/OpenCover/opencover">OpenCover<a/> を <a href="https://github.com/OpenCover/opencover/releases">https://github.com/OpenCover/opencover/releases</a>
+から msi ファイルをダウンロードしてインストールします。<br>
+
+インストールフォルダは C:\Users\ユーザー名\AppData\Local\Apps\OpenCover にインストールされました。<br>
+PATH 変数にインストールフォルダのパスを追加します。
+
+<h2>ReportGenerator のインストール</h2>
+
+<a href="https://github.com/danielpalme/ReportGenerator">ReportGenerator</a> を <a href="https://github.com/danielpalme/ReportGenerator/releases">https://github.com/danielpalme/ReportGenerator/releases</a>
+から ZIP ファイルをダウンロードして C:\Program Files (x86) 以下に展開します。<br>
+PATH 変数にインストールフォルダのパスを追加します。
+
+<h2>テストプログラム</h2>
+
+テストプログラムとして <a href="https://github.com/m-tmatma/OpenCoverTest">https://github.com/m-tmatma/OpenCoverTest</a> を用意しました。<br>
+これを git clone して OpenCoverTest1\OpenCoverTest1.sln を開いてコンパイルします。
+
+<h2>OpenCover の実行</h2>
+
+OpenCover.Console.exe を実行してターゲット exe を実行してカバレッジを計測します。
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest1.exe" -register:user
+Executing: C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug\OpenCoverTest1.exe
+Test
+Committing...
+Visited Classes 1 of 1 (100)
+Visited Methods 1 of 1 (100)
+Visited Points 6 of 10 (60)
+Visited Branches 1 of 1 (100)
+
+==== Alternative Results (includes all methods including those without corresponding source) ====
+Alternative Visited Classes 1 of 1 (100)
+Alternative Visited Methods 1 of 2 (50)
+</pre>
+
+<h2>ReportGenerator の実行 (HTML に整形)</h2>
+
+ReportGenerator.exe を実行して HTML に整形します。<br>
+この例ではカレントディレクトリの html というフォルダに html を生成します。
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug>ReportGenerator.exe  --reports:results.xml --targetdir:html
+Loading report 'C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug\results.xml'
+ Preprocessing report
+ Initiating parser for OpenCover
+  Current Assembly: OpenCoverTest1
+Initializing report builders for report types: Html
+Analyzing 1 classes
+ Creating report 1/1 (Assembly: OpenCoverTest1, Class: OpenCoverTest1.Program)
+ Creating summary
+Report generation took 0.4 seconds
+</pre>
+
+<h2>生成した html ファイル</h2>
+
+<a href="html/index.htm">生成した html ファイル</a> です。<br>
+プログラムの引数を処理している箇所のパスが通っていないことがわかります。
+
+<h2>OpenCover の実行 (コマンドライン引数を渡す場合)</h2>
+
+-targetargs でコマンドライン引数をプログラムに渡します。
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug>OpenCover.Console.exe -target:"OpenCoverTest1.exe" -register:user "-targetargs:test1 test2"
+Executing: C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug\OpenCoverTest1.exe
+Test
+test1
+test2
+Committing...
+Visited Classes 1 of 1 (100)
+Visited Methods 1 of 1 (100)
+Visited Points 10 of 10 (100)
+Visited Branches 1 of 1 (100)
+
+==== Alternative Results (includes all methods including those without corresponding source) ====
+Alternative Visited Classes 1 of 1 (100)
+Alternative Visited Methods 1 of 2 (50)
+</pre>
+
+<h2>ReportGenerator.exe の実行 (出力フォルダを変更)</h2>
+
+ReportGenerator.exe を再実行します。
+
+<pre>
+C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug>ReportGenerator.exe  --reports:results.xml --targetdir:html2
+Loading report 'C:\gitwork\OpenCoverTest\OpenCoverTest1\bin\Debug\results.xml'
+ Preprocessing report
+ Initiating parser for OpenCover
+  Current Assembly: OpenCoverTest1
+Initializing report builders for report types: Html
+Analyzing 1 classes
+ Creating report 1/1 (Assembly: OpenCoverTest1, Class: OpenCoverTest1.Program)
+ Creating summary
+Report generation took 0.4 seconds
+</pre>
+
+<h2>生成した html ファイル</h2>
+
+<a href="html2/index.htm">生成した html ファイル</a> です。<br>
+カバレッジが 100 % になったことがわかります。
+
+</body>
+</html>
+
