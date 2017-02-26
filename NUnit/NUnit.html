@@ -1,0 +1,207 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="NUnit" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>NUnit の使い方</title>
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+	<a href="index.html">前に戻る</a>
+	次に進む
+</div>
+<div align="right">
+$Date: 2017-02-26 14:30:05 +0900 (2017/02/26 (日)) $<br>
+$Revision: 1061 $<br>
+</div>
+
+<h1>NUnit の使い方</h1>
+
+<h2>プロジェクトの作成</h2>
+
+<ol>
+<li>Visual Studio 2015 を開く</li>
+<li>ファイル → 新規作成 → プロジェクト を選ぶ<br><img src="image/create-project.png" width="600"/>
+<li>クラスライブラリを選び、プロジェクト名を入力して、OK を押す</li>
+</li>
+</ol>
+
+<h2>NUnit を NuGet でプロジェクトに追加する</h2>
+
+<ol>
+<li>ツール → NuGet パッケージマネージャ → ソリューションの NuGet パッケージの管理 を選ぶ<br><img src="image/nuget-package.png" width="600"/></li>
+<li>参照を選んで、エディットボックスに NUnit と入力する<br><img src="image/nuget-NUnit.png" width="600"/>
+<li>NUnit を選択して、追加したいプロジェクトにチェックをつけてインストールを選ぶ<br><img src="image/nuget-NUnit-install.png" width="600"/></li>
+<li>確認ダイアログが出るので OK を押す<br><img src="image/nuget-NUnit-install2.png" width="600"/></li>
+<li>NUnit.Console を選択して、プロジェクトにチェックをつけてインストールを選ぶ<br><img src="image/nuget-NUnit-Consolue-install.png" width="600"/></li>
+<li>確認ダイアログが出るので OK を押す<br><img src="image/nuget-NUnit-Consolue-install2.png" width="600"/></li>
+<li>NUnit3.TestAdaptor を選択して、プロジェクトにチェックをつけてインストールを選ぶ<br><img src="image/nuget-NUnit-NUnit3TestAdapter-install.png" width="600"/></li>
+<li>確認ダイアログが出るので OK を押す<br><img src="image/nuget-NUnit-NUnit3TestAdapter-install2.png" width="600"/></li>
+</ol>
+
+
+<h2>テスト対象のクラスを追加する</h2>
+
+<ol>
+<li>ツール → NuGet パッケージマネージャ → ソリューションの NuGet パッケージの管理 を選ぶ<br><img src="image/add-file-menu.png" width="600"/></li>
+<li>クラスを選んでファイル名を入力して OK を押す<br><img src="image/add-class.png" width="600"/></li>
+</ol>
+
+テスト対象のクラス
+
+<pre>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NUnitTestTest
+{
+    class Calc
+    {
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+    }
+}
+</pre>
+
+
+<h2>テストクラスを作成する</h2>
+
+先頭に using 指定する。これによってコード補完が効きます。
+
+<pre>
+using NUnit.Framework;
+</pre>
+
+以下がテストクラスです。<br>
+<strong>[TestFixture]</strong>でテストクラスの印をつけます。
+SetUp() でテスト前のセットアップをします。<strong>[SetUp]</strong> でセットアップメソッドの印をつけます。<br>
+TearDown() でテスト後の終了処理をします。<strong>[TearDown]</strong> で終了処理メソッドの印をつけます。<br>
+Test1() で実際のテストをします。
+
+<pre>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using NUnit.Framework;
+
+namespace NUnitTestTest
+{
+    <strong>[TestFixture]</strong>
+    public class Test
+    {
+        private Calc calc;
+
+        <strong>[SetUp]</strong>
+        public void SetUp()
+        {
+            this.calc = new Calc();
+        }
+
+        <strong>[TearDown]</strong>
+        public void TearDown()
+        {
+            this.calc = null;
+        }
+
+        <strong>[Test]</strong>
+        public void Test1()
+        {
+            Assert.That(this.calc.Add(1, 2), Is.EqualTo(3));
+        }
+    }
+}
+</pre>
+
+
+<h2>コマンドラインからテストを実行します</h2>
+
+<pre>
+C:\gitwork\NUnitTestTest\packages\NUnit.ConsoleRunner.3.6.0\tools>nunit3-console.exe "C:\gitwork\NUnitTestTest\NUnitTestTest\bin\Debug\NUnitTestTest.dll"
+NUnit Console Runner 3.6.0
+Copyright (C) 2017 Charlie Poole
+
+Runtime Environment
+   OS Version: Microsoft Windows NT 10.0.14393.0
+  CLR Version: 4.0.30319.42000
+
+Test Files
+    C:\gitwork\NUnitTestTest\NUnitTestTest\bin\Debug\NUnitTestTest.dll
+
+
+Run Settings
+    DisposeRunners: True
+    WorkDirectory: C:\gitwork\NUnitTestTest\packages\NUnit.ConsoleRunner.3.6.0\tools
+    ImageRuntimeVersion: 4.0.30319
+    ImageTargetFrameworkName: .NETFramework,Version=v4.5.2
+    ImageRequiresX86: False
+    ImageRequiresDefaultAppDomainAssemblyResolver: False
+    NumberOfTestWorkers: 4
+
+Test Run Summary
+  Overall result: Passed
+  Test Count: 1, Passed: 1, Failed: 0, Warnings: 0, Inconclusive: 0, Skipped: 0
+  Start time: 2017-02-26 04:54:08Z
+    End time: 2017-02-26 04:54:09Z
+    Duration: 1.453 seconds
+
+Results (nunit3) saved as TestResult.xml
+</pre>
+
+<h2>Visual Studio から実行します</h2>
+
+<ol>
+<li>テスト → 実行 → すべてのテスト を選ぶ<br><img src="image/run-test-from-vs.png" width="600"/></li>
+<li>テストエクスプローラが開きテスト結果が表示される<br><img src="image/test-explorer.png" width="600"/></li>
+</ol>
+
+
+<h2>テスト、テスト対象クラス、プロジェクト</h2>
+
+<a href="https://github.com/m-tmatma/NUnitTest">https://github.com/m-tmatma/NUnitTest</a><br>テスト、テスト対象クラス、プロジェクトを GitHub に登録している。
+
+
+</body>
+</html>
+
