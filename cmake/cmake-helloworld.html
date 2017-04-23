@@ -1,0 +1,329 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>HelloWorld for cmake</title>
+<meta name="keywords" content="distcc" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2017-04-23 11:33:04 +0900 (2017/04/23 (日)) $<br>
+$Revision: 1069 $<br>
+</div>
+
+<h1>HelloWorld for cmake</h1>
+
+<h1>CMakeLists.txt とソースファイルの作成</h1>
+
+以下のようなプログラムがあるときにこれを cmake でプロジェクトを作成してコンパイルすることを考えます。
+
+<pre>
+#include &lt;stdio.h&gt;
+
+int main()
+{
+	printf(&quot;Hello World\n&quot;);
+	return 0;
+}
+</pre>
+
+以下のような CMakeLists.txt を作成します。
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+# define a variable of project name
+set( project_name &quot;HellowWorld&quot;)
+
+# set the project as the startup project
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_name} )
+
+# define a project name
+project (${project_name})
+
+# define a variable SRC with file GLOB
+file(GLOB SRC *.c)
+
+# define sources files of an executable
+add_executable(${project_name} ${SRC})
+</pre>
+
+
+<ul>
+<li>set( project_name &quot;HellowWorld&quot;) で project_name という変数を HelloWorld という値で定義します</li>
+<li>set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_name} ) でproject_name という変数で定義したプロジェクトをスタートアッププロジェクトにします</li>
+<li>project (${project_name}) でプロジェクト名を定義します</li>
+<li>file(GLOB SRC *.c) で CMakeLists.txt と同じディレクトリにあるすべての *.c ファイルを SRC という変数に格納します</li>
+<li>add_executable(${project_name} ${SRC}) で SRC という変数に入っているソースファイルから project_name という変数で定義した実行ファイルを作成します</li>
+</ul>
+
+上記のファイルは <a href="https://github.com/m-tmatma/cmake-sample.git">https://github.com/m-tmatma/cmake-sample.git</a> で公開しています。<br>
+HelloWorld というフォルダに入っています。
+
+以下コマンドで取得します。
+
+<pre>
+git clone https://github.com/m-tmatma/cmake-sample.git
+</pre>
+
+<h2>cmake --help</h2>
+
+以下は cmake --help の Windows での実行結果です。<br>
+-G でどのツールのプロジェクトを生成するかを選択できます。<br>
+OS によって選択できる -G のオプションは変わります。使用したい OS 上で cmake --help を実行してみてください。<br>
+
+たとえば Visual Studio 2015 で Win32 用のプロジェクトを生成する場合は -G "Visual Studio 14 2015" を指定します。<br>
+たとえば Visual Studio 2017 で x64   用のプロジェクトを生成する場合は -G "Visual Studio 15 2017 Win64" を指定します。<br>
+
+<pre>
+&gt; cmake --help
+Usage
+
+  cmake [options] &lt;path-to-source&gt;
+  cmake [options] &lt;path-to-existing-build&gt;
+
+Specify a source directory to (re-)generate a build system for it in the
+current working directory.  Specify an existing build directory to
+re-generate its build system.
+
+Options
+  -C &lt;initial-cache&gt;           = Pre-load a script to populate the cache.
+  -D &lt;var&gt;[:&lt;type&gt;]=&lt;value&gt;    = Create a cmake cache entry.
+  -U &lt;globbing_expr&gt;           = Remove matching entries from CMake cache.
+  -G &lt;generator-name&gt;          = Specify a build system generator.
+  -T &lt;toolset-name&gt;            = Specify toolset name if supported by
+                                 generator.
+  -A &lt;platform-name&gt;           = Specify platform name if supported by
+                                 generator.
+  -Wdev                        = Enable developer warnings.
+  -Wno-dev                     = Suppress developer warnings.
+  -Werror=dev                  = Make developer warnings errors.
+  -Wno-error=dev               = Make developer warnings not errors.
+  -Wdeprecated                 = Enable deprecation warnings.
+  -Wno-deprecated              = Suppress deprecation warnings.
+  -Werror=deprecated           = Make deprecated macro and function warnings
+                                 errors.
+  -Wno-error=deprecated        = Make deprecated macro and function warnings
+                                 not errors.
+  -E                           = CMake command mode.
+  -L[A][H]                     = List non-advanced cached variables.
+  --build &lt;dir&gt;                = Build a CMake-generated project binary tree.
+  -N                           = View mode only.
+  -P &lt;file&gt;                    = Process script mode.
+  --find-package               = Run in pkg-config like mode.
+  --graphviz=[file]            = Generate graphviz of dependencies, see
+                                 CMakeGraphVizOptions.cmake for more.
+  --system-information [file]  = Dump information about this system.
+  --debug-trycompile           = Do not delete the try_compile build tree.
+                                 Only useful on one try_compile at a time.
+  --debug-output               = Put cmake in a debug mode.
+  --trace                      = Put cmake in trace mode.
+  --trace-expand               = Put cmake in trace mode with variable
+                                 expansion.
+  --trace-source=&lt;file&gt;        = Trace only this CMake file/module.  Multiple
+                                 options allowed.
+  --warn-uninitialized         = Warn about uninitialized values.
+  --warn-unused-vars           = Warn about unused variables.
+  --no-warn-unused-cli         = Don't warn about command line options.
+  --check-system-vars          = Find problems with variable usage in system
+                                 files.
+  --help,-help,-usage,-h,-H,/? = Print usage information and exit.
+  --version,-version,/V [&lt;f&gt;]  = Print version number and exit.
+  --help-full [&lt;f&gt;]            = Print all help manuals and exit.
+  --help-manual &lt;man&gt; [&lt;f&gt;]    = Print one help manual and exit.
+  --help-manual-list [&lt;f&gt;]     = List help manuals available and exit.
+  --help-command &lt;cmd&gt; [&lt;f&gt;]   = Print help for one command and exit.
+  --help-command-list [&lt;f&gt;]    = List commands with help available and exit.
+  --help-commands [&lt;f&gt;]        = Print cmake-commands manual and exit.
+  --help-module &lt;mod&gt; [&lt;f&gt;]    = Print help for one module and exit.
+  --help-module-list [&lt;f&gt;]     = List modules with help available and exit.
+  --help-modules [&lt;f&gt;]         = Print cmake-modules manual and exit.
+  --help-policy &lt;cmp&gt; [&lt;f&gt;]    = Print help for one policy and exit.
+  --help-policy-list [&lt;f&gt;]     = List policies with help available and exit.
+  --help-policies [&lt;f&gt;]        = Print cmake-policies manual and exit.
+  --help-property &lt;prop&gt; [&lt;f&gt;] = Print help for one property and exit.
+  --help-property-list [&lt;f&gt;]   = List properties with help available and
+                                 exit.
+  --help-properties [&lt;f&gt;]      = Print cmake-properties manual and exit.
+  --help-variable var [&lt;f&gt;]    = Print help for one variable and exit.
+  --help-variable-list [&lt;f&gt;]   = List variables with help available and exit.
+  --help-variables [&lt;f&gt;]       = Print cmake-variables manual and exit.
+
+Generators
+
+The following generators are available on this platform:
+  Visual Studio 15 2017 [arch] = Generates Visual Studio 2017 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.
+  Visual Studio 14 2015 [arch] = Generates Visual Studio 2015 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.
+  Visual Studio 12 2013 [arch] = Generates Visual Studio 2013 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.
+  Visual Studio 11 2012 [arch] = Generates Visual Studio 2012 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.
+  Visual Studio 10 2010 [arch] = Generates Visual Studio 2010 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;IA64&quot;.
+  Visual Studio 9 2008 [arch]  = Generates Visual Studio 2008 project files.
+                                 Optional [arch] can be &quot;Win64&quot; or &quot;IA64&quot;.
+  Visual Studio 8 2005 [arch]  = Generates Visual Studio 2005 project files.
+                                 Optional [arch] can be &quot;Win64&quot;.
+  Visual Studio 7 .NET 2003    = Deprecated.  Generates Visual Studio .NET
+                                 2003 project files.
+  Borland Makefiles            = Generates Borland makefiles.
+  NMake Makefiles              = Generates NMake makefiles.
+  NMake Makefiles JOM          = Generates JOM makefiles.
+  Green Hills MULTI            = Generates Green Hills MULTI files
+                                 (experimental, work-in-progress).
+  MSYS Makefiles               = Generates MSYS makefiles.
+  MinGW Makefiles              = Generates a make file for use with
+                                 mingw32-make.
+  Unix Makefiles               = Generates standard UNIX makefiles.
+  Ninja                        = Generates build.ninja files.
+  Watcom WMake                 = Generates Watcom WMake makefiles.
+  CodeBlocks - MinGW Makefiles = Generates CodeBlocks project files.
+  CodeBlocks - NMake Makefiles = Generates CodeBlocks project files.
+  CodeBlocks - NMake Makefiles JOM
+                               = Generates CodeBlocks project files.
+  CodeBlocks - Ninja           = Generates CodeBlocks project files.
+  CodeBlocks - Unix Makefiles  = Generates CodeBlocks project files.
+  CodeLite - MinGW Makefiles   = Generates CodeLite project files.
+  CodeLite - NMake Makefiles   = Generates CodeLite project files.
+  CodeLite - Ninja             = Generates CodeLite project files.
+  CodeLite - Unix Makefiles    = Generates CodeLite project files.
+  Sublime Text 2 - MinGW Makefiles
+                               = Generates Sublime Text 2 project files.
+  Sublime Text 2 - NMake Makefiles
+                               = Generates Sublime Text 2 project files.
+  Sublime Text 2 - Ninja       = Generates Sublime Text 2 project files.
+  Sublime Text 2 - Unix Makefiles
+                               = Generates Sublime Text 2 project files.
+  Kate - MinGW Makefiles       = Generates Kate project files.
+  Kate - NMake Makefiles       = Generates Kate project files.
+  Kate - Ninja                 = Generates Kate project files.
+  Kate - Unix Makefiles        = Generates Kate project files.
+  Eclipse CDT4 - NMake Makefiles
+                               = Generates Eclipse CDT 4.0 project files.
+  Eclipse CDT4 - MinGW Makefiles
+                               = Generates Eclipse CDT 4.0 project files.
+  Eclipse CDT4 - Ninja         = Generates Eclipse CDT 4.0 project files.
+  Eclipse CDT4 - Unix Makefiles= Generates Eclipse CDT 4.0 project files.
+</pre>
+
+<h2>プロジェクト作成 for Visual Studio</h2>
+
+Visual Studio 2017 用に Win32 用のプロジェクトを生成する場合の例です。<br>
+cmake ではソースコードのディレクトリとビルド用のディレクトリを分けます。<br>
+このためまず最初にビルド用のディレクトリを作成して、そのディレクトリに移動します。<br>
+-G オプションでどの種類のプロジェクトを生成するかを指定します。<br>
+最後にソースコードの入っているディレクトリ(実際には CMakeLists.txt の入っているディレクトリ) を指定して cmake を実行します。
+
+<pre>
+&gt; mkdir HelloWorld
+&gt; cd    HelloWorld
+&gt; cmake -G &quot;Visual Studio 15 2017&quot;  ..\cmake-sample\HelloWorld\
+</pre>
+
+cmake を実行するとカレントディレクトリにソリューションファイルが作成されるので Visual Studio で開いてコンパイルします。<br>
+
+<h2>プロジェクト作成 for Xcode</h2>
+
+Xcode でプロジェクト作成する場合は -G オプションに Xcode を指定するところが違うだけです。
+
+<pre>
+$ mkdir HelloWorld
+$ cd    HelloWorld
+$ cmake -G &quot;Xcode&quot;  ../cmake-sample/HelloWorld/
+</pre>
+
+あと違うのは スタートアッププロジェクトの指定が Xcode だと効かないので、Xcode から開始するときにプロジェクトを選択する必要があります。
+
+<h2>プロジェクト作成 for Makefile on Linux (Mac とかでも適用可能)</h2>
+
+Linux で Makefile を使う場合
+
+<pre>
+$ mkdir HelloWorld
+$ cd    HelloWorld
+$ cmake -G "Unix Makefiles" ../cmake-sample/HelloWorld/
+</pre>
+
+Makefile でビルドする場合、以下のようにデフォルトではコマンドが表示されません。
+
+<pre>
+$ make
+Scanning dependencies of target HellowWorld
+[ 50%] Building C object CMakeFiles/HellowWorld.dir/HelloWorld.c.o
+[100%] Linking C executable HellowWorld
+[100%] Built target HellowWorld
+</pre>
+
+変数 VERVOSE で 1 を指定してビルドすることでどのようなコマンドが実行されているか確認できます。
+
+<pre>
+make VERBOSE=1
+</pre>
+
+
+<h2>プロジェクト作成 for Ninja on Linux (Windows とかでも適用可能)</h2>
+
+<a href="https://ninja-build.org/">Ninja</a> というビルドシステムもあります。<br>
+Unix Makefile よりも高速です。<br>
+
+<pre>
+$ mkdir HelloWorld-ninja
+$ cd    HelloWorld-ninja
+$ make -G Ninja ../cmake-sample/HelloWorld
+</pre>
+
+Ninja でビルドする場合も、以下のようにデフォルトではコマンドが表示されません。
+
+<pre>
+$ ninja-build
+[2/2] Linking C executable HellowWorld
+</pre>
+
+-v を指定してビルドすることでどのようなコマンドが実行されているか確認できます。
+
+<pre>
+ninja-build -v
+</pre>
+
+</body>
+</html>
