@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>cmake</title>
+<title>cmake のコンパイル</title>
 <meta name="keywords" content="distcc" />
 </head>
 <body>
@@ -41,37 +41,31 @@
 <div class="index">
 	<a href="../contact.html">連絡先</a>
 	<a href="../">最初に戻る</a>
-	<a href="../">戻る</a>
-	<a href="cmake-helloworld.html">次へ進む</a>
+	<a href="./">戻る</a>
+	次へ進む
 </div>
 <div align="right">
 $Date: 2017-04-23 12:09:21 +0900 (2017/04/23 (日)) $<br>
 $Revision: 1072 $<br>
 </div>
 
-<h1>cmake</h1>
-<h2>cmake とは?</h2>
+<h1>cmake のコンパイル方法</h1>
 
-<a href="https://cmake.org/">cmake</a> とはオープンソースのクロスプラットフォームのビルドツールです。<br>
-<a href="https://github.com/Kitware/CMake">ソースコードは GitHub</a> で公開されています。<br>
+<h2>cmake のコンパイル方法 (Windows の場合)</h2>
 
-<ul>
-<li>ビルドツールとは言っても別のビルドツールのプロジェクトファイルなどを生成するジェネレーターです。</li>
-<li>Windows, Mac, Linux などで動作します。</li>
-<li>Visual Studio, Makefile, Xcode, <a href="https://ninja-build.org/">Ninja</a> などに対応しています。</li>
-<li>cmake ではソースコードディレクトリとビルドディレクトリを別々にすることができます。</li>
-<li>CMakeLists.txt というファイルでビルドのための設定を行います。(最後に s がついていることに注意が必要)</li>
-<li>バイナリは <a href="https://cmake.org/download/">https://cmake.org/download/</a> からダウンロードできます</li>
-<li>ver 3.8 から <a href="https://cmake.org/cmake/help/v3.8/release/3.8.html#c">C&#035;もサポートされています。(未検証)</a></li>
-</ul>
+Windows でコンパイルする場合、cmake のバイナリがインストールされている必要があります。<br>
+CMAKE_INSTALL_PREFIX でインストール先を指定します。<br>
 
-<h2>cmake</h2>
+<pre>
+&gt; git clone https://github.com/Kitware/CMake.git
+&gt; mkdir build2017
+&gt; cd    build2017
+&gt; cmake -G "Visual Studio 15 2017" -D CMAKE_INSTALL_PREFIX=c:\cmake ../cmake
+</pre>
 
-<ul>
-<li><a href="cmake-helloworld.html">HelloWorld for cmake</a></li>
-<li><a href="cmake-compile.html">cmake のコンパイル</a></li>
-</ul>
+<h2>cmake のコンパイル方法 (Mac, Linux の場合)</h2>
 
+<a href="https://cmake.org/install/">https://cmake.org/install/</a> を見てください<br>
 
 </body>
 </html>
