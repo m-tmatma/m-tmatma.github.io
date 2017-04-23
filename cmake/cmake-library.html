@@ -45,8 +45,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-04-23 17:42:40 +0900 (2017/04/23 (日)) $<br>
-$Revision: 1073 $<br>
+$Date: 2017-04-23 21:23:20 +0900 (2017/04/23 (日)) $<br>
+$Revision: 1074 $<br>
 </div>
 
 <h1>cmake での shared library/static library のテストプロジェクト</h1>
@@ -179,7 +179,7 @@ Program/CMakeLists.txt
 cmake_minimum_required(VERSION 2.6.4)
 
 # define a variable of project name
-set( project_name "Program")
+set( project_name sample_program)
 
 # set the project as the startup project
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_name} )
@@ -240,8 +240,8 @@ add_subdirectory(Program)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # create solution folder
-set_target_properties(Library     PROPERTIES FOLDER library)
-set_target_properties(Program     PROPERTIES FOLDER executable)
+set_target_properties(Library        PROPERTIES FOLDER library)
+set_target_properties(sample_program PROPERTIES FOLDER executable)
 </pre>
 
 以下定義で BUILD_SHARED_LIBS が ON になっていたら ${LIB_TYPE} は SHARED (Shared Library) になります。<br>
@@ -281,12 +281,12 @@ add_subdirectory(Library) でライブラリ用のディレクトリをビルド
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # create solution folder
-set_target_properties(Library     PROPERTIES FOLDER library)
-set_target_properties(Program     PROPERTIES FOLDER executable)
+set_target_properties(Library        PROPERTIES FOLDER library)
+set_target_properties(sample_program PROPERTIES FOLDER executable)
 </pre>
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON) でソリューションフォルダの機能を有効にします。<br>
-set_target_properties(Program     PROPERTIES FOLDER executable) で Program というプロジェクトを executable というソリューションフォルダに入れています。<br>
+set_target_properties(sample_program PROPERTIES FOLDER executable) で sample_program というプロジェクトを executable というソリューションフォルダに入れています。<br>
 
 </body>
 </html>
