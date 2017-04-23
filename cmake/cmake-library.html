@@ -1,0 +1,292 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>cmake での share library/static library プロジェクト</title>
+<meta name="keywords" content="distcc" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'asahi-net.or.jp');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2017-04-23 17:42:40 +0900 (2017/04/23 (日)) $<br>
+$Revision: 1073 $<br>
+</div>
+
+<h1>cmake での shared library/static library のテストプロジェクト</h1>
+
+<h2>概要</h2>
+
+shared library(DLL) と static library を使う場合をプロジェクト生成時(cmake 実行時) に動的に切り替えられる方法を説明します。
+
+<h2>サンプルのプロジェクトの構成</h2>
+
+<pre>
+│  CMakeLists.txt
+│
+├─Library
+│      CMakeLists.txt
+│      Library.c
+│      Library.h
+│
+└─Program
+        CMakeLists.txt
+        Program.c
+</pre>
+
+<a href="https://github.com/m-tmatma/cmake-sample.git">https://github.com/m-tmatma/cmake-sample.git</a> の
+LibrarySample ディレクトリに格納されています。
+
+<h2>library のプロジェクトの定義</h2>
+
+Library/CMakeLists.txt
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+# define a variable of project name
+set( project_name "Library")
+
+# define a project name
+project (${project_name})
+
+# define a variable SRC with file GLOB
+file(GLOB SRC *.c *.h)
+
+# add include directory for ${project_name}_Export.h
+include_directories(${PROJECT_BINARY_DIR})
+
+# define sources files of an executable
+add_library(${project_name} ${LIB_TYPE} ${SRC} ${PROJECT_BINARY_DIR}/${project_name}_Export.h)
+
+include (GenerateExportHeader)
+GENERATE_EXPORT_HEADER( ${project_name}
+	BASE_NAME ${project_name}
+	EXPORT_MACRO_NAME ${project_name}_EXPORT
+	EXPORT_FILE_NAME ${project_name}_Export.h
+	STATIC_DEFINE ${project_name}_BUILT_AS_STATIC
+)
+</pre>
+
+include_directories でインクルードディレクトリを指定します<br>
+${PROJECT_BINARY_DIR} はこのプロジェクトに対応するビルドディレクトリを意味します。<br>
+
+add_library でライブラリを定義します。${LIB_TYPE} のところで SHARED を指定すると shared Library(Windows ではDLL)になり,<br>
+STATIC を指定するとスタティックライブラリになります。<br>
+
+トップディレクトリにある CMakeLists.txt でこの変数を定義します。<br>
+
+以下の指定では Library_Export.h というDLL のインポート、エクスポート指定のためのヘッダファイルを作成するための命令です。<br>
+
+<pre>
+include (GenerateExportHeader)
+GENERATE_EXPORT_HEADER( ${project_name}
+	BASE_NAME ${project_name}
+	EXPORT_MACRO_NAME ${project_name}_EXPORT
+	EXPORT_FILE_NAME ${project_name}_Export.h
+	STATIC_DEFINE ${project_name}_BUILT_AS_STATIC
+)
+</pre>
+
+以下のようなヘッダファイルが出力先に生成されます。<br>
+このファイルをインクルードするために include_directories(${PROJECT_BINARY_DIR}) の指定をしています。<br>
+
+<pre>
+#ifndef Library_EXPORT_H
+#define Library_EXPORT_H
+
+#ifdef Library_BUILT_AS_STATIC
+#  define Library_EXPORT
+#  define LIBRARY_NO_EXPORT
+#else
+#  ifndef Library_EXPORT
+#    ifdef Library_EXPORTS
+        /* We are building this library */
+#      define Library_EXPORT __declspec(dllexport)
+#    else
+        /* We are using this library */
+#      define Library_EXPORT __declspec(dllimport)
+#    endif
+#  endif
+
+#  ifndef LIBRARY_NO_EXPORT
+#    define LIBRARY_NO_EXPORT 
+#  endif
+#endif
+
+#ifndef LIBRARY_DEPRECATED
+#  define LIBRARY_DEPRECATED __declspec(deprecated)
+#endif
+
+#ifndef LIBRARY_DEPRECATED_EXPORT
+#  define LIBRARY_DEPRECATED_EXPORT Library_EXPORT LIBRARY_DEPRECATED
+#endif
+
+#ifndef LIBRARY_DEPRECATED_NO_EXPORT
+#  define LIBRARY_DEPRECATED_NO_EXPORT LIBRARY_NO_EXPORT LIBRARY_DEPRECATED
+#endif
+
+#if 0 /* DEFINE_NO_DEPRECATED */
+#  ifndef LIBRARY_NO_DEPRECATED
+#    define LIBRARY_NO_DEPRECATED
+#  endif
+#endif
+
+#endif
+</pre>
+
+<h2>exe のプロジェクトの定義</h2>
+
+Program/CMakeLists.txt
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+# define a variable of project name
+set( project_name "Program")
+
+# set the project as the startup project
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_name} )
+
+# define a project name
+project (${project_name})
+
+# define a variable SRC with file GLOB
+file(GLOB SRC *.c *.h)
+
+# add include directory
+include_directories(../Library)
+
+# add include directory for ${project_name}_Export.h
+include_directories(${PROJECT_BINARY_DIR}/../Library)
+
+# define sources files of an executable
+add_executable(${project_name} ${SRC})
+
+# link a library
+target_link_libraries(${project_name} Library)
+</pre>
+
+include_directories でインクルードディレクトリの指定をしていますが、
+${PROJECT_BINARY_DIR} を参照する場合、Program のプロジェクトに対する生成ディレクトリなので
+Library のプロジェクトに対するフォルダを指定する必要があるので ../Library を追加しています。
+
+target_link_libraries でリンクするライブラリを指定しています。
+
+<h2>トップのプロジェクトの定義</h2>
+
+Program/CMakeLists.txt
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+# see https://cmake.org/Wiki/BuildingWinDLL
+# Allow the developer to select if Dynamic or Static libraries are built
+option (BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+# Set the LIB_TYPE variable to STATIC
+set (LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
+  set (LIB_TYPE SHARED)
+endif (BUILD_SHARED_LIBS)
+
+project (LibraryTest)
+
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "Program" )
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+
+add_subdirectory(Library)
+add_subdirectory(Program)
+
+# turn on solution folder
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# create solution folder
+set_target_properties(Library     PROPERTIES FOLDER library)
+set_target_properties(Program     PROPERTIES FOLDER executable)
+</pre>
+
+以下定義で BUILD_SHARED_LIBS が ON になっていたら ${LIB_TYPE} は SHARED (Shared Library) になります。<br>
+
+<pre>
+option (BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+# Set the LIB_TYPE variable to STATIC
+set (LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
+  set (LIB_TYPE SHARED)
+endif (BUILD_SHARED_LIBS)
+</pre>
+
+BUILD_SHARED_LIBS が OFF になっていたら ${LIB_TYPE} は STATIC (Static Library) になります。<br>
+そして BUILD_SHARED_LIBS はコマンドラインで cmake を実行するときに上書きすることができます。<br>
+
+以下のように実行してプロジェクトを生成すれば Shared Library (DLL) になります。<br>
+
+<pre>
+cmake -D BUILD_SHARED_LIBS=1 ..\cmake-sample\LibrarySample\
+</pre>
+
+以下のように実行してプロジェクトを生成すれば Static Library になります。<br>
+
+<pre>
+cmake -D BUILD_SHARED_LIBS=0 ..\cmake-sample\LibrarySample\
+</pre>
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}) でライブラリ出力先フォルダを指定します。<br>
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}) で実行ファイルの出力先フォルダを指定します。<br>
+
+add_subdirectory(Library) でライブラリ用のディレクトリをビルド対象に追加しています。<br>
+
+<pre>
+# turn on solution folder
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# create solution folder
+set_target_properties(Library     PROPERTIES FOLDER library)
+set_target_properties(Program     PROPERTIES FOLDER executable)
+</pre>
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON) でソリューションフォルダの機能を有効にします。<br>
+set_target_properties(Program     PROPERTIES FOLDER executable) で Program というプロジェクトを executable というソリューションフォルダに入れています。<br>
+
+</body>
+</html>
