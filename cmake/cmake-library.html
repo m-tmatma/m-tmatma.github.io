@@ -45,8 +45,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-04-23 21:23:20 +0900 (2017/04/23 (日)) $<br>
-$Revision: 1074 $<br>
+$Date: 2017-04-25 23:10:14 +0900 (2017/04/25 (火)) $<br>
+$Revision: 1075 $<br>
 </div>
 
 <h1>cmake での shared library/static library のテストプロジェクト</h1>
@@ -211,7 +211,7 @@ target_link_libraries でリンクするライブラリを指定しています�
 
 <h2>トップのプロジェクトの定義</h2>
 
-Program/CMakeLists.txt
+CMakeLists.txt
 
 <pre>
 cmake_minimum_required(VERSION 2.6.4)
@@ -228,10 +228,10 @@ endif (BUILD_SHARED_LIBS)
 
 project (LibraryTest)
 
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "Program" )
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "sample_program" )
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(Library)
 add_subdirectory(Program)
@@ -271,10 +271,19 @@ cmake -D BUILD_SHARED_LIBS=1 ..\cmake-sample\LibrarySample\
 cmake -D BUILD_SHARED_LIBS=0 ..\cmake-sample\LibrarySample\
 </pre>
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}) でライブラリ出力先フォルダを指定します。<br>
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}) で実行ファイルの出力先フォルダを指定します。<br>
+<p>
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) でライブラリ出力先フォルダを指定します。<br>
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) で実行ファイルの出力先フォルダを指定します。<br>
+CMAKE_BINARY_DIR の変数はビルドディレクトリのトップディレクトリを表します<br>
+</p>
 
+<p>
+<a href="http://qiita.com/osamu0329/items/7de2b190df3cfb4ad0ca">CMake : out-of-sourceビルドで幸せになる</a>を参考<br>
+</p>
+
+<p>
 add_subdirectory(Library) でライブラリ用のディレクトリをビルド対象に追加しています。<br>
+</p>
 
 <pre>
 # turn on solution folder
