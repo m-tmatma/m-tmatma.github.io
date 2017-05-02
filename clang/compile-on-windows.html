@@ -47,8 +47,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-05-02 14:27:29 +0900 (2017/05/02 (火)) $<br>
-$Revision: 1080 $<br>
+$Date: 2017-05-02 15:54:43 +0900 (2017/05/02 (火)) $<br>
+$Revision: 1087 $<br>
 </div>
 
 <h1>LLVM/clang コンパイル Windows (VC)</h1>
@@ -98,8 +98,10 @@ svn co http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi
 
 <h2>プロジェクトの生成</h2>
 
+..\llvm はソースコードツリーのパスです。
 
-インストールされている最新の Visual Studioを使う場合<br>
+
+<h3>インストールされている最新の Visual Studioを使う場合</h3>
 
 generate-vc.bat
 
@@ -112,7 +114,7 @@ cmake ^
 ..\llvm
 </pre>
 
-Visual Studio 2017 を使う場合<br>
+<h3>Visual Studio 2017 を使う場合</h3>
 
 generate-vc2017.bat
 
@@ -126,7 +128,7 @@ cmake ^
 ..\llvm
 </pre>
 
-Visual Studio 2015 を使う場合<br>
+<h3>Visual Studio 2015 を使う場合</h3>
 
 generate-vc2015.bat
 
@@ -140,13 +142,49 @@ cmake ^
 ..\llvm
 </pre>
 
+<h3>Ninjaを使う場合</h3>
+
+<pre>
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+
+rmdir /s /q build-ninja-llvm
+mkdir       build-ninja-llvm
+cd          build-ninja-llvm
+cmake ^
+-G Ninja ^
+-D CMAKE_INSTALL_PREFIX=c:\clang ^
+-D CMAKE_BUILD_TYPE=Release ^
+..\llvm
+</pre>
+
 <h2>ビルド</h2>
+
+<h3>Visual Studio を使う場合</h3>
 
 LLVM.sln をダブルクリックして開き、ソリューションのビルドを行います。
 
+<h3>Ninjaを使う場合</h3>
+
+<pre>
+ninja
+</pre>
+
 <h2>パッケージの作成</h2>
 
-Package プロジェクトをビルドします。
+インストーラを作成します。
+
+<h3>Visual Studio を使う場合</h3>
+
+Visual Studio からPackage プロジェクトをビルドします。<br>
+でも r301888 現在ではパッケージの作成に失敗します。<br>
+
+<h3>Ninjaを使う場合</h3>
+
+<pre>
+ninja package
+</pre>
+
+LLVM-5.0.0svn-win32.exe というファイルがビルドディレクトリのトップに作成されます。
 
 </body>
 </html>
