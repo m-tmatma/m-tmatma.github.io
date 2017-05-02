@@ -1,0 +1,152 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>LLVM/clang のコンパイル on Windows (VC)</title>
+<meta name="keywords" content="Jenkins" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<!-- Start Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="<a href="compile-on-linux.html">">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2017-05-02 11:42:09 +0900 (火, 02 5 2017) $<br>
+$Revision: 1078 $<br>
+</div>
+
+<h1>LLVM/clang コンパイル Windows (VC)</h1>
+
+<h2>svn から取得</h2>
+
+checkout.bat
+
+<pre>
+set DIR=%~dp0
+
+cd /d %DIR%
+rmdir /s /q llvm
+svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+
+cd /d %DIR%
+cd llvm\tools
+svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+
+cd /d %DIR%
+cd llvm\tools
+svn co http://llvm.org/svn/llvm-project/lld/trunk lld
+
+cd /d %DIR%
+cd llvm\tools
+svn co http://llvm.org/svn/llvm-project/polly/trunk polly
+
+cd /d %DIR%
+cd llvm\projects
+svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
+
+cd /d %DIR%
+cd llvm\projects
+svn co http://llvm.org/svn/llvm-project/openmp/trunk openmp
+
+cd /d %DIR%
+cd llvm\projects
+svn co http://llvm.org/svn/llvm-project/libcxx/trunk libcxx
+svn co http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi
+</pre>
+
+<h2>CMake</h2>
+
+<a href="https://cmake.org/">CMake</a> はWindows や Linux や Mac に対応したクロスプラットフォームのビルドツールです<br>
+<a href="../cmake/">CMake のページ</a> を作りました。
+
+
+<h2>プロジェクトの生成</h2>
+
+
+インストールされている最新の Visual Studioを使う場合<br>
+
+generate-vc.bat
+
+<pre>
+rmdir /s /q build-llvm
+mkdir build-llvm
+cd build-llvm
+cmake ^
+-D CMAKE_INSTALL_PREFIX=c:\clang ^
+..\llvm
+</pre>
+
+Visual Studio 2017 を使う場合<br>
+
+generate-vc2017.bat
+
+<pre>
+rmdir /s /q build2017-llvm
+mkdir build2017-llvm
+cd build2017-llvm
+cmake ^
+<strong>-G "Visual Studio 15 2017"</strong> ^
+-D CMAKE_INSTALL_PREFIX=c:\clang ^
+..\llvm
+</pre>
+
+Visual Studio 2015 を使う場合<br>
+
+generate-vc2015.bat
+
+<pre>
+rmdir /s /q build2015-llvm
+mkdir build2015-llvm
+cd build2015-llvm
+cmake ^
+<strong>-G "Visual Studio 14 2015"</strong> ^
+-D CMAKE_INSTALL_PREFIX=c:\clang ^
+..\llvm
+</pre>
+
+<h2>ビルド</h2>
+
+LLVM.sln をダブルクリックして開き、ソリューションのビルドを行います。
+
+<h2>パッケージの作成</h2>
+
+Package プロジェクトをビルドします。
+
+</body>
+</html>
