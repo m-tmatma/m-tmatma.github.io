@@ -50,8 +50,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-05-02 14:55:38 +0900 (2017/05/02 (火)) $<br>
-$Revision: 1083 $<br>
+$Date: 2017-05-02 15:02:54 +0900 (2017/05/02 (火)) $<br>
+$Revision: 1084 $<br>
 </div>
 
 <h1>Visual Studio によるコンパイル</h1>
@@ -86,10 +86,13 @@ C:\svnwork\ConsoleApplication2>"C:\Program Files (x86)\Microsoft Visual Studio\2
 
 <h3>ソリューションの中の特定のプロジェクトをビルドする場合</h3>
 
-/project の後にプロジェクト名を指定することでソリューションの中の特定のプロジェクトをビルドできます。
+/project の後にプロジェクト名を指定することでソリューションの中の特定のプロジェクトをビルドできます。<br>
+ここでは sample_program というプロジェクトを指定しています。<br>
 
 <pre>
-C:\gitwork\GitHub\sample\LibrarySample>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LibraryTest.sln /rebuild "Release|Win32" /project sample_program
+C:\gitwork\GitHub\sample\LibrarySample>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LibraryTest.sln ^
+/rebuild "Release|Win32" ^
+<strong>/project sample_program</strong>
 1>------ すべてのリビルド開始: プロジェクト:ZERO_CHECK, 構成: Release Win32 ------
 1>Checking Build System
 1>CMake does not need to re-run because C:/gitwork/GitHub/sample/LibrarySample/CMakeFiles/generate.stamp is up-to-date.
