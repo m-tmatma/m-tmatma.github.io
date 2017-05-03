@@ -54,11 +54,10 @@ table, td, th {
 pre
 {
 	margin-left: 2em;
-/*	margin-right: 20em; */
 	border-width: 3px;
 	border-style: solid;
 	border-color: activeborder;
-	background-color: black;
+	background-color: blue;
 	color: white;
 }
 
