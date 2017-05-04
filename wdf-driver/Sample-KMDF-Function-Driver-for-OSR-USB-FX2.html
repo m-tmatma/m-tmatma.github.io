@@ -46,8 +46,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-05-01 14:57:34 +0900 (2017/05/01 (月)) $<br>
-$Revision: 1076 $<br>
+$Date: 2017-05-04 19:20:20 +0900 (2017/05/04 (木)) $<br>
+$Revision: 1095 $<br>
 </div>
 
 <h1>Sample KMDF Function Driver for OSR USB-FX2</h1>
@@ -163,8 +163,8 @@ $Revision: 1076 $<br>
 <h2>OsrFxEvtIoStop (bulkrwr.c)</h2>
 
 <ul>
-	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff550033(v=vs.85).aspx>WdfRequestStopAcknowledge</a></li>
-	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff549941(v=vs.85).aspx>WdfRequestCancelSentRequest</a></li>
+	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff550033(v=vs.85).aspx">WdfRequestStopAcknowledge</a></li>
+	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff549941(v=vs.85).aspx">WdfRequestCancelSentRequest</a></li>
 </ul>
 
 
@@ -173,7 +173,7 @@ $Revision: 1076 $<br>
 <ol>
 	<li>EventWriteReadStart (WdfIoQueueGetDevice)</li>
 	<li>GetDeviceContext (WdfIoQueueGetDevice)</li>
-	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff550019(v=vs.85).aspx>WdfRequestRetrieveOutputMemory</a></li>
+	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff550019(v=vs.85).aspx">WdfRequestRetrieveOutputMemory</a></li>
 	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff551136(v=vs.85).aspx">WdfUsbTargetPipeFormatRequestForRead</a></li>
 	<li><a href="http://msdn.microsoft.com/ja-jp/library/ff550030(v=vs.85).aspx">WdfRequestSetCompletionRoutine (EvtRequestReadCompletionRoutine)</a></li>
 	<li><a href="http://msdn.microsoft.com/ja-jp/library/ff550027(v=vs.85).aspx">WdfRequestSend (WdfUsbTargetPipeGetIoTarget)</a></li>
@@ -186,7 +186,7 @@ $Revision: 1076 $<br>
 	<li>EventWriteWriteStart (WdfIoQueueGetDevice)</li>
 	<li>GetDeviceContext (WdfIoQueueGetDevice)</li>
 	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff550015(v=vs.85).aspx">WdfRequestRetrieveInputMemory</a></li>
-	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff551141(v=vs.85).aspx>WdfUsbTargetPipeFormatRequestForWrite</a></li>
+	<li><a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff551141(v=vs.85).aspx">WdfUsbTargetPipeFormatRequestForWrite</a></li>
 	<li><a href="http://msdn.microsoft.com/ja-jp/library/ff550030(v=vs.85).aspx">WdfRequestSetCompletionRoutine (EvtRequestWriteCompletionRoutine)</a></li>
 	<li><a href="http://msdn.microsoft.com/ja-jp/library/ff550027(v=vs.85).aspx">WdfRequestSend (WdfUsbTargetPipeGetIoTarget)</a></li>
 </ol>
