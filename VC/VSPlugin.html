@@ -1,0 +1,130 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>Visual Studio プラグインの作り方 on Visual Studio 2017</title>
+<meta name="keywords" content="Visual Studio" />
+<meta name="keywords" content="Visual Studio 2017" />
+<meta name="keywords" content="プラグイン" />
+<meta name="keywords" content="Plugin" />
+</head>
+<body>
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<script language="javascript" src="http://analyzer5.fc2.com:8080/ana/processor.php?uid=45767" type="text/javascript">
+</script>
+<!-- Start Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="ForceUTF8.html">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2017-05-06 11:44:52 +0900 (2017/05/06 (土)) $<br>
+$Revision: 1101 $<br>
+</div>
+
+<h1>Visual Studio プラグインの作り方 on Visual Studio 2017</h1>
+
+<h2>下準備</h2>
+
+<a href="https://www.visualstudio.com/ja/downloads/?rr=https%3A%2F%2Fwww.microsoft.com%2Fja-jp%2Fdev%2Fproducts%2Fcommunity.aspx">Visual Studio 2017</a>
+をインストールします。<br>
+
+<p>
+インストールするときに "Visual Studio 拡張機能の開発" にチェックを入れます。<br>
+インストール後も変更できます。<br>
+<img src="image/visualstudio2017-install.png" width="600" />
+</p>
+
+<h2>プロジェクトの作成</h2>
+
+ファイルメニューから新規作成 -> プロジェクトを選びます。<br>
+Visual C# の Extensibility の VSIX Project を選びます。<br>
+
+<img src="image/vsix.png" width="600"/>
+
+
+<h2>Visual Studio Package の追加</h2>
+
+<p>
+ソリューションエクスプローラでプロジェクトを右クリックします。<br>
+その後、追加を選び、新しい項目を選びます。<br>
+
+<img src="image/AddItem.png" width="600" /><br>
+</p>
+
+
+<p>
+Visual C# アイテムの Extensibility の VSPackage を選んだ後、Visual Studio Package を選びます。<br>
+
+<img src="image/VSPackage.png" width="600" /><br>
+</p>
+
+<h2>Custom Command の追加</h2>
+
+
+<p>
+ソリューションエクスプローラでプロジェクトを右クリックします。<br>
+その後、追加を選び、新しい項目を選びます。<br>
+
+<img src="image/AddItem.png" width="600" /><br>
+</p>
+
+
+<p>
+Visual C# アイテムの Extensibility の VSPackage を選んだ後、Custom Command を選びます。<br>
+
+<img src="image/CustomCommand.png" width="600" /><br>
+</p>
+
+<h2>ビルド</h2>
+
+ビルドメニューからソリューションのビルドを選びます。
+
+<h2>デバッグ実行</h2>
+
+F5 を押してデバッグ実行を行うと実験的なインスタンスというタイトルで Visul Studio 2017 が起動してきます。<br>
+これはデフォルトで外部プログラムの開始で<br> "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe" が設定されていて<br>
+コマンドラインに "/rootsuffix Exp" が設定されているためです。<br>
+
+自由にブレークポイントを設定してステップ実行できます<br>
+
+<img src="image/Debug.png" width="600" /><br>
+
+<h2>インストール</h2>
+
+ビルドで生成された vsix ファイルをダブルクリックしてインストールできます。<br>
+
+</body>
+</html>
