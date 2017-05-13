@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>CopyWithLineNumbers (行番号付きでコピーするプラグイン)</title>
+<title>SetStartupProjectVS</title>
 <meta name="keywords" content="Visual Studio" />
 <meta name="keywords" content="Visual Studio 2017" />
 <meta name="keywords" content="Visual Studio 2015" />
@@ -10,7 +10,9 @@
 <meta name="keywords" content="両対応" />
 <meta name="keywords" content="both" />
 <meta name="keywords" content="Plugin" />
-<meta name="keywords" content="Copy With Line Numbers" />
+<meta name="keywords" content="SetStartupProjectVS" />
+<meta name="keywords" content="Set Startup Project" />
+<meta name="keywords" content="スタートアッププロジェクト設定" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -179,40 +181,52 @@
 <div class="index">
 	<a href="../contact.html">連絡先</a>
 	<a href="../">最初に戻る</a>
-	<a href="VSPlugin-2015-and-2017.html">戻る</a>
-	<a href="SetStartupProjectVS.html">次へ進む</a>
+	<a href="CopyWithLineNumbers.html">戻る</a>
+	次へ進む
 </div>
 <div align="right">
 $Date: 2017-05-13 18:59:43 +0900 (2017/05/13 (土)) $<br>
 $Revision: 1124 $<br>
 </div>
 
-<h1>CopyWithLineNumbers (行番号付きでコピーするプラグイン)</h1>
+<h1>SetStartupProjectVS (Visual Studio のスタートアッププロジェクトを変更するプラグイン)</h1>
+
+<h2>説明</h2>
+
+Visul Studio でスタートアッププロジェクトを設定しても .suo ファイルに保存されるだけでソリューションファイルに保存されません。<br>
+ソリューションファイルを変更してデフォルトのスタートアッププロジェクトを変更するプラグインを開発しました。<br>
+
+<p>
+<a href="http://blog.ch3cooh.jp/entry/20130121/1358735110">Visual Studioのスタートアップ プロジェクトを変更する</a> で説明されている手順を
+プラグインで行うものです。<br>
+</p>
+
+<p>
+<a href="https://github.com/michaKFromParis/slnStartupProject">https://github.com/michaKFromParis/slnStartupProject</a> を使っています。<br>
+</p>
 
 <h2>ソースコード</h2>
 
-<a href="https://github.com/m-tmatma/CopyWithLineNumbers">https://github.com/m-tmatma/CopyWithLineNumbers</a> で公開しています。
+<a href="https://github.com/m-tmatma/SetStartupProjectVS">https://github.com/m-tmatma/SetStartupProjectVS</a> で公開しています。
 
 <h2>バイナリ</h2>
 
-<a href="https://github.com/m-tmatma/CopyWithLineNumbers/releases">https://github.com/m-tmatma/CopyWithLineNumbers/releases</a> からダウンロードできます。
+<a href="https://github.com/m-tmatma/SetStartupProjectVS/releases">https://github.com/m-tmatma/SetStartupProjectVS/releases</a> からダウンロードできます。
 
 
 <h3>Marcket Place での公開</h3>
 
-<a href="https://marketplace.visualstudio.com/items?itemName=tmatma.CopyWithLineNumbers-18783">https://marketplace.visualstudio.com/items?itemName=tmatma.CopyWithLineNumbers-18783</a>
+<a href="https://marketplace.visualstudio.com/items?itemName=tmatma.SetStartupProjectVS">https://marketplace.visualstudio.com/items?itemName=tmatma.SetStartupProjectVS</a>
 で入手可能です。
 
 <h2>対応 Visual Studio</h2>
 
 <ul>
-<li>Visual Studio 2015 Community</li>
-<li>Visual Studio 2017 Community</li>
+<li>Visual Studio 2015 Community (多分 Pro/Enterprise も)</li>
+<li>Visual Studio 2017 Community (多分 Pro/Enterprise も)</li>
 </ul>
 
 Professinal/Enterprise は持っていないので検証ができません。<br>
-多分 Install Targets に追加するだけだと思いますが、検証できないのでしていません<br>
-検証環境をお持ちの方は検証して Pull Request してください。<br>
 
 <h2>インストール</h2>
 
@@ -224,28 +238,15 @@ Professinal/Enterprise は持っていないので検証ができません。<br
 <h2>使い方</h2>
 
 <ol>
-<li>ソリューションを開きます</li>
-<li>何かドキュメントを開きます</li>
-<li>範囲選択します</li>
-<li>ツールメニューから "Copy With Line Numbers" を選ぶ か 右クリックメニューから "Copy With Line Numbers" を選びます</li>
-<li>なんかのエディタで貼り付けを行います</li>
+<li>複数プロジェクトを含むソリューションを開きます</li>
+<li>スタートアッププロジェクトに設定したいプロジェクトで右クリックします。</li>
+<li>Set Startup Project by writing to the solution file を選びます</li>
+<li>ソリューションを再読み込みするのを聞かれるので再読み込みします</li>
 </ol>
 
-<h2>サンプル出力</h2>
+<h2>スクリーンショット</h2>
 
-<pre>
-   51:         /// &lt;summary&gt;
-   52:         /// Initializes a new instance of the &lt;see cref=&quot;VSPackage&quot;/&gt; class.
-   53:         /// &lt;/summary&gt;
-   54:         public VSPackage()
-   55:         {
-   56:             // Inside this method you can place any initialization code that does not require
-   57:             // any Visual Studio service because at this point the package object is created but
-   58:             // not sited yet inside Visual Studio environment. The place to do all the other
-   59:             // initialization is the Initialize method.
-   60:         }
-   61: 
-</pre>
+<img src="https://raw.githubusercontent.com/m-tmatma/SetStartupProjectVS/master/image/screenshot-en.png" width="900"/>
 
 </body>
 </html>
