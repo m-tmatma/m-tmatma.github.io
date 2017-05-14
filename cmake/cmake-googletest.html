@@ -1,0 +1,529 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>cmake で googletest を使う方法</title>
+<meta name="keywords" content="cmake" />
+<meta name="keywords" content="googletest" />
+</head>
+<body>
+<!-- User Heat Tag -->
+<!-- http://userheat.com -->
+<script type="text/javascript">
+(function(add, cla){window['UserHeatTag']=cla;window[cla]=window[cla]||function(){(window[cla].q=window[cla].q||[]).push(arguments)},window[cla].l=1*new Date();var ul=document.createElement('script');var tag = document.getElementsByTagName('script')[0];ul.async=1;ul.src=add;tag.parentNode.insertBefore(ul,tag);})('//uh.nakanohito.jp/uhj2/uh.js', '_uhtracker');_uhtracker({id:'uhG8g9zBC0'});
+</script>
+<!-- End User Heat Tag --><!-- Pt engine End -->
+<!-- Pt engine Start -->
+<!-- https://www.ptengine.jp/ -->
+<script type="text/javascript">
+    window._pt_lt = new Date().getTime();
+    window._pt_sp_2 = [];
+    _pt_sp_2.push('setAccount,52fcdfa3');
+    var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    (function() {
+        var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
+        atag.src = _protocol + 'js.ptengine.jp/pta.js';
+        var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
+        stag.src = _protocol + 'js.ptengine.jp/pts.js';
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+    })();
+</script>
+<!-- Pt engine End -->
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<!-- Start Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div align="left">
+	<div id="srchBox">
+	<style type="text/css">
+	#srchBox
+	{
+	width:298px;
+	_width:296px;
+	margin-bottom:10px;
+	background-color:#FFF9F9;
+	border-style:solid;
+	border-width:1px;
+	border-color:#EEEEEE;
+	color:#000000;
+	text-align:left;
+	}
+	#srchBox *
+	{
+	margin:0;
+	padding:0;
+	font-size:13px;
+	*font-size:small;
+	*font:x-small;
+	}
+	#srchBox a img
+	{
+	border:none;
+	}
+	#srchBox #srch
+	{
+	padding:10px 10px 0 10px;
+	}
+	#srchBox #srch #srchForm
+	{
+	white-space:nowrap;
+	}
+	#srchBox #srchInput
+	{
+	width:188px;
+	margin-right:6px;
+	vertical-align:bottom;
+	}
+	#srchBox #srchBtn
+	{
+	width:80px;
+	}
+	*html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	*:first-child+html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	#srchBox ul
+	{
+	margin-top:6px;
+	text-align:left;
+	}
+	#srchBox li
+	{
+	list-style-type:none;
+	display:inline;
+	zoom:1;
+	padding-right:10px;
+	}
+	#srchBox li input
+	{
+	zoom:1;
+	margin-right:2px;
+	_margin:-4px 0 -4px -4px;
+	vertical-align:middle;
+	border:0;
+	}
+	*:+html #srchBox li input
+	{
+	margin:-4px 0 -4px -4px;
+	}
+	#srchBox #srchLogo
+	{
+	margin:6px 6px 6px 0;
+	text-align:right;
+	}
+	#srchBox #srchLogo a
+	{
+	color:#666666;
+	text-decoration:none;
+	font-size:85%;
+	}
+	#srchBox #srchLogo a:hover
+	{
+	text-decoration:underline;
+	}
+
+	</style>
+	<form action="https://custom.search.yahoo.co.jp/search" method="get" id="srch">
+	<p id="srchForm">
+	<input type="text" name="p" id="srchInput"><input type="submit" value="検索" id="srchBtn">
+	<input type="hidden" id="fr" name="fr" value="cse">
+	<input type="hidden" id="ei" name="ei" value="UTF-8">
+	<input type="hidden" id="csid" name="csid" value="J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX">
+	</p>
+	<input type="hidden" name="vs" value="m-tmatma.github.io" id="yjInsite">
+	</form>
+	<p id="srchLogo"><a href="http://www.yahoo.co.jp"><img src="https://s.yimg.jp/images/search/customsearch/yjlogo/yjlogo_type1_fffafa.gif" width="124" height="20" alt="powered by Yahoo! JAPAN"></a></p>
+	<img src="https://custom.search.yahoo.co.jp/images/window/J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX.gif">
+	</div>
+	<!-- /#srchBox -->
+</div>
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="./">戻る</a>
+	次へ進む
+</div>
+<div align="right">
+$Date: 2017-05-14 17:03:58 +0900 (2017/05/14 (日)) $<br>
+$Revision: 1129 $<br>
+</div>
+
+<h1>cmake での googletest</h1>
+
+<h2>概要</h2>
+
+googletest を cmake で使う方法を説明します。
+
+<h2>サンプルプロジェクト<h2>
+
+<a href="https://github.com/m-tmatma/googletest-sample-cmake">https://github.com/m-tmatma/googletest-sample-cmake</a> に格納されています。
+
+<h2>取得方法<h2>
+
+<pre>
+> git clone --recursive https://github.com/m-tmatma/googletest-sample-cmake.git
+</pre>
+
+<pre>
+> git clone https://github.com/m-tmatma/googletest-sample-cmake.git
+> git submodule init
+> git submodule update
+</pre>
+
+<h2>プロジェクトの生成方法</h2>
+
+以下のように実行してプロジェクトを生成すれば Shared Library (DLL) になります。<br>
+
+<pre>
+mkdir build-on
+cd    build-on
+cmake -D BUILD_SHARED_LIBS=1 ..\googletest-sample-cmake\
+</pre>
+
+以下のように実行してプロジェクトを生成すれば Static Library になります。<br>
+
+<pre>
+mkdir build-off
+cd    build-off
+cmake -D BUILD_SHARED_LIBS=0 ..\googletest-sample-cmake\
+</pre>
+
+<h2>サンプルのプロジェクトの構成</h2>
+
+<pre>
+│  CMakeLists.txt
+│  runtime.cmake
+│
+├─googletest
+│
+├─src
+│      CMakeLists.txt
+│      calc.cpp
+│      calc.h
+│
+└─tests
+        CMakeLists.txt
+        test.cpp
+        test2.cpp
+</pre>
+
+
+<h2>トップのruntime.cmakeの定義</h2>
+
+<pre>
+########################################################################################################
+# see https://cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
+########################################################################################################
+if (NOT BUILD_SHARED_LIBS)
+    foreach(flag_var
+            CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+            CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+       if(${flag_var} MATCHES "/MD")
+          string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+       endif(${flag_var} MATCHES "/MD")
+    endforeach(flag_var)
+endif (NOT BUILD_SHARED_LIBS)
+</pre>
+
+<p>
+BUILD_SHARED_LIBS が OFF のとき (static ライブラリのとき) /MT オプションを指定することで
+C のランタイムを static バージョンを使うようにします。
+</p>
+
+<h2>トップのプロジェクトの定義</h2>
+
+CMakeLists.txt
+
+<pre>
+# set 3.6 to use VS_STARTUP_PROJECT
+cmake_minimum_required(VERSION 3.6)
+
+project (googletest-sample-cmake)
+
+option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
+if (APPLE)
+  set(CMAKE_MACOSX_RPATH 1)
+endif(APPLE)
+
+# switch DLL or static libary by specifying by command line
+set (LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
+  set (LIB_TYPE SHARED)
+endif (BUILD_SHARED_LIBS)
+
+# set Target Directories
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_subdirectory(googletest)
+add_subdirectory(src)
+add_subdirectory(tests)
+
+# set Startup Project
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "tests" )
+
+# turn on solution folder
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# create solution folder
+set_target_properties(gmock       PROPERTIES FOLDER GoogleTest)
+set_target_properties(gmock_main  PROPERTIES FOLDER GoogleTest)
+set_target_properties(gtest       PROPERTIES FOLDER GoogleTest)
+set_target_properties(gtest_main  PROPERTIES FOLDER GoogleTest)
+set_target_properties(calc        PROPERTIES FOLDER library)
+set_target_properties(tests       PROPERTIES FOLDER executable)
+</pre>
+
+Mac で警告ができるので以下を指定します。
+
+<pre>
+if (APPLE)
+  set(CMAKE_MACOSX_RPATH 1)
+endif(APPLE)
+</pre>
+
+
+以下定義で BUILD_SHARED_LIBS が ON(1) になっていたら ${LIB_TYPE} は SHARED (Shared Library) になります。<br>
+
+<pre>
+# switch DLL or static libary by specifying by command line
+set (LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
+  set (LIB_TYPE SHARED)
+endif (BUILD_SHARED_LIBS)
+</pre>
+
+BUILD_SHARED_LIBS が OFF(0) になっていたら ${LIB_TYPE} は STATIC (Static Library) になります。<br>
+そして BUILD_SHARED_LIBS はコマンドラインで cmake を実行するときに上書きすることができます。<br>
+
+<p>
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) でライブラリ出力先フォルダを指定します。<br>
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) で実行ファイルの出力先フォルダを指定します。<br>
+CMAKE_BINARY_DIR の変数はビルドディレクトリのトップディレクトリを表します<br>
+</p>
+
+<p>
+<a href="http://qiita.com/osamu0329/items/7de2b190df3cfb4ad0ca">CMake : out-of-sourceビルドで幸せになる</a>を参考<br>
+</p>
+
+<p>
+add_subdirectory(googletest) 等でサブディレクトリをビルド対象にしています。<br>
+</p>
+
+<pre>
+# turn on solution folder
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# create solution folder
+set_target_properties(gmock       PROPERTIES FOLDER GoogleTest)
+set_target_properties(gmock_main  PROPERTIES FOLDER GoogleTest)
+set_target_properties(gtest       PROPERTIES FOLDER GoogleTest)
+set_target_properties(gtest_main  PROPERTIES FOLDER GoogleTest)
+set_target_properties(calc        PROPERTIES FOLDER library)
+set_target_properties(tests       PROPERTIES FOLDER executable)
+</pre>
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON) でソリューションフォルダの機能を有効にします。<br>
+set_target_properties(tests PROPERTIES FOLDER executable) で tests というプロジェクトを executable というソリューションフォルダに入れています。<br>
+GoogleTest 関連のプロジェクトは GoogleTest というフォルダに入れます<br>
+
+
+<h2>src のプロジェクトの定義</h2>
+
+Library/CMakeLists.txt
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+include (../runtime.cmake)
+
+# define a variable of project name
+set( project_name calc)
+
+# define a variable of project name
+project (${project_name})
+
+# define a variable SRC with file GLOB
+file(GLOB SRC *.cpp *.h)
+
+# define as exports
+if (BUILD_SHARED_LIBS)
+  add_definitions(-D${project_name}_EXPORTS)
+endif (BUILD_SHARED_LIBS)
+
+# add include directory for ${project_name}_Export.h
+include_directories(${PROJECT_BINARY_DIR})
+
+# define sources files of an executable
+ADD_LIBRARY(${project_name} ${LIB_TYPE} ${SRC} ${PROJECT_BINARY_DIR}/${project_name}_Export.h)
+
+include (GenerateExportHeader)
+GENERATE_EXPORT_HEADER( ${project_name}
+	BASE_NAME ${project_name}
+	EXPORT_MACRO_NAME ${project_name}_EXPORT
+	EXPORT_FILE_NAME ${project_name}_Export.h
+	STATIC_DEFINE ${project_name}_BUILT_AS_STATIC
+)
+</pre>
+
+親ディレクトリある runtime.cmake を読み込みます。
+
+<p>
+include (../runtime.cmake)
+</pre>
+
+<p>
+include_directories でインクルードディレクトリを指定します<br>
+${PROJECT_BINARY_DIR} はこのプロジェクトに対応するビルドディレクトリを意味します。<br>
+</p>
+
+<p>
+add_library でライブラリを定義します。${LIB_TYPE} のところで SHARED を指定すると shared Library(Windows ではDLL)になり,<br>
+STATIC を指定するとスタティックライブラリになります。<br>
+</p>
+
+<p>
+トップディレクトリにある CMakeLists.txt でこの変数を定義します。<br>
+</p>
+
+以下の指定では calc_Export.h というDLL のインポート、エクスポート指定のためのヘッダファイルを作成するための命令です。<br>
+
+<pre>
+include (GenerateExportHeader)
+GENERATE_EXPORT_HEADER( ${project_name}
+	BASE_NAME ${project_name}
+	EXPORT_MACRO_NAME ${project_name}_EXPORT
+	EXPORT_FILE_NAME ${project_name}_Export.h
+	STATIC_DEFINE ${project_name}_BUILT_AS_STATIC
+)
+</pre>
+
+以下のようなヘッダファイルが出力先に生成されます。これは Windows で実行したときの内容です。Mac や Linux では内容は異なります。<br>
+このファイルをインクルードするために include_directories(${PROJECT_BINARY_DIR}) の指定をしています。<br>
+
+<pre>
+
+#ifndef calc_EXPORT_H
+#define calc_EXPORT_H
+
+#ifdef calc_BUILT_AS_STATIC
+#  define calc_EXPORT
+#  define CALC_NO_EXPORT
+#else
+#  ifndef calc_EXPORT
+#    ifdef calc_EXPORTS
+        /* We are building this library */
+#      define calc_EXPORT __declspec(dllexport)
+#    else
+        /* We are using this library */
+#      define calc_EXPORT __declspec(dllimport)
+#    endif
+#  endif
+
+#  ifndef CALC_NO_EXPORT
+#    define CALC_NO_EXPORT 
+#  endif
+#endif
+
+#ifndef CALC_DEPRECATED
+#  define CALC_DEPRECATED __declspec(deprecated)
+#endif
+
+#ifndef CALC_DEPRECATED_EXPORT
+#  define CALC_DEPRECATED_EXPORT calc_EXPORT CALC_DEPRECATED
+#endif
+
+#ifndef CALC_DEPRECATED_NO_EXPORT
+#  define CALC_DEPRECATED_NO_EXPORT CALC_NO_EXPORT CALC_DEPRECATED
+#endif
+
+#if 0 /* DEFINE_NO_DEPRECATED */
+#  ifndef CALC_NO_DEPRECATED
+#    define CALC_NO_DEPRECATED
+#  endif
+#endif
+
+#endif
+</pre>
+
+<h2>exe のプロジェクトの定義</h2>
+
+tests/CMakeLists.txt
+
+<pre>
+cmake_minimum_required(VERSION 2.6.4)
+
+include (../runtime.cmake)
+
+# define a variable of project name
+set( project_name tests)
+
+# define a project name
+project (${project_name})
+
+# define a variable SRC with file GLOB
+file(GLOB SRC *.cpp *.h)
+
+# add include directories
+include_directories(../googletest/googletest/include)
+include_directories(../src)
+
+# add include directory for ${project_name}_Export.h
+include_directories(${PROJECT_BINARY_DIR}/../src)
+
+# define sources files of an executable
+add_executable(${project_name} ${SRC})
+
+# link libraries
+target_link_libraries(${project_name} gtest)
+target_link_libraries(${project_name} gtest_main)
+target_link_libraries(${project_name} calc)
+</pre>
+
+<p>
+include_directories でインクルードディレクトリの指定をしていますが、
+${PROJECT_BINARY_DIR} を参照する場合、Program のプロジェクトに対する生成ディレクトリなので
+calc のプロジェクトに対するフォルダを指定する必要があるので ../src を追加しています。
+</p>
+
+<p>
+target_link_libraries でリンクするライブラリを指定しています。GoogleTest の gtest と gtest_main と calc をリンクしています。
+</p>
+
+</body>
+</html>
