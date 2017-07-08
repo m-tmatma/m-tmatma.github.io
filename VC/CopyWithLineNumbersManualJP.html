@@ -2,10 +2,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>CopyWithLineNumbers Manual</title>
+<title>CopyWithLineNumbers (行番号付きでコピーするプラグイン) のマニュアル</title>
 <meta name="keywords" content="Visual Studio" />
 <meta name="keywords" content="Visual Studio 2017" />
 <meta name="keywords" content="Visual Studio 2015" />
+<meta name="keywords" content="プラグイン" />
+<meta name="keywords" content="両対応" />
+<meta name="keywords" content="both" />
 <meta name="keywords" content="Plugin" />
 <meta name="keywords" content="Copy With Line Numbers" />
 </head>
@@ -59,7 +62,7 @@
 	<div align="right">
 	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
 	<strong>
-	<a href="http://diary.fc2.com/">diary</a>
+	<a href="http://diary.fc2.com/">日記</a>
 	</strong>
 	</div>
 </noscript>
@@ -173,96 +176,101 @@
 	</div>
 	<!-- /#srchBox -->
 </div>
+<div class="index">
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="CopyWithLineNumbers.html">戻る</a>
+	<a href="SetStartupProjectVS.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2017-07-08 17:10:12 +0900 (2017/07/08 (土)) $<br>
+$Revision: 1133 $<br>
+</div>
 
-<h1>CopyWithLineNumbers Manual (Visual Studio Plugin)</h1>
+<h1>CopyWithLineNumbers マニュアル (Visual Studio プラグイン)</h1>
 
 <ul>
-<li>English</li>
-<li><a href="CopyWithLineNumbersManualJP.html">日本語</a></li>
+<li><a href="CopyWithLineNumbersManualEN.html">English</a></li>
+<li>日本語</li>
 </ul>
 
-<h2>GitHub</h2>
-
-<a href="https://github.com/m-tmatma/CopyWithLineNumbers">https://github.com/m-tmatma/CopyWithLineNumbers</a>
-
-
-<h2>How to install</h2>
+<h2>インストール方法</h2>
 
 <ol>
-<li>you can download from <a href="https://marketplace.visualstudio.com/items?itemName=tmatma.CopyWithLineNumbers-18783">here</a></li>
-<li>close all Visual Studio</li>
-<li>double click CopyWithLineNumbers.vsix</li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=tmatma.CopyWithLineNumbers-18783">ここ</a>からダウンロードできます</li>
+<li>すべての Visual Studio を閉じます</li>
+<li>CopyWithLineNumbers.vsix をダブルクリックします</li>
 </ol>
 
-<h2>How to use</h2>
+<h2>使い方</h2>
 
 <ol>
-<li>select on active document</li>
-<li>right click on active document</li>
-<li>Select "Copy With Line Numbers"</li>
+<li>アクティブドキュメントで選択します</li>
+<li>アクティブドキュメントで右クリックします</li>
+<li>"Copy With Line Numbers" を選択します</li>
 </ol>
 
-<h2>How to customize</h2>
+<h2>カスタマイズ方法</h2>
 
-You can customize the format of the copying text by template<br>
+テンプレートによりコピーするテキストをカスタマイズできます<br>
 
-<h3>template variable</h3>
+<h3>テンプレート用変数</h3>
 
 <p>
 <table>
 <tr>
-	<th>Variable Name</th>
-	<th>Description</th>
+	<th>変数名</th>
+	<th>説明</th>
 </tr>
 <tr>
 	<td>{FileName}</td>
-	<td>file name of the active document which doen't include directory name</td>
+	<td>ディレクトリ名を含まないファイル名</td>
 </tr>
 <tr>
 	<td>{FullPath}</td>
-	<td>abosolute file path of the active docuemnt</td>
+	<td>絶対パス</td>
 </tr>
 <tr>
 	<td>{RelativePath}</td>
-	<td>relative file path of the active docuemnt from the solution directory</td>
+	<td>ソリューションディレクトリからの相対パス</td>
 </tr>
 <tr>
 	<td>{TopLineNumber}</td>
-	<td>the line number of the first line of the selection</td>
+	<td>選択部分の最初の行番号</td>
 </tr>
 <tr>
 	<td>{BottomLineNumber}</td>
-	<td>the line number of the last line of the selection</td>
+	<td>選択部分の最後の行番号</td>
 </tr>
 <tr>
 	<td>{Selection}</td>
-	<td>the selection text which is added with the line number in each line</td>
+	<td>選択部分の各行に行番号を付与したテキスト</td>
 </tr>
 </table>
 </p>
 
-<h3>how to set the template</h3>
+<h3>テンプレートの設定方法</h3>
 
 <p>
 <ol>
-<li>Select Tools Menu</li>
-<li>Select Options...</li>
-<li>Select CopyWithLineNumbers</li>
-<li>Select an item from ComboBox</li>
-<li>press Insert button</li>
+<li>ツールメニューを選択します</li>
+<li>オプション(O)... を選択します</li>
+<li>CopyWithLineNumbers を選択します</li>
+<li>コンボボックスから挿入したい項目を選択します</li>
+<li>Insert ボタンを押します</li>
 </ol>
 </p>
 
-If you want to insert New Line, please press "Insert EOL" button<br>
-If you want to set to default, please press "Set Default" button<br>
+改行を入力したい場合 "Insert EOL" ボタンを押します<br>
+初期設定に戻したい場合、"Set Default" ボタンを押します。<br>
 
-<h2>example</h2>
+<h2>例</h2>
 
-<h3>example setting</h3>
+<h3>設定例</h3>
 
 <image src="image/CopyWithLineNumbers-setting.png" />
 
-<h3>example output</h3>
+<h3>出力例</h3>
 
 <pre>
 c:\gitwork\github\copywithlinenumbers\copywithlinenumbers\copywithlinenumberscommand.cs(24):
