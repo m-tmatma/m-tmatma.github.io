@@ -2,7 +2,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>Visual Studio</title>
+<title>Google Test Adapter を使う方法</title>
+<meta name="keywords" content="Google Test Adapter" />
+<meta name="keywords" content="googletest" />
 <meta name="keywords" content="Visual Studio" />
 </head>
 <body>
@@ -172,29 +174,47 @@
 <div class="index">
 	<a href="../contact.html">連絡先</a>
 	<a href="../">最初に戻る</a>
-	<a href="../">戻る</a>
-	<a href="compile-on-linux.html">次へ進む</a>
+	<a href="SetStartupProjectVS.html">戻る</a>
+	次へ進む
 </div>
 <div align="right">
-$Date: 2017-07-29 13:35:28 +0900 (土, 29 7 2017) $<br>
+$Date: 2017-07-29 13:35:28 +0900 (2017/07/29 (土)) $<br>
 $Revision: 1139 $<br>
 </div>
 
-<h1>VC</h1>
+<h1>Google Test Adapter を使う方法</h1>
 
-<h2>VC のページ</h2>
-<ul>
-<li><a href="https://marketplace.visualstudio.com/search?term=publisher%3A%22tmatma%22&target=VS&category=All%20categories&vsVersion=&sortBy=Relevance">自作のプラグイン</a></li>
-<li><a href="commandline.html">コマンドラインによる Visual Studio コンパイル</a></li>
-<li><a href="ForceUTF8.html">Visual Studio プラグイン ForceUTF8/ForceUTF8 with BOM</a></li>
-<li><a href="VSPlugin.html">Visual Studio プラグインの作り方 on Visual Studio 2017</a></li>
-<li><a href="VSPlugin-2015-and-2017.html">Visual Studio プラグインの作り方 Visual Studio 2015/2017 両対応</a></li>
-<li><a href="CopyWithLineNumbers.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)</a></li>
-<li><a href="CopyWithLineNumbersManualJP.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)のマニュアル (日本語)</a></li>
-<li><a href="CopyWithLineNumbersManualEN.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)のマニュアル (英語)</a></li>
-<li><a href="SetStartupProjectVS.html">SetStartupProjectVS (Visual Studio のスタートアッププロジェクトを変更するプラグイン)</a></li>
-<li><a href="GoogleTestAdapter.html">Google Test Adapter を使う方法</a></li>
-</ul>
+<h2>概要</h2>
+
+<a href="https://marketplace.visualstudio.com/items?itemName=ChristianSoltenborn.GoogleTestAdapter">Google Test Adapter</a>
+という Visual Studio で利用可能な Test Runner のブラグインがあるので紹介します。
+
+
+<h2>インストール方法</h2>
+
+<a href="https://marketplace.visualstudio.com/items?itemName=ChristianSoltenborn.GoogleTestAdapter">ここ</a>から vsix ファイルを
+ダウンロードしてダブルクリックして、インストールします。
+
+<h2>使い方</h2>
+
+<ol>
+<li>google test のテストプログラムをビルドします。</li>
+<li>テストメニューからウィンドウを選び、テストエクスプローラを選びます</li>
+<li>すべて実行を選びます</li>
+</ol>
+
+<h2>例</h2>
+
+<pre>
+git clone --recursive https://github.com/m-tmatma/googletest-sample-cmake.git
+cd googletest-sample-cmake
+mkdir build
+cd    build
+cmake -D BUILD_SHARED_LIBS=0 ..
+</pre>
+
+<img src="google-test-runner.png" />
+
 
 </body>
 </html>
