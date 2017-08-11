@@ -178,8 +178,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-08-10 11:16:29 +0900 (2017/08/10 (木)) $<br>
-$Revision: 1143 $<br>
+$Date: 2017-08-11 10:23:46 +0900 (2017/08/11 (金)) $<br>
+$Revision: 1145 $<br>
 </div>
 
 <h1>gitbucket の rpm による Fedora 26 へのインストール方法</h1>
@@ -205,7 +205,7 @@ Pull Request を送っています。
 $ git clone https://github.com/m-tmatma/gitbucket.git
 $ cd gitbucket
 $ git checkout -b script-for-creating-rpm origin/script-for-creating-rpm
-$ ./contrib/linux/redhat/createrpm.sh 4.15.0
+$ ./contrib/linux/redhat/create-rpm.py --version 4.15.0
 </pre>
 
 <p>
@@ -215,6 +215,14 @@ https://github.com/gitbucket/gitbucket/releases から gitbucket.war をダウ�
 
 <p>
 カレントディレクトリに gitbucket-4.15.0-1.fc26.noarch.rpm ができます。<br>
+</p>
+
+以下のようにポートをオプションで指定できます。
+
+<p>
+<pre>
+$ ./contrib/linux/redhat/create-rpm.py --version 4.15.0 <strong>--port 8888</strong>
+</pre>
 </p>
 
 <h2>gitbucket のインストール</h2>
