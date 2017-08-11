@@ -177,8 +177,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-08-11 16:19:51 +0900 (2017/08/11 (金)) $<br>
-$Revision: 1153 $<br>
+$Date: 2017-08-11 18:20:24 +0900 (2017/08/11 (金)) $<br>
+$Revision: 1155 $<br>
 </div>
 
 <h1>github のリリースバージョンを列挙する方法</h1>
@@ -231,7 +231,7 @@ def enum_release(owner, repos):
     result = urllib2.urlopen(URL)
 
     # "tag_name":"x.xx.x"
-    re_release = re.compile(r'"tag_name":"(?P<version>.+?)",')
+    re_release = re.compile(r'"tag_name":"(?P&lt;version&gt;.+?)",')
 
     content = ""
     for data in result:
