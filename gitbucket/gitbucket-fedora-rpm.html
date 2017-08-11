@@ -181,8 +181,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-08-11 10:47:44 +0900 (2017/08/11 (金)) $<br>
-$Revision: 1148 $<br>
+$Date: 2017-08-11 14:38:06 +0900 (2017/08/11 (金)) $<br>
+$Revision: 1150 $<br>
 </div>
 
 <h1>gitbucket の rpm による Fedora 26 へのインストール方法</h1>
@@ -208,13 +208,17 @@ $ cd gitbucket
 $ git checkout -b script-for-creating-rpm origin/script-for-creating-rpm
 </pre>
 
+<h2>gitbucket の利用可能なバージョンを表示する</h2>
+
+<pre>
+$ ./contrib/linux/redhat/create-rpm.py --command list-version
+</pre>
+
 <h2>gitbucket 用の rpm を作成する</h2>
 
 <ul>
 <li>./contrib/linux/redhat/create-rpm.py で rpm ファイルを作成します。</li>
 <li>--version で作成する gitbucket のバージョンを指定します。</li>
-<li><a href="https://github.com/gitbucket/gitbucket/releases">https://github.com/gitbucket/gitbucket/releases</a> にアクセスして作成するバージョンを調べてください。</li>
-<li>create-rpm.py は <a href="https://github.com/gitbucket/gitbucket/releases">https://github.com/gitbucket/gitbucket/releases</a> から gitbucket.war をダウンロードしてきて rpm を作成します。</li>
 <li>カレントディレクトリに gitbucket-&lt;version&gt;.fc26.noarch.rpm ができます。</li>
 </ul>
 
@@ -222,7 +226,7 @@ $ git checkout -b script-for-creating-rpm origin/script-for-creating-rpm
 <h3>ポート指定なしの場合 (ポートは 8080 になる)</h3>
 
 <pre>
-$ ./contrib/linux/redhat/create-rpm.py --version 4.15.0
+$ ./contrib/linux/redhat/create-rpm.py --command create --version 4.15.0
 </pre>
 
 <h3>ポート指定する場合</h3>
@@ -230,7 +234,7 @@ $ ./contrib/linux/redhat/create-rpm.py --version 4.15.0
 Jenkins などを使っているときに使用するポートを変えたいときに使用します。
 
 <pre>
-$ ./contrib/linux/redhat/create-rpm.py --version 4.15.0 <strong>--port 8888</strong>
+$ ./contrib/linux/redhat/create-rpm.py --command create --version 4.15.0 <strong>--port 8888</strong>
 </pre>
 
 <h2>gitbucket のインストール</h2>
