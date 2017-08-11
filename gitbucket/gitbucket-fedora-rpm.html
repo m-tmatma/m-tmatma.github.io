@@ -178,8 +178,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-08-11 10:28:20 +0900 (2017/08/11 (金)) $<br>
-$Revision: 1146 $<br>
+$Date: 2017-08-11 10:44:31 +0900 (2017/08/11 (金)) $<br>
+$Revision: 1147 $<br>
 </div>
 
 <h1>gitbucket の rpm による Fedora 26 へのインストール方法</h1>
@@ -193,44 +193,48 @@ Fedora 用の RPM が提供されていません。このサイトでは Fedora 
 # dnf install -y rpm-build
 </pre>
 
-<h2>gitbucket 用の rpm を作成するスクリプト</h2>
+<h2>gitbucket 用の rpm を作成するスクリプトの取得</h2>
 
 <a href="https://github.com/m-tmatma/gitbucket.git">https://github.com/m-tmatma/gitbucket.git</a> で公開しています。<br>
 また <a href="https://github.com/gitbucket/gitbucket/pull/1662">https://github.com/gitbucket/gitbucket/pull/1662</a> で
 Pull Request を送っています。
 
-<h2>gitbucket 用の rpm を作成する</h2>
-
 <pre>
 $ git clone https://github.com/m-tmatma/gitbucket.git
 $ cd gitbucket
 $ git checkout -b script-for-creating-rpm origin/script-for-creating-rpm
+</pre>
+
+<h2>gitbucket 用の rpm を作成する</h2>
+
+<ul>
+<li>./contrib/linux/redhat/create-rpm.py で rpm ファイルを作成します。</li>
+<li>--version で作成する gitbucket のバージョンを指定します。</li>
+<li><a href="https://github.com/gitbucket/gitbucket/releases">https://github.com/gitbucket/gitbucket/releases</a> にアクセスして作成するバージョンを調べてください。</li>
+<li>create-rpm.py は <a href="https://github.com/gitbucket/gitbucket/releases">https://github.com/gitbucket/gitbucket/releases</a> から gitbucket.war をダウンロードしてきて rpm を作成します。</li>
+<li>カレントディレクトリに gitbucket-&lt;version&gt;.fc26.noarch.rpm ができます。</li>
+</ul>
+
+
+<h3>ポート指定なしの場合 (ポートは 8080 になる)</h3>
+
+<pre>
 $ ./contrib/linux/redhat/create-rpm.py --version 4.15.0
 </pre>
 
-<p>
-ここで 4.15.0 というのは GitBucket のバージョンです。<br>
-<a href="https://github.com/gitbucket/gitbucket/releases">https://github.com/gitbucket/gitbucket/releases</a> から gitbucket.war をダウンロードしてきて rpm を作成します。<br>
-</p>
+<h3>ポート指定する場合</h3>
 
-<p>
-カレントディレクトリに gitbucket-4.15.0-1.fc26.noarch.rpm ができます。<br>
-</p>
+Jenkins などを使っているときに使用するポートを変えたいときに使用します。
 
-以下のようにポートをオプションで指定できます。
-
-<p>
 <pre>
 $ ./contrib/linux/redhat/create-rpm.py --version 4.15.0 <strong>--port 8888</strong>
 </pre>
-</p>
 
 <h2>gitbucket のインストール</h2>
 
 <pre>
 # dnf install -y gitbucket-4.15.0-1.fc26.noarch.rpm
 </pre>
-
 
 <h2>gitbucket の起動</h2>
 
