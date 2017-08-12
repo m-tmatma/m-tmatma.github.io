@@ -181,8 +181,8 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-08-11 14:43:05 +0900 (2017/08/11 (金)) $<br>
-$Revision: 1151 $<br>
+$Date: 2017-08-12 22:19:04 +0900 (2017/08/12 (土)) $<br>
+$Revision: 1158 $<br>
 </div>
 
 <h1>gitbucket の rpm による Fedora 26 へのインストール方法</h1>
@@ -261,6 +261,13 @@ $ ./contrib/linux/redhat/create-rpm.py --command create --version 4.15.0 <strong
 
 <pre>
 # chkconfig gitbucket on
+</pre>
+
+<h2>ファイアーウォールの設定 (port 8080 を許可)</h2>
+
+<pre>
+# firewall-cmd --permanent --add-port=8080/tcp
+# firewall-cmd --reload
 </pre>
 
 <h2>設定ファイル</h2>
