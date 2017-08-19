@@ -33,7 +33,7 @@ set ROOTDIR=llvm
 set BUILDDIR=build-%BUILDTOOL%-%BUILD_ARCH%
 set DIR=%~dp0
 
-cd /d %DIR%
+pushd %DIR%
 
 if exist %ROOTDIR% (
 	svn update  %ROOTDIR%
@@ -97,25 +97,19 @@ if "%BUILD_ACTION%" == "rebuild" (
 	if not exist %BUILDDIR% mkdir %BUILDDIR%
 )
 
-cd %BUILDDIR%
+pushd %BUILDDIR%
 
 del /Q LLVM-*.exe
 
+@echo on
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
 if "%BUILDTOOL%" == "ninja" (
-    @echo on
-	call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
 	"C:\Program Files\CMake\bin\cmake.exe" -G %CMAKE_GENERATOR% -D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release ..
 	"C:\Program Files (x86)\Ninja\ninja.exe" -v package
-    @echo off
 ) else if "%BUILDTOOL%" == "vs2017" (
-    @echo on
-	call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
 	"C:\Program Files\CMake\bin\cmake.exe" -G %CMAKE_GENERATOR% -D CMAKE_INSTALL_PREFIX=c:\clang
 	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LLVM.sln  /build "Release|Win32"
-    @echo off
 )
-
-cd /d %DIR%
 
 exit /b %ERRORLEVEL%
 
