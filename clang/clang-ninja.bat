@@ -69,7 +69,7 @@ if exist %ROOTDIR%\projects\libcxxabi (
 cd %ROOTDIR% || exit /b 1
 
 if "%BUILD_ACTION%" == "rebuild" (
-	echo rebuild
+	echo update clean
 	if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
 	if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
 	if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
@@ -82,6 +82,7 @@ if "%BUILD_ACTION%" == "rebuild" (
 	if not exist %BUILDDIR% mkdir %BUILDDIR%
 ) else if "%BUILD_ACTION%" == "update" (
 	echo update build
+	if not exist %BUILDDIR% mkdir %BUILDDIR%
 )
 
 cd %BUILDDIR%

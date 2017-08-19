@@ -82,6 +82,7 @@ if "%BUILD_ACTION%" == "rebuild" (
 	if not exist %BUILDDIR% mkdir %BUILDDIR%
 ) else if "%BUILD_ACTION%" == "update" (
 	echo update build
+	if not exist %BUILDDIR% mkdir %BUILDDIR%
 )
 
 cd %BUILDDIR%
