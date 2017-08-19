@@ -176,145 +176,171 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-05-06 22:21:48 +0900 (2017/05/06 (土)) $<br>
-$Revision: 1117 $<br>
+$Date: 2017-08-19 10:00:47 +0900 (2017/08/19 (土)) $<br>
+$Revision: 1161 $<br>
 </div>
 
 <h1>LLVM/clang コンパイル Windows (VC)</h1>
-
-<h2>svn から取得</h2>
-
-checkout.bat
-
-<pre>
-set DIR=%~dp0
-
-cd /d %DIR%
-rmdir /s /q llvm
-svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
-
-cd /d %DIR%
-cd llvm\tools
-svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
-
-cd /d %DIR%
-cd llvm\tools
-svn co http://llvm.org/svn/llvm-project/lld/trunk lld
-
-cd /d %DIR%
-cd llvm\tools
-svn co http://llvm.org/svn/llvm-project/polly/trunk polly
-
-cd /d %DIR%
-cd llvm\projects
-svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
-
-cd /d %DIR%
-cd llvm\projects
-svn co http://llvm.org/svn/llvm-project/openmp/trunk openmp
-
-cd /d %DIR%
-cd llvm\projects
-svn co http://llvm.org/svn/llvm-project/libcxx/trunk libcxx
-svn co http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi
-</pre>
 
 <h2>CMake</h2>
 
 <a href="https://cmake.org/">CMake</a> はWindows や Linux や Mac に対応したクロスプラットフォームのビルドツールです<br>
 <a href="../cmake/">CMake のページ</a> を作りました。
 
+<h2>Ninja</h2>
 
-<h2>プロジェクトの生成</h2>
+<a href="https://ninja-build.org/">Ninja</a> は make のようなビルドツールです。<br>
+<a href="https://github.com/ninja-build/ninja/releases">https://github.com/ninja-build/ninja/releases</a> からバイナリをダウンロードできます。
 
-..\llvm はソースコードツリーのパスです。
+<h2>NSIS</h2>
 
-
-<h3>インストールされている最新の Visual Studioを使う場合</h3>
-
-generate-vc.bat
-
-<pre>
-rmdir /s /q build-llvm
-mkdir build-llvm
-cd build-llvm
-cmake ^
--D CMAKE_INSTALL_PREFIX=c:\clang ^
-..\llvm
-</pre>
-
-<h3>Visual Studio 2017 を使う場合</h3>
-
-generate-vc2017.bat
-
-<pre>
-rmdir /s /q build2017-llvm
-mkdir build2017-llvm
-cd build2017-llvm
-cmake ^
-<strong>-G "Visual Studio 15 2017"</strong> ^
--D CMAKE_INSTALL_PREFIX=c:\clang ^
-..\llvm
-</pre>
-
-<h3>Visual Studio 2015 を使う場合</h3>
-
-generate-vc2015.bat
-
-<pre>
-rmdir /s /q build2015-llvm
-mkdir build2015-llvm
-cd build2015-llvm
-cmake ^
-<strong>-G "Visual Studio 14 2015"</strong> ^
--D CMAKE_INSTALL_PREFIX=c:\clang ^
-..\llvm
-</pre>
-
-<h3>Ninjaを使う場合</h3>
-
-<pre>
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
-
-rmdir /s /q build-ninja-llvm
-mkdir       build-ninja-llvm
-cd          build-ninja-llvm
-cmake ^
--G Ninja ^
--D CMAKE_INSTALL_PREFIX=c:\clang ^
--D CMAKE_BUILD_TYPE=Release ^
-..\llvm
-</pre>
-
-<h2>ビルド</h2>
-
-<h3>Visual Studio を使う場合</h3>
-
-LLVM.sln をダブルクリックして開き、ソリューションのビルドを行います。
-
-<h3>Ninjaを使う場合</h3>
-
-<pre>
-ninja
-</pre>
-
-<h2>パッケージの作成</h2>
-
-インストーラを作成します。<br>
 <a href="http://nsis.sourceforge.net/Download">NSIS</a> を使うのでダウンロードしてインストールします。
 
-<h3>Visual Studio を使う場合</h3>
 
-Visual Studio からPackage プロジェクトをビルドします。<br>
-でも r301888 現在ではパッケージの作成に失敗します。<br>
 
-<h3>Ninjaを使う場合</h3>
+<h2>svn から取得してビルド (ninja 使用)</h2>
+
+<a href="clang-ninja.bat">clang-ninja.bat</a>
 
 <pre>
-ninja package
+@echo off
+set PARAM_ARCH=%1
+if "%PARAM_ARCH%" == "x86" (
+	set BUILD_ARCH=%PARAM_ARCH%
+) else if "%PARAM_ARCH%" == "x64" (
+	set BUILD_ARCH=%PARAM_ARCH%
+) else (
+	goto SHOW_HELP
+)
+
+set ROOTDIR=llvm
+set BUILDDIR=build-ninja-%BUILD_ARCH%
+set DIR=%~dp0
+
+cd /d %DIR%
+
+if exist %ROOTDIR% (
+	svn update  %ROOTDIR%
+	svn update  %ROOTDIR%\tools\clang
+	svn update  %ROOTDIR%\tools\lld
+	svn update  %ROOTDIR%\tools\polly
+	svn update  %ROOTDIR%\projects\compiler-rt
+	svn update  %ROOTDIR%\projects\libcxx
+	svn update  %ROOTDIR%\projects\libcxxabi
+) else (
+	svn co    http://llvm.org/svn/llvm-project/llvm/trunk        %ROOTDIR%
+	svn co    http://llvm.org/svn/llvm-project/cfe/trunk         %ROOTDIR%\tools\clang
+	svn co    http://llvm.org/svn/llvm-project/lld/trunk         %ROOTDIR%\tools\lld
+	svn co    http://llvm.org/svn/llvm-project/polly/trunk       %ROOTDIR%\tools\polly
+	svn co    http://llvm.org/svn/llvm-project/compiler-rt/trunk %ROOTDIR%\projects\compiler-rt
+	svn co    http://llvm.org/svn/llvm-project/libcxx/trunk      %ROOTDIR%\projects\libcxx
+	svn co    http://llvm.org/svn/llvm-project/libcxxabi/trunk   %ROOTDIR%\projects\libcxxabi
+)
+
+cd %ROOTDIR% || exit /b 1
+
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     exit /b 1
+if not exist %BUILDDIR% mkdir %BUILDDIR%
+cd %BUILDDIR%
+
+del /Q LLVM-*.exe
+
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+"C:\Program Files\CMake\bin\cmake.exe" <strong>-G Ninja</strong> <strong>-D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release</strong> ..
+"C:\Program Files (x86)\Ninja\ninja.exe" -v package
+
+exit /b %ERRORLEVEL%
+
+:SHOW_HELP
+	@echo off
+	echo clang-ninja.bat ARCH
+	echo ARCH
+	echo x86: build for x86
+	echo x64: build for x64
+	exit /b 1
 </pre>
 
-LLVM-5.0.0svn-win32.exe というファイルがビルドディレクトリのトップに作成されます。
+LLVM-&lt;version&gt;-svn-win32.exe というファイルがビルドディレクトリのトップに作成されます。
+
+
+<h2>svn から取得してビルド (Visual Studio 2017 使用)</h2>
+
+<a href="clang-vs2017.bat">clang-vs2017.bat</a>
+
+<pre>
+@echo off
+set PARAM_ARCH=%1
+if "%PARAM_ARCH%" == "x86" (
+	set BUILD_ARCH=%PARAM_ARCH%
+) else if "%PARAM_ARCH%" == "x64" (
+	set BUILD_ARCH=%PARAM_ARCH%
+) else (
+	goto SHOW_HELP
+)
+
+set ROOTDIR=llvm
+set BUILDDIR=build-vs2017-%BUILD_ARCH%
+set DIR=%~dp0
+
+cd /d %DIR%
+
+if exist %ROOTDIR% (
+	svn update  %ROOTDIR%
+	svn update  %ROOTDIR%\tools\clang
+	svn update  %ROOTDIR%\tools\lld
+	svn update  %ROOTDIR%\tools\polly
+	svn update  %ROOTDIR%\projects\compiler-rt
+	svn update  %ROOTDIR%\projects\libcxx
+	svn update  %ROOTDIR%\projects\libcxxabi
+) else (
+	svn co    http://llvm.org/svn/llvm-project/llvm/trunk        %ROOTDIR%
+	svn co    http://llvm.org/svn/llvm-project/cfe/trunk         %ROOTDIR%\tools\clang
+	svn co    http://llvm.org/svn/llvm-project/lld/trunk         %ROOTDIR%\tools\lld
+	svn co    http://llvm.org/svn/llvm-project/polly/trunk       %ROOTDIR%\tools\polly
+	svn co    http://llvm.org/svn/llvm-project/compiler-rt/trunk %ROOTDIR%\projects\compiler-rt
+	svn co    http://llvm.org/svn/llvm-project/libcxx/trunk      %ROOTDIR%\projects\libcxx
+	svn co    http://llvm.org/svn/llvm-project/libcxxabi/trunk   %ROOTDIR%\projects\libcxxabi
+)
+
+cd %ROOTDIR% || exit /b 1
+
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     rmdir /s /q %BUILDDIR%
+if exist %BUILDDIR%     exit /b 1
+if not exist %BUILDDIR% mkdir %BUILDDIR%
+cd %BUILDDIR%
+
+del /Q LLVM-*.exe
+
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+"C:\Program Files\CMake\bin\cmake.exe" <strong>-G "Visual Studio 15 2017"</strong> -D CMAKE_INSTALL_PREFIX=c:\clang
+"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LLVM.sln  /rebuild "Release|Win32"
+
+exit /b %ERRORLEVEL%
+
+:SHOW_HELP
+	@echo off
+	echo clang-vs2017.bat ARCH
+	echo ARCH
+	echo x86: build for x86
+	echo x64: build for x64
+	exit /b 1
+
+</pre>
 
 </body>
 </html>
