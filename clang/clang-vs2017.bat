@@ -94,6 +94,8 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary
 "C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 15 2017" -D CMAKE_INSTALL_PREFIX=c:\clang
 "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LLVM.sln  /build "Release|Win32"
 
+cd /d %DIR%
+
 exit /b %ERRORLEVEL%
 
 :SHOW_HELP

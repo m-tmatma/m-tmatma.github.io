@@ -176,8 +176,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-08-19 10:15:43 +0900 (2017/08/19 (土)) $<br>
-$Revision: 1163 $<br>
+$Date: 2017-08-19 14:41:39 +0900 (2017/08/19 (土)) $<br>
+$Revision: 1170 $<br>
 </div>
 
 <h1>LLVM/clang コンパイル Windows (VC)</h1>
@@ -257,6 +257,8 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary
 "C:\Program Files\CMake\bin\cmake.exe" <strong>-G Ninja</strong> <strong>-D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release</strong> ..
 "C:\Program Files (x86)\Ninja\ninja.exe" -v package
 
+cd /d %DIR%
+
 exit /b %ERRORLEVEL%
 
 :SHOW_HELP
@@ -329,6 +331,8 @@ del /Q LLVM-*.exe
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
 "C:\Program Files\CMake\bin\cmake.exe" <strong>-G "Visual Studio 15 2017"</strong> -D CMAKE_INSTALL_PREFIX=c:\clang
 "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LLVM.sln  /rebuild "Release|Win32"
+
+cd /d %DIR%
 
 exit /b %ERRORLEVEL%
 

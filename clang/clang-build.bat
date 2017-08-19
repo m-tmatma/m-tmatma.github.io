@@ -115,6 +115,8 @@ if "%BUILDTOOL%" == "ninja" (
     @echo off
 )
 
+cd /d %DIR%
+
 exit /b %ERRORLEVEL%
 
 :SHOW_HELP

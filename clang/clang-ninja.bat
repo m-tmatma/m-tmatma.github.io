@@ -94,6 +94,8 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary
 "C:\Program Files\CMake\bin\cmake.exe" -G Ninja -D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release ..
 "C:\Program Files (x86)\Ninja\ninja.exe" -v package
 
+cd /d %DIR%
+
 exit /b %ERRORLEVEL%
 
 :SHOW_HELP
