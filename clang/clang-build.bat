@@ -1,5 +1,17 @@
 @echo off
-set PARAM_ARCH=%1
+
+set PARAM_BUILDTOOL=%1
+if "%PARAM_BUILDTOOL%" == "ninja" (
+	set BUILDTOOL=%PARAM_BUILDTOOL%
+	set CMAKE_GENERATOR=Ninja
+) else if "%PARAM_BUILDTOOL%" == "vs2017" (
+	set BUILDTOOL=%PARAM_BUILDTOOL%
+	set CMAKE_GENERATOR="Visual Studio 15 2017"
+) else (
+	goto SHOW_HELP
+)
+
+set PARAM_ARCH=%2
 if "%PARAM_ARCH%" == "x86" (
 	set BUILD_ARCH=%PARAM_ARCH%
 ) else if "%PARAM_ARCH%" == "x64" (
@@ -8,7 +20,7 @@ if "%PARAM_ARCH%" == "x86" (
 	goto SHOW_HELP
 )
 
-set PARAM_ACTION=%2
+set PARAM_ACTION=%3
 if "%PARAM_ACTION%" == "rebuild" (
 	set BUILD_ACTION=%PARAM_ACTION%
 ) else if "%PARAM_ACTION%" == "update" (
@@ -18,7 +30,7 @@ if "%PARAM_ACTION%" == "rebuild" (
 )
 
 set ROOTDIR=llvm
-set BUILDDIR=build-ninja-%BUILD_ARCH%
+set BUILDDIR=build-%BUILDTOOL%-%BUILD_ARCH%
 set DIR=%~dp0
 
 cd /d %DIR%
@@ -81,23 +93,35 @@ if "%BUILD_ACTION%" == "rebuild" (
 	if exist %BUILDDIR%     exit /b 1
 	if not exist %BUILDDIR% mkdir %BUILDDIR%
 ) else if "%BUILD_ACTION%" == "update" (
-	echo update build
+	echo update
 )
 
 cd %BUILDDIR%
 
 del /Q LLVM-*.exe
 
-@echo on
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
-"C:\Program Files\CMake\bin\cmake.exe" -G Ninja -D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release ..
-"C:\Program Files (x86)\Ninja\ninja.exe" -v package
+if "%BUILDTOOL%" == "ninja" (
+    @echo on
+	call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
+	"C:\Program Files\CMake\bin\cmake.exe" -G %CMAKE_GENERATOR% -D CMAKE_INSTALL_PREFIX=c:\clang -D CMAKE_BUILD_TYPE=Release ..
+	"C:\Program Files (x86)\Ninja\ninja.exe" -v package
+    @echo off
+) else if "%BUILDTOOL%" == "vs2017" (
+    @echo on
+	call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %BUILD_ARCH%
+	"C:\Program Files\CMake\bin\cmake.exe" -G %CMAKE_GENERATOR% -D CMAKE_INSTALL_PREFIX=c:\clang
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" LLVM.sln  /build "Release|Win32"
+    @echo off
+)
 
 exit /b %ERRORLEVEL%
 
 :SHOW_HELP
 	@echo off
-	echo clang-ninja.bat ARCH [action]
+	echo clang-build.bat BUILDTOOL ARCH [action]
+	echo BUILDTOOL
+	echo ninja
+	echo vs2017
 	echo ARCH
 	echo x86: build for x86
 	echo x64: build for x64
