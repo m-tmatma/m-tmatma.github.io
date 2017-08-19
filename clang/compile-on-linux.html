@@ -176,8 +176,8 @@
 	<a href="compile-on-windows.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2017-05-06 22:21:48 +0900 (2017/05/06 (土)) $<br>
-$Revision: 1117 $<br>
+$Date: 2017-08-19 11:51:30 +0900 (2017/08/19 (土)) $<br>
+$Revision: 1164 $<br>
 </div>
 
 <h1>LLVM/clang コンパイル Linux</h1>
@@ -259,7 +259,7 @@ build-ninja-clang.sh (clang を使う場合)
 rm -rf build
 mkdir build
 cd build
-<strong>CC=/usr/bin/clang</strong cmake \
+<strong>CC=/usr/bin/clang</strong> cmake \
 -G Ninja  \
 -D CMAKE_BUILD_TYPE=Release \
 -D CMAKE_INSTALL_PREFIX=${HOME}/local \
