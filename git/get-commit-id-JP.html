@@ -182,8 +182,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-08-26 17:59:11 +0900 (2017/08/26 (土)) $<br>
-$Revision: 1175 $<br>
+$Date: 2017-08-26 21:00:55 +0900 (2017/08/26 (土)) $<br>
+$Revision: 1176 $<br>
 </div>
 
 <h1>git の現在のコミットID を変数に格納する方法</h1>
@@ -202,6 +202,13 @@ for /f "usebackq" %%s in (`git show -s --format^=%%H`) do (
 )
 
 echo %COMMITID%
+</pre>
+
+<h2>実行例</h2>
+
+<pre>
+C:\gitwork\GitHub\cmake\cmake&gt;COMMITID.bat
+9538d22d955a0b101548019003f2d5c7ba833d77
 </pre>
 
 <h2>参考にしたサイト</h2>
