@@ -177,8 +177,8 @@
 	<a href="NUnit-Debug.html">次に進む</a>
 </div>
 <div align="right">
-$Date: 2017-09-02 07:38:05 +0900 (2017/09/02 (土)) $<br>
-$Revision: 1177 $<br>
+$Date: 2017-09-02 08:19:42 +0900 (2017/09/02 (土)) $<br>
+$Revision: 1178 $<br>
 </div>
 
 <h1>NUnit の使い方</h1>
@@ -244,10 +244,6 @@ using NUnit.Framework;
 </pre>
 
 以下がテストクラスです。<br>
-<strong>[TestFixture]</strong>でテストクラスの印をつけます。
-SetUp() でテスト前のセットアップをします。<strong>[SetUp]</strong> でセットアップメソッドの印をつけます。<br>
-TearDown() でテスト後の終了処理をします。<strong>[TearDown]</strong> で終了処理メソッドの印をつけます。<br>
-Test1() で実際のテストをします。
 
 <pre>
 using System;
@@ -279,12 +275,68 @@ namespace NUnitTestTest
         <strong>[Test]</strong>
         public void Test1()
         {
-            Assert.That(this.calc.Add(1, 2), Is.EqualTo(3));
+            <strong>Assert.That</strong>(this.calc.Add(1, 2), <strong>Is.EqualTo</strong>(3));
         }
     }
 }
 </pre>
 
+<h3>属性</h3>
+
+<table>
+	<tr>
+		<th>属性名名</th>
+		<th>説明</th>
+		<th>一次情報へのリンク (英語です)</th>
+	</tr>
+	<tr>
+		<td>[TestFixture]</td>
+		<td>クラスにテストクラスの印をつけます</td>
+		<td><a href="https://github.com/nunit/docs/wiki/TestFixture-Attribute">TestFixture Attribute</a></td>
+	</tr>
+	<tr>
+		<td>[SetUp]</td>
+		<td>
+			テスト前のセットアップを行うメソッドの印をつけます。<br>
+			通常はメソッド名はSetUp() という名前にします。(名前に制約はないです)
+		</td>
+		<td><a href="https://github.com/nunit/docs/wiki/SetUp-Attribute">SetUp Attribute</a></td>
+	</tr>
+	<tr>
+		<td>[TearDown]</td>
+		<td>
+			テスト後の終了処理を行うメソッドの印をつけます。<br>
+			通常はメソッド名はTearDown() という名前にします。(名前に制約はないです)
+		</td>
+		<td><a href="https://github.com/nunit/docs/wiki/TearDown-Attribute">TearDown Attribute</a></td>
+	</tr>
+	<tr>
+		<td>[Test]</td>
+		<td>
+			実際のテストをするメソッドの印をつけます。<br>
+			メソッド名はなんでも構いません。。
+		</td>
+		<td><a href="https://github.com/nunit/docs/wiki/Test-Attribute">Test Attribute</a></td>
+	</tr>
+</table>
+
+<p>
+すべての属性を確認したい場合は以下を参照<br>
+<a href="https://github.com/nunit/docs/wiki/Attributes">Attributes</a><br>
+</p>
+
+<h3>Assertion</h3>
+
+<p>
+Assert.That は特定の条件が成立するか確認して、成立しなければテストを失敗させる単体テストの核となる処理です。<br>
+Assert.That に関しては <a href="https://github.com/nunit/docs/wiki/Assertions">Assertions (英語)</a> や 
+<a href="https://github.com/nunit/docs/wiki/Constraint-Model">Constraint Model (英語)</a> で説明されています。<br>
+</p>
+
+<p>
+<strong>Assert.That</strong>(this.calc.Add(1, 2), <strong>Is.EqualTo</strong>(3)); は
+Calc.Add(1, 2) の戻り値が 3 であることを確認しています。<br>
+</p>
 
 <h2>コマンドラインからテストを実行します</h2>
 
