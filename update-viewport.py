@@ -20,7 +20,7 @@ def add_viewport(path):
 	# <meta name="viewport" content="width=device-width,initial-scale=1">
 	f_out  = codecs.open(path, 'w', 'utf-8')
 	for line in lines:
-		match1 = re.match(r'<head>\r\n', line, re.IGNORECASE)
+		match1 = re.match(r'<head>(\r)?\n', line, re.IGNORECASE)
 		match2 = re.match(r'<meta name="viewport"', line, re.IGNORECASE)
 		if match1:
 			f_out.write(line)
