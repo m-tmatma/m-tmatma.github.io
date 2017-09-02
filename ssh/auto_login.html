@@ -182,16 +182,17 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-09-02 17:23:41 +0900 (2017/09/02 (土)) $<br>
-$Revision: 1196 $<br>
+$Date: 2017-09-02 19:09:32 +0900 (2017/09/02 (土)) $<br>
+$Revision: 1201 $<br>
 </div>
 
-<h1>概要</h1>
+<h1>SSH の自動ログインメモ</h1>
+
 <p>
 SSH の自動ログインメモです
 </p>
 
-<h1>リンク</h1>
+<h2>リンク</h2>
 
 <ul>
 	<li>
@@ -226,11 +227,11 @@ SSH の自動ログインメモです
 	</li>
 </ul>
 
-<h1>手順</h1>
+<h2>手順</h2>
 
-<h2>クライアントPC</h2>
+<h3>クライアントPC</h3>
 
-<h3>公開鍵/秘密鍵の作成</h3>
+<h4>公開鍵/秘密鍵の作成</h4>
 
 <pre>
 $ ssh-keygen -t rsa
@@ -241,7 +242,7 @@ $ ssh-keygen -t rsa
 <li>公開鍵 .ssh/id_rsa.pub</li>
 </ul>
 
-<h3>公開鍵をサーバーに転送</h3>
+<h4>公開鍵をサーバーに転送</h4>
 
 <pre>
 $ scp .ssh/id_rsa.pub user@server:
@@ -250,15 +251,15 @@ $ scp .ssh/id_rsa.pub user@server:
 user → 実際のユーザー名に置き換えてください<br>
 server → 実際のサーバー名に置き換えてください<br>
 
-<h3>パーミッションの設定 (通常は不要)</h3>
+<h4>パーミッションの設定 (通常は不要)</h4>
 
 <pre>
 $ chmod 600 .ssh/id_rsa
 </pre>
 
-<h2>サーバー</h2>
+<h3>サーバー</h3>
 
-<h3>公開鍵のセット</h3>
+<h4>公開鍵のセット</h4>
 
 <pre>
 $ cat id_rsa.pub >>  .ssh/authorized_keys
@@ -266,7 +267,7 @@ $ rm  id_rsa.pub
 </pre>
 
 
-<h3>パーミッションの設定</h3>
+<h4>パーミッションの設定</h4>
 
 <pre>
 $ chmod <strong>755</strong> ~
@@ -274,7 +275,7 @@ $ chmod 700 ~/.ssh
 $ chmod 600 ~/.ssh/authorized_keys
 </pre>
 
-<h3>.ssh/authorized_keys と .ssh/authorized_keys2</h3>
+<h4>.ssh/authorized_keys と .ssh/authorized_keys2</h4>
 
 <ul>
 <li>新しいバージョン: .ssh/authorized_keys </li>
@@ -282,7 +283,7 @@ $ chmod 600 ~/.ssh/authorized_keys
 </ul>
 参考: <a href="http://www.unixuser.org/~euske/doc/openssh/jman/sshd_config.html">/etc/ssh/sshd_config</a> のAuthorizedKeysFile 
 
-<h1>動作しない場合</h1>
+<h2>動作しない場合</h2>
 
 以下をチェック
 <ul>
