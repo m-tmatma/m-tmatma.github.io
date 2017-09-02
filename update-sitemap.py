@@ -105,23 +105,41 @@ def dump_tree(trees, level, f_out):
 	f_out.write("\t" * level + '</ul>' + '\n')
 	f_out.write("\t" * level +  "<!-- end " + str(level) + " -->\n")
 
+def read_all_file(path):
+	f_in = codecs.open(path, 'r', 'utf-8')
+	lines = f_in.readlines()
+	f_in.close()
+	return lines
+
 scriptdir = os.path.dirname(os.path.realpath(__file__))
 sitemapfile = 'sitemap.html'
 temporalfile = 'sitemap.txt'
 sitemap_path = os.path.join(scriptdir, sitemapfile)
 temporal_path = os.path.join(scriptdir, temporalfile)
 
+header = 'sitemap-header.txt'
+footer = 'sitemap-footer.txt'
+header_path = os.path.join(scriptdir, header)
+footer_path = os.path.join(scriptdir, footer)
+
 if os.path.isfile(sitemap_path):
 	os.remove(sitemap_path)
 
 trees = create_list(scriptdir)
 
+header_lines = read_all_file(header_path)
+footer_lines = read_all_file(footer_path)
+
 f_out  = codecs.open(temporal_path, 'w', 'utf-8')
-f_out.write('<html>' + '\n')
-f_out.write('<body>' + '\n')
+
+for line in header_lines:
+	f_out.write(line)
+
 dump_tree(trees, 0, f_out)
-f_out.write('</body>' + '\n')
-f_out.write('</html>' + '\n')
+
+for line in footer_lines:
+	f_out.write(line)
+
 f_out.close()
 
 os.rename(temporal_path, sitemap_path)
