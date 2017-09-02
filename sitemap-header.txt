@@ -16,6 +16,7 @@
 <meta name="keywords" content="ForceUTF8" />
 <meta name="keywords" content="ForceUTF8 with BOM" />
 <meta name="keywords" content="Google Test Adapter" />
+<meta name="keywords" content="Google デジタルワークショップ" />
 <meta name="keywords" content="H.265" />
 <meta name="keywords" content="Jenkins" />
 <meta name="keywords" content="Linux" />
@@ -153,8 +154,10 @@
 <meta name="keywords" content="usebackq" />
 <meta name="keywords" content="vc6" />
 <meta name="keywords" content="very sleepy" />
+<meta name="keywords" content="viewport" />
 <meta name="keywords" content="virtualbox" />
 <meta name="keywords" content="vs2005" />
+<meta name="keywords" content="web" />
 <meta name="keywords" content="windows" />
 <meta name="keywords" content="wintest.py" />
 <meta name="keywords" content="wwwc" />
@@ -169,6 +172,7 @@
 <meta name="keywords" content="デバッグ" />
 <meta name="keywords" content="バックアップ" />
 <meta name="keywords" content="パーミッション" />
+<meta name="keywords" content="ビューポート" />
 <meta name="keywords" content="ビルド" />
 <meta name="keywords" content="ファイル削除" />
 <meta name="keywords" content="ファイル操作" />
@@ -177,9 +181,12 @@
 <meta name="keywords" content="プロジェクト" />
 <meta name="keywords" content="プロファイラ" />
 <meta name="keywords" content="プロファイラー" />
+<meta name="keywords" content="モバイルフレンドリー" />
+<meta name="keywords" content="モバイルフレンドリーテスト" />
 <meta name="keywords" content="ライトスルー" />
 <meta name="keywords" content="リバースプロキシ" />
 <meta name="keywords" content="リリース" />
+<meta name="keywords" content="レスポンシブデザイン" />
 <meta name="keywords" content="両対応" />
 <meta name="keywords" content="作業コピー" />
 <meta name="keywords" content="作業コピーなし" />
@@ -372,8 +379,8 @@
 </div>
 
 <div align="right">
-$Date: 2017-09-02 20:42:26 +0900 (2017/09/02 (土)) $<br>
-$Revision: 1204 $<br>
+$Date: 2017-09-03 07:36:28 +0900 (2017/09/03 (日)) $<br>
+$Revision: 1215 $<br>
 </div>
 
 <h1>サイトマップ</h1>
