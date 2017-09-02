@@ -89,6 +89,8 @@ def dump_tree(trees, level, f_out):
 			title = 'empty'
 		url = trees.indexhtml.replace('\\', '/')
 		f_out.write("\t" * (level + 1) + '<li><a href="' + url + '">' + title + '</a></li>' + '\n')
+	else:
+		f_out.write("\t" * (level + 1) + '<li>no index.html</li>' + '\n')
 
 	if trees.filelist:
 		f_out.write("\t" * (level + 1) +  '<ul>' + '\n')
