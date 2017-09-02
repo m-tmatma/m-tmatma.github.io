@@ -179,8 +179,8 @@
 	<a href="NUnit-Debug.html">次に進む</a>
 </div>
 <div align="right">
-$Date: 2017-09-02 09:31:11 +0900 (2017/09/02 (土)) $<br>
-$Revision: 1186 $<br>
+$Date: 2017-09-02 09:55:19 +0900 (2017/09/02 (土)) $<br>
+$Revision: 1187 $<br>
 </div>
 
 <h1>NUnit3 の使い方</h1>
@@ -232,6 +232,11 @@ namespace NUnitTestTest
         {
             return a + b;
         }
+
+        public int Devide(int a, int b)
+        {
+            return a / b;
+        }
     }
 }
 </pre>
@@ -274,10 +279,23 @@ namespace NUnitTestTest
             this.calc = null;
         }
 
+
         <strong>[Test]</strong>
-        public void Test1()
+        public void TestAdd()
         {
-            <strong>Assert.That</strong>(this.calc.Add(1, 2), <strong>Is.EqualTo</strong>(3));
+            <strong>Assert.That</strong>(this.calc.Add(1, 2), Is.EqualTo(3));
+        }
+
+        <strong>[Test]</strong>
+        public void TestDevide()
+        {
+            <strong>Assert.That</strong>(this.calc.Devide(2, 1), Is.EqualTo(2));
+        }
+
+        <strong>[Test]</strong>
+        public void TestDevideByZero()
+        {
+            <strong>Assert.Throws</strong>&lt;DivideByZeroException&gt;(() => this.calc.Devide(2, 0));
         }
     }
 }
@@ -338,6 +356,17 @@ Assert.That に関しては <a href="https://github.com/nunit/docs/wiki/Assertio
 <p>
 <strong>Assert.That</strong>(this.calc.Add(1, 2), <strong>Is.EqualTo</strong>(3)); は
 Calc.Add(1, 2) の戻り値が 3 であることを確認しています。<br>
+</p>
+
+<p>
+<strong>Assert.Throws</strong> は例外が発生することを期待する assert です。<br>
+以下で説明されています。<br>
+<a href="https://github.com/nunit/docs/wiki/Assert.Throws">Assert.Throws (英語)</a><br>
+</p>
+
+<p>
+<strong>Assert.Throws</strong>&lt;DivideByZeroException&gt;(() => this.calc.Devide(2, 0)); では<br>
+Calc.Devide(2, 0) が DivideByZeroException という例外を発生することを確認します。
 </p>
 
 <h2>コマンドラインからテストを実行します</h2>
