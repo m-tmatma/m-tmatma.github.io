@@ -59,6 +59,8 @@ pre
 	border-color: activeborder;
 	background-color: green;
 	color: white;
+	width: 100%;
+	overflow: auto;
 }
 
 strong
