@@ -24,7 +24,7 @@ def add_viewport(path):
 		match2 = re.match(r'<meta name="viewport"', line, re.IGNORECASE)
 		if match1:
 			f_out.write(line)
-			f_out.write('<meta name="viewport" content="width=device-width,initial-scale=1">\n')
+			f_out.write('<meta name="viewport" content="width=device-width,initial-scale=1">\r\n')
 		elif match2:
 			pass
 		else:
