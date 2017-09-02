@@ -65,7 +65,13 @@ def create_list(scriptdir):
 def get_title(path):
 	title = ""
 	f_in  = codecs.open(path, 'r', 'utf-8')
-	lines = f_in.readlines()
+
+	try:
+		lines = f_in.readlines()
+	except:
+		print "error on reading " + path
+		raise
+
 	for line in lines:
 		match = re.match(r'<title>(.*?)</title>', line, re.IGNORECASE)
 		if match:
