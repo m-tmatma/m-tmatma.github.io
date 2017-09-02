@@ -179,8 +179,8 @@
 	<a href="NUnit-Debug.html">次に進む</a>
 </div>
 <div align="right">
-$Date: 2017-09-02 10:07:09 +0900 (2017/09/02 (土)) $<br>
-$Revision: 1188 $<br>
+$Date: 2017-09-02 13:07:32 +0900 (2017/09/02 (土)) $<br>
+$Revision: 1189 $<br>
 </div>
 
 <h1>NUnit3 の使い方</h1>
@@ -295,7 +295,7 @@ namespace NUnitTestTest
         <strong>[Test]</strong>
         public void TestDevideByZero()
         {
-            <strong>Assert.That</strong>(() => this.calc.Devide(2, 0), <strong>Throws.TypeOf</strong>&lt;DivideByZeroException&gt;());
+            <strong>Assert.That</strong>(() => { this.calc.Devide(2, 0); }, <strong>Throws.TypeOf</strong>&lt;DivideByZeroException&gt;());
         }
     }
 }
@@ -365,13 +365,17 @@ Calc.Add(1, 2) の戻り値が 3 であることを確認しています。<br>
 </p>
 
 <p>
-<strong>Assert.That</strong>(() => this.calc.Devide(2, 0), <strong>Throws.TypeOf</strong>&lt;DivideByZeroException&gt;()); では<br>
+<strong>Assert.That</strong>(() => { this.calc.Devide(2, 0); }, <strong>Throws.TypeOf</strong>&lt;DivideByZeroException&gt;()); では<br>
 Calc.Devide(2, 0) が DivideByZeroException という例外を発生することを確認します。
 </p>
 
 <p>
-例外を発生しない場合の制約条件は以下<br>
-<a href="https://github.com/nunit/docs/wiki/ThrowsNothingConstraint">ThrowsNothingConstraint (英語)</a>
+例外を発生しない場合の制約条件は<br>
+<strong>Assert.That</strong>(() => { this.calc.Devide(2, 0); }, <strong>Throws.Nothing</strong>); <br>
+とします。もちろんこの場合はテストは失敗します。<br>
+
+以下で説明されています。<br>
+<a href="https://github.com/nunit/docs/wiki/ThrowsNothingConstraint">ThrowsNothingConstraint (英語)</a><br>
 </p>
 
 
