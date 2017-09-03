@@ -113,6 +113,24 @@ def read_all_file(path):
 	f_in.close()
 	return lines
 
+def create_sitemap_txt(scriptdir):
+	base_url = 'https://m-tmatma.github.io/'
+	sitemap_path = os.path.join(scriptdir, 'sitemap.txt')
+
+	f_out  = codecs.open(sitemap_path, 'w', 'utf-8')
+
+	for dirpath, dirnames, filenames in os.walk(scriptdir):
+		reldir = os.path.relpath(dirpath, scriptdir)
+
+		for file in filenames:
+			if file.endswith('.html'):
+				path = os.path.join(reldir, file)
+				path_converted = path.replace('\\', '/')
+				
+				url = base_url + path_converted
+				f_out.write(url + '\r\n')
+	f_out.close()
+
 scriptdir = os.path.dirname(os.path.realpath(__file__))
 sitemapfile = 'sitemap.html'
 temporalfile = 'sitemap.txt'
@@ -146,3 +164,4 @@ f_out.close()
 
 os.rename(temporal_path, sitemap_path)
 
+create_sitemap_txt(scriptdir)
