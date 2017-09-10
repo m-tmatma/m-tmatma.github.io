@@ -63,6 +63,12 @@ pre
 	overflow: auto;
 }
 
+img
+{
+	max-width: 90% ;
+	height: auto ;
+}
+
 strong
 {
 /*	text-decoration: overline underline; */
