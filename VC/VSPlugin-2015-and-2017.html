@@ -184,8 +184,8 @@
 	<a href="CopyWithLineNumbers.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2017-09-03 06:44:18 +0900 (日, 03 9 2017) $<br>
-$Revision: 1213 $<br>
+$Date: 2017-09-10 09:24:22 +0900 (2017/09/10 (日)) $<br>
+$Revision: 1231 $<br>
 </div>
 
 <h1>Visual Studio プラグインの作り方 Visual Studio 2015/2017 両対応</h1>
@@ -206,7 +206,7 @@ $Revision: 1213 $<br>
 <li>Microsoft.VisualStudio.Shell.15.0</li>
 </ul>
 
-<img src="image/dual-remove.png" width="900" />
+<img src="image/dual-remove.png"  />
 </p>
 
 <h2>NuGet で依存関係の追加</h2>
@@ -215,14 +215,14 @@ $Revision: 1213 $<br>
 
 ツール -> NuGet パッケージマネージャー -> ソリューションの NuGet パッケージの管理を選ぶ<br>
 
-<img src="image/dual-add-nuget1.png" width="900" /><br>
+<img src="image/dual-add-nuget1.png"  /><br>
 
 参照タブを選ぶ<br>
 エディットボックスに "VSSDK.DTE" と入力する。<br>
 "VSSDK.DTE" を選び、プロジェクトのチェックをつける<br>
 インストールを選ぶ<br>
 
-<img src="image/dual-add-nuget-VSSDK.DTE.png" width="900" /><br>
+<img src="image/dual-add-nuget-VSSDK.DTE.png"  /><br>
 
 
 <h3>VSSDK.DTE.10</h3>
@@ -237,7 +237,7 @@ $Revision: 1213 $<br>
 "VSSDK.Shell.10" を選び、プロジェクトのチェックをつける<br>
 インストールを選ぶ<br>
 
-<img src="image/dual-add-nuget-VSSDK.Shell.10.png" width="900" />
+<img src="image/dual-add-nuget-VSSDK.Shell.10.png"  />
 
 <h2>source.extension.vsixmanifest の編集</h2>
 
@@ -245,11 +245,11 @@ $Revision: 1213 $<br>
 
 source.extension.vsixmanifest をダブルクリックする。<br>
 
-<img src="image/dual-source.extension.png" width="900" /><br><br>
+<img src="image/dual-source.extension.png"  /><br><br>
 
 Install Targets タブを選び、Edit を選ぶ<br>
 
-<img src="image/dual-source.extension-install-targets.png" width="900" /><br><br>
+<img src="image/dual-source.extension-install-targets.png"  /><br><br>
 
 Edit 画面で Version Range で [14.0, 16.0) を設定し、OK を押す<br>
 14 = Visual Studio 2015<br>
@@ -264,17 +264,17 @@ Edit 画面で Version Range で [14.0, 16.0) を設定し、OK を押す<br>
 
 Dependencies タブを選び、Visual Studio MPF 15.0 を選び、Delete を選ぶ<br>
 
-<img src="image/dual-dependencies-delete.png" width="900" /><br><br>
+<img src="image/dual-dependencies-delete.png"  /><br><br>
 
 <h3>Prerequisites</h3>
 
 Prerequisites タブを選び、Edit を選ぶ<br>
 
-<img src="image/dual-prerequisites.png" width="900" /><br><br>
+<img src="image/dual-prerequisites.png"  /><br><br>
 
 Edit 画面で Version Range で [14.0, 16.0) を設定し、OK を押す<br>
 
-<img src="image/dual-edit-prerequisites.png" width="900" /><br><br>
+<img src="image/dual-edit-prerequisites.png"  /><br><br>
 
 <h2>ビルド</h2>
 
