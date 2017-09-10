@@ -18,6 +18,8 @@
 <meta name="keywords" content="Google Test Adapter" />
 <meta name="keywords" content="Google デジタルワークショップ" />
 <meta name="keywords" content="H.265" />
+<meta name="keywords" content="JNLP-connect" />
+<meta name="keywords" content="JNLP2-connect" />
 <meta name="keywords" content="Jenkins" />
 <meta name="keywords" content="Linux" />
 <meta name="keywords" content="NUnit" />
@@ -379,8 +381,8 @@
 </div>
 
 <div align="right">
-$Date: 2017-09-03 07:36:28 +0900 (2017/09/03 (日)) $<br>
-$Revision: 1215 $<br>
+$Date: 2017-09-10 09:05:54 +0900 (2017/09/10 (日)) $<br>
+$Revision: 1230 $<br>
 </div>
 
 <h1>サイトマップ</h1>
