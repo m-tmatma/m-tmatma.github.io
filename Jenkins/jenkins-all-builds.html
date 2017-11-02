@@ -3,10 +3,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>Jenkins の警告 (古いプロトコル) が出ないようにする方法</title>
+<title>Jenkins の過去と最新バージョン</title>
 <meta name="keywords" content="Jenkins" />
-<meta name="keywords" content="JNLP-connect" />
-<meta name="keywords" content="JNLP2-connect" />
+<meta name="keywords" content="古いバージョン" />
+<meta name="keywords" content="新しいバージョン" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -176,56 +176,23 @@
 	<a href="../sitemap.html">サイトマップ</a>
 	<a href="../contact.html">連絡先</a>
 	<a href="../">最初に戻る</a>
-	<a href="build-jenkins.html">戻る</a>
-	<a href="jenkins-all-builds.html">次へ進む</a>
+	<a href="jenkins-deprecated-protocol.html">戻る</a>
+	次へ進む
 </div>
 <div align="right">
 $Date: 2017-11-03 08:30:50 +0900 (2017/11/03 (金)) $<br>
 $Revision: 1235 $<br>
 </div>
 
-<h1>Jenkins の警告 (古いプロトコル) が出ないようにする方法</h1>
+<h1>Jenkins の過去と最新バージョン</h1>
 
 <h2>リンク</h2>
 
-参考: <a href="https://jenkins.io/blog/2017/08/11/remoting-update/">
-Remoting Update. Protocols deprecation, Java 8 requirement and plans
+Jenkins の過去と最新バージョンのバイナリを以下から取得できます。<br>
+
+<a href="http://mirrors.jenkins-ci.org/">
+http://mirrors.jenkins-ci.org/
 </a>
-
-<h2>Jenkins の警告</h2>
-
-Jenkins を 2.75 以降にアップデートすると以下の警告が出るようになります。<br>
-
-<p>
-This Jenkins instance uses deprecated protocols: JNLP-connect,JNLP2-connect. 
-It may impact stability of the instance. If newer protocol versions are supported 
-by all system components (agents, CLI and other clients), it is highly recommended 
-to disable the deprecated protocols. 
-</p>
-
-こんな感じ
-
-<img src="image/warning.png" />
-
-<h2>Jenkins の警告を無くす方法</h2>
-
-1. "Protocol Configuation" をクリックすると http://jenkins/configureSecurity/ に移動します。<br>
-2. Agents の "Agent Protocols..." をクリックします。<br>
-3. 以下の 3 つの項目のチェックを外します。
-
-<ul>
-<li>Java Web Start Agent Protocol/1 (deprecated, unencrypted)</li>
-<li>Java Web Start Agent Protocol/2 (deprecated, unencrypted)</li>
-<li>Java Web Start Agent Protocol/3 (deprecated, basic encryption)</li>
-</ul>
-
-4. 保存をクリックします。<br>
-
-<img src="image/agent-protocols.png" />
-<img src="image/disable-deprecated-protocols.png" />
 
 </body>
 </html>
-
-
-
