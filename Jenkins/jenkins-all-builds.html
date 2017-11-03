@@ -180,8 +180,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2017-11-03 08:30:50 +0900 (2017/11/03 (金)) $<br>
-$Revision: 1235 $<br>
+$Date: 2017-11-03 09:09:33 +0900 (2017/11/03 (金)) $<br>
+$Revision: 1236 $<br>
 </div>
 
 <h1>Jenkins の過去と最新バージョン</h1>
@@ -193,6 +193,35 @@ Jenkins の過去と最新バージョンのバイナリを以下から取得で
 <a href="http://mirrors.jenkins-ci.org/">
 http://mirrors.jenkins-ci.org/
 </a>
+
+<h2>表示順番</h2>
+
+<p>
+<a href="http://www.tempest.jp/linux/fedora/documents/text408.html">apacheのインデックス表示をソートするには</a> によると<br>
+ディレクトリのリストアップを表示するときに ? のあとにソートする条件、その後に昇順、降順を指定して表示することができます。<br>
+</p>
+
+参考
+
+<p>
+<a href="https://httpd.apache.org/docs/2.4/ja/mod/mod_autoindex.html#query">Autoindex リクエストクエリー引数</a>
+</p>
+
+<h3>Windows 用のWeekly ビルドのバイナリの例</h3>
+
+<p>
+<a href="http://mirrors.jenkins-ci.org/">http://mirrors.jenkins-ci.org/</a> の中のリンクの中で<br>
+例えば、Windows 用のWeekly ビルドのバイナリは <a href="http://mirrors.jenkins-ci.org/windows/">http://mirrors.jenkins-ci.org/windows/</a>ですが、<br>
+ファイル名順昇順にに並んでいます。<br>
+</p>
+
+これをファイルの更新日時、ファイル名の順番に並べたい場合 C=M を指定します。<br>
+そしてこれを降順に並べたい場合、 O=D を指定します。<br>
+
+<h3>ファイルの更新日時、ファイル名の順番に降順</h3>
+
+Windows 用のWeekly ビルドのバイナリは以下URL でファイルの更新日時、ファイル名の順番に降順に並べることができます。<br>
+<a href="http://mirrors.jenkins-ci.org/windows/?C=M&O=D">http://mirrors.jenkins-ci.org/windows/?C=M&O=D</a><br>
 
 </body>
 </html>
