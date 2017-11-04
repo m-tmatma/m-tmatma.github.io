@@ -3,10 +3,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>Google Test Adapter を使う方法</title>
-<meta name="keywords" content="Google Test Adapter" />
-<meta name="keywords" content="googletest" />
+<title>Visual Studio プラグイン EditorConfig/EditorConfig Language Service</title>
 <meta name="keywords" content="Visual Studio" />
+<meta name="keywords" content="プラグイン" />
+<meta name="keywords" content="EditorConfig" />
+<meta name="keywords" content="コーディングスタイル" />
+<meta name="keywords" content="Coding Style" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -176,53 +178,73 @@
 	<a href="../sitemap.html">サイトマップ</a>
 	<a href="../contact.html">連絡先</a>
 	<a href="../">最初に戻る</a>
-	<a href="SetStartupProjectVS.html">戻る</a>
-	<a href="EditorConfig.html">次へ進む</a>
+	<a href="GoogleTestAdapter.html">戻る</a>
+	次へ進む
 </div>
 <div align="right">
 $Date: 2017-11-04 21:09:21 +0900 (2017/11/04 (土)) $<br>
 $Revision: 1241 $<br>
 </div>
 
-<h1>Google Test Adapter を使う方法</h1>
+<h1>Visual Studio プラグイン EditorConfig/EditorConfig Language Service</h1>
 
-<h2>概要</h2>
+<h2>EditorConfig とは?</h2>
 
-<a href="https://marketplace.visualstudio.com/items?itemName=ChristianSoltenborn.GoogleTestAdapter">Google Test Adapter</a>
-という Visual Studio で利用可能な Test Runner のブラグインがあるので紹介します。
+<p>
+<a href="http://editorconfig.org/">EditorConfig</a> とは .editorconfig というファイルで各種エディタや IDE で
+コーディングスタイルを定義して、一貫したコーディングスタイルを維持するための仕組みです。<br>
+EditorConfig プロジェクトは .editorconfig のフォーマット定義と実現するためのプラグインを提供しています。<br>
+</p>
+
+<p>
+<a href="http://editorconfig.org/#download">EditorConfig をサポートしているエディタや IDE のリストです。</a>
+</p>
+
+<h2>Visual Studio 2010 ～ Visual Studio 2015 用のプラグイン</h2>
 
 
-<h2>インストール方法</h2>
+<p>
+<a href="https://marketplace.visualstudio.com/items?itemName=EditorConfigTeam.EditorConfig">EditorConfig</a> は
+.editorconfig をロードして定義したスタイルのとおりに動作する Visual Studio 2010 ～ Visual Studio 2015 用のプラグインです。<br>
+</a>
 
-<a href="https://marketplace.visualstudio.com/items?itemName=ChristianSoltenborn.GoogleTestAdapter">ここ</a>から vsix ファイルを
-ダウンロードしてダブルクリックして、インストールします。
+<p>
+ソースコードは <a href="https://github.com/editorconfig/editorconfig-visualstudio">https://github.com/editorconfig/editorconfig-visualstudio</a> で
+公開されています。
+</p>
 
-<h2>使い方</h2>
+<p>
+.editorconfig の編集を支援するプラグインは提供されていないようです。
+</p>
 
-<ol>
-<li>google test のテストプログラムをビルドします。</li>
-<li>テストメニューからウィンドウを選び、テストエクスプローラを選びます</li>
-<li>すべて実行を選びます</li>
-</ol>
+<h2>Visual Studio 2017 用のプラグイン</h2>
 
-<h2>例</h2>
+<p>
+Visual Studio 2017 はネイティブで .editorconfig をサポートしていますが、編集機能は提供されていません。<br>
+</p>
 
-<a href="https://github.com/m-tmatma/googletest-sample-cmake.git">https://github.com/m-tmatma/googletest-sample-cmake.git</a>
-は <a href="../cmake/cmake-googletest.html">cmake での googletest</a> で作った cmake での google テストのプロジェクトです。
+<h3>EditorConfig Language Service (.editorconfig の編集を支援するプラグイン)</h3>
 
-<pre>
-git clone <strong>--recursive</strong> https://github.com/m-tmatma/googletest-sample-cmake.git
-cd googletest-sample-cmake
-mkdir build
-cd    build
-cmake -D BUILD_SHARED_LIBS=0 ..
-</pre>
+<p>
+<a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.EditorConfig">EditorConfig Language Service</a> は
+.editorconfig の編集を支援するための Visual Studio 2017 用のプラグインです。<br>
+</a>
 
-build\googletest-sample-cmake.sln を開いてビルドします。<br>
-すべて実行を選びます
+<p>
+ソースコードは <a href="https://github.com/madskristensen/EditorConfigLanguage">https://github.com/madskristensen/EditorConfigLanguage</a> で
+公開されています。
+</p>
 
-<img src="google-test-runner.png" />
+<h2>.editorconfig の書き方</h2>
 
+<ul>
+<li><a href="https://qiita.com/naru0504/items/82f09881abaf3f4dc171">どんなエディタでもEditorConfigを使ってコードの統一性を高める</a></li>
+<li><a href="https://qiita.com/spiegel-im-spiegel/items/a1b4d1ad2a6693ae33e4">行末の空白は EditorConfig で始末しましょう</a></li>
+</ul>
+
+<h2>EditorConfig に対応したプラグインの開発方法</h2>
+
+<a href="http://editorconfig.org/#create-a-plugin">Create a plugin</a> でいろんな開発言語のパーサーのライブラリが提供されています。
 
 </body>
 </html>
