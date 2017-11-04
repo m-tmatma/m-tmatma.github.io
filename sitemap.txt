@@ -145,6 +145,7 @@ https://m-tmatma.github.io/VC/commandline.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbers.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualEN.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualJP.html
+https://m-tmatma.github.io/VC/EditorConfig.html
 https://m-tmatma.github.io/VC/ForceUTF8.html
 https://m-tmatma.github.io/VC/GoogleTestAdapter.html
 https://m-tmatma.github.io/VC/index.html
