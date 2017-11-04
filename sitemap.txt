@@ -21,6 +21,8 @@ https://m-tmatma.github.io/Fedora/install_linux_from_USB.html
 https://m-tmatma.github.io/Fedora/ntpd.html
 https://m-tmatma.github.io/Fedora/samba_name_fedora24.html
 https://m-tmatma.github.io/Flex-Bison/index.html
+https://m-tmatma.github.io/git/CodeBucket.html
+https://m-tmatma.github.io/git/CodeHub.html
 https://m-tmatma.github.io/git/get-commit-id-JP.html
 https://m-tmatma.github.io/git/index.html
 https://m-tmatma.github.io/gitbucket/gitbucket-fedora-rpm.html
@@ -33,6 +35,7 @@ https://m-tmatma.github.io/h265/HEVC_software_structure.html
 https://m-tmatma.github.io/h265/index.html
 https://m-tmatma.github.io/Jenkins/build-jenkins.html
 https://m-tmatma.github.io/Jenkins/index.html
+https://m-tmatma.github.io/Jenkins/jenkins-all-builds.html
 https://m-tmatma.github.io/Jenkins/jenkins-deprecated-protocol.html
 https://m-tmatma.github.io/Jenkins/jenkins_linux_install.html
 https://m-tmatma.github.io/Jenkins/recommend_plugin.html
