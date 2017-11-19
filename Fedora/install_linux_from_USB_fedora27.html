@@ -182,11 +182,18 @@
 	<a href="./">最初に戻る</a>
 </div>
 <div align="right">
-$Date: 2017-11-19 10:54:38 +0900 (2017/11/19 (日)) $<br>
-$Revision: 1249 $<br>
+$Date: 2017-11-19 11:37:08 +0900 (2017/11/19 (日)) $<br>
+$Revision: 1251 $<br>
 </div>
 
 <h1>USB メモリに Fedora 27 用のブータブルイメージを書き込む (Fedora Media Writer)</h1>
+
+<ol>
+	<li><a href="#create-bootable-usb">USB メモリに Fedora 27 用のブータブルイメージを書き込む (Fedora Media Writer)</a></li>
+	<li><a href="#reuse-usb">USB メモリを他の用途に使う</a></li>
+</ol>
+
+<h2 id="create-bootable-usb">USB メモリに Fedora 27 用のブータブルイメージを書き込む (Fedora Media Writer)</h2>
 
 <ol>
 	<li><a href="https://getfedora.org/ja/workstation/download/">Fedora 27 Workstation のダウンロード</a>で Windows 用のツールをダウンロードする</li> 
@@ -202,6 +209,25 @@ $Revision: 1249 $<br>
 <img src="image/fedora-image-writer2.png" />
 <img src="image/fedora-image-writer3.png" />
 <img src="image/fedora-image-writer4.png" />
+
+<h2 id="reuse-usb">USB メモリを他の用途に使う</h2>
+
+Fedora Media Writer で Fedora 用のイメージを書き込むと Windows からは通常のドライブとして認識しなくなります。<br>
+Fedora Media Writer を使うことで通常のドライブとして利用できます。<br>
+Windows の管理メニューからパーティションの操作をすることにより再利用可能ですが、Fedora Media Writer を使うと楽です。<br>
+
+<ol>
+	<li>Fedora Media Writer を起動する</li>
+	<li>USB メモリを抜き挿しする</li>
+	<li>Restore ボタンを押す</li>
+	<li>(別のダイアログの) Restore ボタンを押す</li>
+	<li>完了ダイアログが出る</li>
+</ol>
+
+<img src="image/fedora-image-writer-restore1.png" />
+<img src="image/fedora-image-writer-restore2.png" />
+<img src="image/fedora-image-writer-restore3.png" />
+<img src="image/fedora-image-writer-restore4.png" />
 
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
