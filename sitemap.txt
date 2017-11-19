@@ -18,6 +18,7 @@ https://m-tmatma.github.io/distcc/index.html
 https://m-tmatma.github.io/EFI/index.html
 https://m-tmatma.github.io/Fedora/index.html
 https://m-tmatma.github.io/Fedora/install_linux_from_USB.html
+https://m-tmatma.github.io/Fedora/install_linux_from_USB_fedora27.html
 https://m-tmatma.github.io/Fedora/ntpd.html
 https://m-tmatma.github.io/Fedora/samba_name_fedora24.html
 https://m-tmatma.github.io/Flex-Bison/index.html
