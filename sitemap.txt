@@ -6,6 +6,7 @@ https://m-tmatma.github.io/clang/compile-on-windows.html
 https://m-tmatma.github.io/clang/index.html
 https://m-tmatma.github.io/clcl/index.html
 https://m-tmatma.github.io/cmake/cmake-compile.html
+https://m-tmatma.github.io/cmake/cmake-googletest-sample.html
 https://m-tmatma.github.io/cmake/cmake-googletest.html
 https://m-tmatma.github.io/cmake/cmake-helloworld.html
 https://m-tmatma.github.io/cmake/cmake-library.html
