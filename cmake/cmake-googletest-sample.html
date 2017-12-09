@@ -189,8 +189,8 @@
 	<a href="cmake-googletest.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2017-12-09 17:46:32 +0900 (2017/12/09 (土)) $<br>
-$Revision: 1253 $<br>
+$Date: 2017-12-09 17:53:37 +0900 (2017/12/09 (土)) $<br>
+$Revision: 1254 $<br>
 </div>
 
 <h1>cmake で googletest の標準のサンプルを使う方法</h1>
@@ -243,11 +243,15 @@ cmake -Dgtest_build_samples=ON  -DBUILD_SHARED_LIBS=ON -Bbuild -H.
 
 <h4>プロジェクト、CMakeLists.txt があるトップディレクトリの指定</h4>
 
+参考: <br>
+<a href="https://cgold.readthedocs.io/en/latest/glossary/-B.html#b">-B</a><br>
+<a href="https://cgold.readthedocs.io/en/latest/tutorials/out-of-source.html#out-of-source">Out-of-source build</a><br>
+
 <p>
 -B でプロジェクトの生成ディレクトリを指定します。<br>
 -Bbuild のようにスペースなしでディレクトリを指定します。<br>
 -B"build with space" のようにダブルクオートで囲むとスペースありのディレクトリでも指定できます。<br>
-でもトラブルのもとになる可能性があるのでしないほうがいいと思う。<br>
+でもトラブルのもとになる可能性があるのでしないほうがいいと思います。<br>
 </p>
 
 <p>
