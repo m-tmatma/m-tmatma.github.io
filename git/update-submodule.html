@@ -2,9 +2,15 @@
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="link" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>git 関連 Tips</title>
+<title>git の submodule を最新に更新する</title>
+<meta name="keywords" content="git" />
+<meta name="keywords" content="commitID" />
+<meta name="keywords" content="コミットID" />
+<meta name="keywords" content="変数" />
+<meta name="keywords" content="usebackq" />
+<meta name="keywords" content="エスケープ" />
+<meta name="keywords" content="git show" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -30,19 +36,6 @@
     })();
 </script>
 <!-- Pt engine End -->
-<div class="googleads">
-<p>
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<!-- adv -->
-	<ins class="adsbygoogle"
-	     style="display:inline-block;width:728px;height:90px"
-	     data-ad-client="ca-pub-8722759789158430"
-	     data-ad-slot="8544576304"></ins>
-	<script>
-	(adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-</p>
-</div>
 <!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
 <!-- Start Google Analytics -->
 <script>
@@ -56,6 +49,19 @@
 
 </script>
 <!-- End Google Analytics -->
+<div class="googleads">
+<p>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- adv -->
+	<ins class="adsbygoogle"
+	     style="display:inline-block;width:728px;height:90px"
+	     data-ad-client="ca-pub-8722759789158430"
+	     data-ad-slot="8544576304"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</p>
+</div>
 <noscript>
 	<div align="right">
 	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
@@ -177,22 +183,109 @@
 <div class="index">
 	<a href="../sitemap.html">サイトマップ</a>
 	<a href="../contact.html">連絡先</a>
-	<a href="../">トップに戻る</a>
 	<a href="../">最初に戻る</a>
+	<a href="./get-commit-id-JP.html">戻る</a>
+	<a href="./ResolveConflictByRebase.html">次へ進む</a>
 </div>
 <div align="right">
 $Date: 2017-12-17 14:18:18 +0900 (2017/12/17 (日)) $<br>
 $Revision: 1261 $<br>
 </div>
 
-<h1>git 関連 Tips</h1>
+<h1>git の submodule を最新に更新する</h1>
+
+<h2>手順</h2>
+
+git submodule foreach を使います。<br>
+
+<pre>
+git submodule foreach git stash
+git submodule foreach git checkout master
+git submodule foreach git pull origin master
+</pre>
+
+<h2>実行例</h2>
+
+<ol>
+<li>
+念のため、変更を退避します。
+<pre>
+C:\gitwork\GitHub\googletest-sample-cmake>git submodule foreach git stash
+Entering 'googletest'
+No local changes to save
+</pre>
+</li>
+
+<li>
+master をチェックアウトします。
+<pre>
+C:\gitwork\GitHub\googletest-sample-cmake>git submodule foreach git checkout master
+Entering 'googletest'
+Already on 'master'
+Your branch is up to date with 'origin/master'.
+</pre>
+</li>
+
+<li>
+最新の修正を取り込みます。
+<pre>
+C:\gitwork\GitHub\googletest-sample-cmake>git submodule foreach git pull
+Entering 'googletest'
+remote: Counting objects: 56, done.
+remote: Total 56 (delta 36), reused 36 (delta 36), pack-reused 20
+Unpacking objects: 100% (56/56), done.
+From https://github.com/google/googletest
+   cc372a0..1865eca  master     -> origin/master
+Updating cc372a0..1865eca
+Fast-forward
+ .travis.yml                      |  83 +++++++++++++-------
+ CONTRIBUTING.md                  | 160 +++++++++++++++++++++++++++++++++++++++
+ LICENSE                          |  28 +++++++
+ README.md                        |  32 +-------
+ ci/build-linux-bazel.sh          |  35 +++++++++
+ ci/env-linux.sh                  |  41 ++++++++++
+ ci/env-osx.sh                    |  40 ++++++++++
+ ci/install-linux.sh              |  49 ++++++++++++
+ ci/install-osx.sh                |  39 ++++++++++
+ ci/log-config.sh                 |  51 +++++++++++++
+ travis.sh => ci/travis.sh        |   0
+ googlemock/CMakeLists.txt        |   4 +-
+ googlemock/README.md             |  32 --------
+ googlemock/docs/DevGuide.md      | 132 --------------------------------
+ googlemock/docs/Documentation.md |   2 +-
+ googletest/CMakeLists.txt        |   4 +-
+ googletest/README.md             |  35 ---------
+ googletest/docs/DevGuide.md      | 130 -------------------------------
+ googletest/docs/Documentation.md |   2 +-
+ 19 files changed, 506 insertions(+), 393 deletions(-)
+ create mode 100644 CONTRIBUTING.md
+ create mode 100644 LICENSE
+ create mode 100755 ci/build-linux-bazel.sh
+ create mode 100755 ci/env-linux.sh
+ create mode 100755 ci/env-osx.sh
+ create mode 100755 ci/install-linux.sh
+ create mode 100755 ci/install-osx.sh
+ create mode 100755 ci/log-config.sh
+ rename travis.sh => ci/travis.sh (100%)
+ delete mode 100644 googlemock/docs/DevGuide.md
+ delete mode 100644 googletest/docs/DevGuide.md
+</pre>
+</li>
+</ol>
+
+<h2>参考にしたサイト</h2>
 
 <ul>
-<li><a href="get-commit-id-JP.html">git の現在のコミットID を変数に格納する方法</a></li>
-<li><a href="update-submodule.html">git の submodule を最新に更新する</a></li>
-<li><a href="ResolveConflictByRebase.html">git コンフリクト解決 (rebase)</a></li>
-<li><a href="CodeBucket.html">CodeBucket: BitBucket 用の iOS アプリ</a></li>
-<li><a href="CodeHub.html">CodeBucket: GitHub 用の iOS アプリ</a></li>
+<li>
+	<a href="http://www.robvanderwoude.com/escapechars.php">
+	Escape Characters
+	</a>
+</li>
+<li>
+	<a href="http://codegist.net/code/for-usebackq/">
+	For Usebackq
+	</a>
+</li>
 </ul>
 
 <div class="googleads">
@@ -210,4 +303,3 @@ $Revision: 1261 $<br>
 </div>
 </body>
 </html>
-
