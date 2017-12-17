@@ -27,6 +27,7 @@ https://m-tmatma.github.io/git/CodeBucket.html
 https://m-tmatma.github.io/git/CodeHub.html
 https://m-tmatma.github.io/git/get-commit-id-JP.html
 https://m-tmatma.github.io/git/index.html
+https://m-tmatma.github.io/git/ResolveConflictByRebase.html
 https://m-tmatma.github.io/gitbucket/gitbucket-fedora-rpm.html
 https://m-tmatma.github.io/gitbucket/index.html
 https://m-tmatma.github.io/github/enum-release-versions.html
