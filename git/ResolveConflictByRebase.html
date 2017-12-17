@@ -1,0 +1,677 @@
+﻿<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>git コンフリクト解決 (rebase)</title>
+<meta name="keywords" content="git" />
+<meta name="keywords" content="github" />
+<meta name="keywords" content="rebase" />
+<meta name="keywords" content="コンフリクト解決" />
+<meta name="keywords" content="conflict" />
+</head>
+<body>
+<!-- User Heat Tag -->
+<!-- http://userheat.com -->
+<script type="text/javascript">
+(function(add, cla){window['UserHeatTag']=cla;window[cla]=window[cla]||function(){(window[cla].q=window[cla].q||[]).push(arguments)},window[cla].l=1*new Date();var ul=document.createElement('script');var tag = document.getElementsByTagName('script')[0];ul.async=1;ul.src=add;tag.parentNode.insertBefore(ul,tag);})('//uh.nakanohito.jp/uhj2/uh.js', '_uhtracker');_uhtracker({id:'uhG8g9zBC0'});
+</script>
+<!-- End User Heat Tag --><!-- Pt engine End -->
+<!-- Pt engine Start -->
+<!-- https://www.ptengine.jp/ -->
+<script type="text/javascript">
+    window._pt_lt = new Date().getTime();
+    window._pt_sp_2 = [];
+    _pt_sp_2.push('setAccount,52fcdfa3');
+    var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    (function() {
+        var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
+        atag.src = _protocol + 'js.ptengine.jp/pta.js';
+        var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
+        stag.src = _protocol + 'js.ptengine.jp/pts.js';
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+    })();
+</script>
+<!-- Pt engine End -->
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<!-- Start Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49508988-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div align="left">
+	<div id="srchBox">
+	<style type="text/css">
+	#srchBox
+	{
+	width:298px;
+	_width:296px;
+	margin-bottom:10px;
+	background-color:#FFF9F9;
+	border-style:solid;
+	border-width:1px;
+	border-color:#EEEEEE;
+	color:#000000;
+	text-align:left;
+	}
+	#srchBox *
+	{
+	margin:0;
+	padding:0;
+	font-size:13px;
+	*font-size:small;
+	*font:x-small;
+	}
+	#srchBox a img
+	{
+	border:none;
+	}
+	#srchBox #srch
+	{
+	padding:10px 10px 0 10px;
+	}
+	#srchBox #srch #srchForm
+	{
+	white-space:nowrap;
+	}
+	#srchBox #srchInput
+	{
+	width:188px;
+	margin-right:6px;
+	vertical-align:bottom;
+	}
+	#srchBox #srchBtn
+	{
+	width:80px;
+	}
+	*html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	*:first-child+html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	#srchBox ul
+	{
+	margin-top:6px;
+	text-align:left;
+	}
+	#srchBox li
+	{
+	list-style-type:none;
+	display:inline;
+	zoom:1;
+	padding-right:10px;
+	}
+	#srchBox li input
+	{
+	zoom:1;
+	margin-right:2px;
+	_margin:-4px 0 -4px -4px;
+	vertical-align:middle;
+	border:0;
+	}
+	*:+html #srchBox li input
+	{
+	margin:-4px 0 -4px -4px;
+	}
+	#srchBox #srchLogo
+	{
+	margin:6px 6px 6px 0;
+	text-align:right;
+	}
+	#srchBox #srchLogo a
+	{
+	color:#666666;
+	text-decoration:none;
+	font-size:85%;
+	}
+	#srchBox #srchLogo a:hover
+	{
+	text-decoration:underline;
+	}
+
+	</style>
+	<form action="https://custom.search.yahoo.co.jp/search" method="get" id="srch">
+	<p id="srchForm">
+	<input type="text" name="p" id="srchInput"><input type="submit" value="検索" id="srchBtn">
+	<input type="hidden" id="fr" name="fr" value="cse">
+	<input type="hidden" id="ei" name="ei" value="UTF-8">
+	<input type="hidden" id="csid" name="csid" value="J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX">
+	</p>
+	<input type="hidden" name="vs" value="m-tmatma.github.io" id="yjInsite">
+	</form>
+	<p id="srchLogo"><a href="http://www.yahoo.co.jp"><img src="https://s.yimg.jp/images/search/customsearch/yjlogo/yjlogo_type1_fffafa.gif" width="124" height="20" alt="powered by Yahoo! JAPAN"></a></p>
+	<img src="https://custom.search.yahoo.co.jp/images/window/J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX.gif">
+	</div>
+	<!-- /#srchBox -->
+</div>
+<div class="index">
+	<a href="../sitemap.html">サイトマップ</a>
+	<a href="../contact.html">連絡先</a>
+	<a href="../">最初に戻る</a>
+	<a href="get-commit-id-JP.html">戻る</a>
+	<a href="./CodeBucket.html">次へ進む</a>
+</div>
+<div align="right">
+$Date: 2017-12-17 11:32:03 +0900 (日, 17 12 2017) $<br>
+$Revision: 1257 $<br>
+</div>
+
+<h1>git コンフリクト解決 (rebase)</h1>
+
+<h2>概略</h2>
+
+コンフリクトを rebase を使って解消する方法を説明します。
+
+<ol>
+<li>
+対象リポジトリをチェックアウトします。
+
+<pre>
+git checkout branch2
+</pre>
+</li>
+
+<li>
+以下で rebase します。
+
+<pre>
+git pull --rebase origin master
+</pre>
+</li>
+
+<li>
+コンフリクトが発生するので手動でコンフリクトを解消して git add します。
+
+<pre>
+git add a.txt
+</pre>
+
+</li>
+
+<li>
+以下で rebase を続行します。
+
+<pre>
+git rebase --continue
+</pre>
+</li>
+
+<li>
+以下でリモートリポジトリに強制的に push します。
+
+<pre>
+git push origin branch2 --force
+</pre>
+</li>
+</ol>
+
+<h2>具体例</h2>
+
+<h3>リポジトリ作成</h3>
+
+<a href="https://github.com/new">https://github.com/new</a> でリポジトリを作成します。<br>
+
+
+<h3>リポジトリclone</h3>
+
+<pre>
+git clone https://github.com/m-tmatma/ConflictTest.git
+cd ConflictTest
+</pre>
+
+<h4>コマンド出力</h4>
+
+<pre>
+C:\gitwork\Work>git clone https://github.com/m-tmatma/ConflictTest.git
+Cloning into 'ConflictTest'...
+warning: You appear to have cloned an empty repository.
+
+C:\gitwork\Work>cd ConflictTest
+</pre>
+
+
+<h3>初期登録</h3>
+
+<pre>
+echo 1 >  a.txt
+echo 2 >> a.txt
+echo 3 >> a.txt
+git add a.txt
+git commit -m "add a.txt"
+git push origin master
+</pre>
+
+<h4>コマンド出力</h4>
+
+<ol>
+<li>
+ファイルの修正
+<pre>
+C:\gitwork\Work\ConflictTest>echo 1 >  a.txt
+
+C:\gitwork\Work\ConflictTest>echo 2 >> a.txt
+
+C:\gitwork\Work\ConflictTest>echo 3 >> a.txt
+</pre>
+</li>
+
+<li>
+変更をステージング
+<pre>
+C:\gitwork\Work\ConflictTest>git add a.txt
+</pre>
+</li>
+
+<li>
+コミット
+<pre>
+C:\gitwork\Work\ConflictTest>git commit -m "add a.txt"
+[master (root-commit) 769ffb6] add a.txt
+ 1 file changed, 3 insertions(+)
+ create mode 100644 a.txt
+</pre>
+</li>
+
+<li>
+push
+<pre>
+C:\gitwork\Work\ConflictTest>git push origin master
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 222 bytes | 222.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/m-tmatma/ConflictTest.git
+ * [new branch]      master -> master
+</pre>
+</li>
+
+</ol>
+
+<h3>一つ目のブランチ作成 & push</h3>
+
+<pre>
+git checkout master
+git pull
+
+git checkout -b branch1
+echo 1 >> a.txt
+git add a.txt
+git commit -m "branch1"
+git push --set-upstream origin branch1
+</pre>
+
+<h4>コマンド出力</h4>
+
+<ol>
+<li>
+master をチェックアウト
+<pre>
+C:\gitwork\Work\ConflictTest>git checkout master
+Already on 'master'
+Your branch is up to date with 'origin/master'.
+</pre>
+</li>
+
+<li>
+最新に更新
+<pre>
+C:\gitwork\Work\ConflictTest>git pull
+Already up to date.
+</pre>
+</li>
+
+<li>
+ブランチを作成
+<pre>
+C:\gitwork\Work\ConflictTest>git checkout -b branch1
+Switched to a new branch 'branch1'
+</pre>
+</li>
+
+<li>
+既存ファイルの最後に追加
+<pre>
+C:\gitwork\Work\ConflictTest>echo 1 >> a.txt
+</pre>
+</li>
+
+<li>
+変更をステージング
+<pre>
+C:\gitwork\Work\ConflictTest>git add a.txt
+</pre>
+</li>
+
+<li>
+コミット
+<pre>
+C:\gitwork\Work\ConflictTest>git commit -m "branch1"
+[branch1 eed0956] branch1
+ 1 file changed, 1 insertion(+)
+</pre>
+</li>
+
+<li>
+push
+<pre>
+C:\gitwork\Work\ConflictTest>git push --set-upstream origin branch1
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 253 bytes | 126.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/m-tmatma/ConflictTest.git
+ * [new branch]      branch1 -> branch1
+Branch 'branch1' set up to track remote branch 'branch1' from 'origin'.
+</pre>
+</li>
+</ol>
+
+
+<h3>２つ目のブランチ作成 & push</h3>
+
+<pre>
+git checkout master
+git pull
+
+git checkout -b branch2
+echo 2 >> a.txt
+git add a.txt
+git commit -m "branch2"
+git push --set-upstream origin branch2
+</pre>
+
+<h4>コマンド出力</h4>
+
+<ol>
+<li>
+master をチェックアウト
+<pre>
+C:\gitwork\Work\ConflictTest>git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+</pre>
+</li>
+
+<li>
+最新に更新
+<pre>
+C:\gitwork\Work\ConflictTest>git pull
+Already up to date.
+</pre>
+</li>
+
+
+<li>
+ブランチを作成
+<pre>
+C:\gitwork\Work\ConflictTest>git checkout -b branch2
+Switched to a new branch 'branch2'
+</pre>
+</li>
+
+<li>
+既存ファイルの最後に追加
+<pre>
+C:\gitwork\Work\ConflictTest>echo 2 >> a.txt
+</pre>
+</li>
+
+<li>
+変更をステージング
+<pre>
+C:\gitwork\Work\ConflictTest>git add a.txt
+</pre>
+</li>
+
+<li>
+コミット
+<pre>
+C:\gitwork\Work\ConflictTest>git commit -m "branch2"
+[branch2 efa1c40] branch2
+ 1 file changed, 1 insertion(+)
+</pre>
+</li>
+
+<li>
+push
+<pre>
+C:\gitwork\Work\ConflictTest>git push --set-upstream origin branch2
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 251 bytes | 251.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/m-tmatma/ConflictTest.git
+ * [new branch]      branch2 -> branch2
+Branch 'branch2' set up to track remote branch 'branch2' from 'origin'.
+</pre>
+</pre>
+</li>
+</ol>
+
+<h3>一つ目のブランチのプルリクエストを作成</h3>
+
+<ol>
+	<li>
+	"Compare & pull request" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase2.png" />
+	</li>
+
+	<li>
+	"create pull request" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch1-2.png" />
+	</li>
+
+	<li>
+	"Merge pull request" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch1-4.png" />
+	</li>
+
+	<li>
+	"Confirm merge" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch1-6.png" />
+	</li>
+
+	<li>
+	"Delete branch" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch1-8.png" />
+	</li>
+</ol>
+
+<h3>二つ目のブランチのプルリクエストを作成</h3>
+
+<ol>
+	<li>
+	"Compare & pull request" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-branch2-2.png" />
+	</li>
+
+	<li>
+	<strong>"can't automatically merge"</strong> と表示されていますが<br>
+	"create pull request" のボタンを押します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch2-2.png" />
+	</li>
+
+	<li>
+	自動的にコンフリクトを解消できないと出ているのでローカルでコンフリクトを解消します。<br>
+
+	<img src="image/conflict-resolve-rebase-pullrequest-branch2-4.png" />
+	</li>
+</ol>
+
+
+<h3>rebase によるコンフリクト解消</h3>
+
+<ol>
+<li>
+checkout
+
+<pre>
+git checkout branch2
+</pre>
+</li>
+
+<li>
+rebase
+
+<pre>
+git pull --rebase origin master
+</pre>
+</li>
+
+<li>
+エディタでコンフリクトを解消する
+</li>
+
+<li>
+コンフリクトの解決を git に知らせる
+
+<pre>
+git add a.txt
+</pre>
+</li>
+
+<li>
+rebase 再開
+
+<pre>
+git rebase --continue
+</pre>
+</li>
+
+<li>
+強制 push
+
+<pre>
+git push origin branch2 --force
+</pre>
+</li>
+</ol>
+
+
+<h4>コマンド出力</h4>
+
+<ol>
+<li>
+checkout
+<pre>
+C:\gitwork\Work\ConflictTest>git checkout branch2
+Already on 'branch2'
+Your branch is up to date with 'origin/branch2'.
+</pre>
+</li>
+
+<li>
+git pull (念のため多分不要)
+<pre>
+C:\gitwork\Work\ConflictTest>git pull
+remote: Counting objects: 1, done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (1/1), done.
+From https://github.com/m-tmatma/ConflictTest
+   769ffb6..62d1fcb  master     -> origin/master
+Already up to date.
+</pre>
+</li>
+
+<li>
+git pull による rebase
+<pre>
+C:\gitwork\Work\ConflictTest>git pull --rebase origin master
+From https://github.com/m-tmatma/ConflictTest
+ * branch            master     -> FETCH_HEAD
+First, rewinding head to replay your work on top of it...
+Applying: branch2
+.git/rebase-apply/patch:9: trailing whitespace.
+2
+warning: 1 line adds whitespace errors.
+error: Failed to merge in the changes.
+Using index info to reconstruct a base tree...
+M       a.txt
+Falling back to patching base and 3-way merge...
+Auto-merging a.txt
+CONFLICT (content): Merge conflict in a.txt
+Patch failed at 0001 branch2
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+</pre>
+</li>
+
+<li>
+コンフリクト解消を git に知らせる
+<pre>
+C:\gitwork\Work\ConflictTest>git add a.txt
+</pre>
+</li>
+
+<li>
+強制的に push する
+<pre>
+C:\gitwork\Work\ConflictTest>git push origin branch2 --force
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 257 bytes | 257.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/m-tmatma/ConflictTest.git
+ + efa1c40...7b56c22 branch2 -> branch2 (forced update)
+</pre>
+</li>
+</ol>
+
+
+<h4>コンフリクトが解消されていることの確認</h4>
+
+コンフリクトが解消されています。
+
+<img src="image/conflict-resolve-rebase-pullrequest-branch2-rebase2.png" />
+
+<p>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- adv -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8722759789158430"
+     data-ad-slot="8544576304"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
+
+</body>
+</html>
