@@ -2,6 +2,37 @@ body
 {
 /*	background-color: #FFFFCC; */
 /*	background-color: white;   */
+	counter-reset: number02;
+	counter-reset: number03;
+	counter-reset: number04;
+}
+
+h2
+{
+	counter-increment: number02;
+	counter-reset: number03;
+	counter-reset: number04;
+}
+h2:before
+{
+	content: counter(number02) ". ";
+}
+h3
+{
+	counter-increment: number03;
+	counter-reset: number04;
+}
+h3:before
+{
+	content: counter(number02) "-" counter(number03) ". ";
+}
+h4
+{
+	counter-increment: number04;
+}
+h4:before
+{
+	content: counter(number02) "-" counter(number03) "-" counter(number04) ". ";
 }
 
 h1, h2, h3, h4
