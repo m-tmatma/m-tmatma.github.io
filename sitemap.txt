@@ -58,6 +58,7 @@ https://m-tmatma.github.io/OpenCppCoverage/OpenCppCoverage.html
 https://m-tmatma.github.io/other/cmd_explorer.html
 https://m-tmatma.github.io/other/firefox_plugin.html
 https://m-tmatma.github.io/other/google_desktop.html
+https://m-tmatma.github.io/other/hang-chrome.html
 https://m-tmatma.github.io/other/index.html
 https://m-tmatma.github.io/other/ping.html
 https://m-tmatma.github.io/other/vs2005_explorer.html

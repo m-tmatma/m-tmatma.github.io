@@ -99,6 +99,7 @@
 <meta name="keywords" content="github" />
 <meta name="keywords" content="gmail" />
 <meta name="keywords" content="google" />
+<meta name="keywords" content="google Chrome" />
 <meta name="keywords" content="googlechrome" />
 <meta name="keywords" content="googlechrome-x-callback" />
 <meta name="keywords" content="googlechromes" />
@@ -106,6 +107,8 @@
 <meta name="keywords" content="googletest sample" />
 <meta name="keywords" content="googletest サンプル" />
 <meta name="keywords" content="gtest_build_samples" />
+<meta name="keywords" content="hang" />
+<meta name="keywords" content="hangup" />
 <meta name="keywords" content="hook" />
 <meta name="keywords" content="i18n" />
 <meta name="keywords" content="iOS" />
@@ -196,6 +199,8 @@
 <meta name="keywords" content="スタートアッププロジェクト設定" />
 <meta name="keywords" content="ソースコード" />
 <meta name="keywords" content="デバッグ" />
+<meta name="keywords" content="ハング" />
+<meta name="keywords" content="ハングアップ" />
 <meta name="keywords" content="バックアップ" />
 <meta name="keywords" content="パーミッション" />
 <meta name="keywords" content="ビューポート" />
@@ -428,8 +433,8 @@
 </div>
 
 <div align="right">
-$Date: 2017-12-19 21:41:10 +0900 (火, 19 12 2017) $<br>
-$Revision: 1263 $<br>
+$Date: 2017-12-23 08:14:38 +0900 (2017/12/23 (土)) $<br>
+$Revision: 1272 $<br>
 </div>
 
 <h1>サイトマップ</h1>
