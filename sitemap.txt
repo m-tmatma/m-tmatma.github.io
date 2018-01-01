@@ -41,8 +41,11 @@ https://m-tmatma.github.io/Jenkins/build-jenkins.html
 https://m-tmatma.github.io/Jenkins/index.html
 https://m-tmatma.github.io/Jenkins/jenkins-all-builds.html
 https://m-tmatma.github.io/Jenkins/jenkins-deprecated-protocol.html
+https://m-tmatma.github.io/Jenkins/jenkins-secret-data.html
 https://m-tmatma.github.io/Jenkins/jenkins_linux_install.html
 https://m-tmatma.github.io/Jenkins/recommend_plugin.html
+https://m-tmatma.github.io/Mac/errorcode-43.html
+https://m-tmatma.github.io/Mac/index.html
 https://m-tmatma.github.io/movie/index.html
 https://m-tmatma.github.io/movie/link.html
 https://m-tmatma.github.io/movie/yuv.html
