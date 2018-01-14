@@ -9,6 +9,8 @@
 <meta name="keywords" content="svn-backup-dumps.py" />
 <meta name="keywords" content="backup" />
 <meta name="keywords" content="バックアップ" />
+<meta name="keywords" content="bzip2" />
+<meta name="keywords" content="gzip" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -202,8 +204,8 @@
 	<a href="svn_backup_dumps_py_svnrdump.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2017-12-23 10:05:03 +0900 (2017/12/23 (土)) $<br>
-$Revision: 1277 $<br>
+$Date: 2018-01-14 21:23:26 +0900 (2018/01/14 (日)) $<br>
+$Revision: 1290 $<br>
 </div>
 
 <h1>Subversionリポジトリのバックアップ [svn-backup-dumps.py の利用方法]</h1>
@@ -292,7 +294,7 @@ Usage: svn-backup-dumps.py [options] repospath dumpdir
 Options:
   --version        show program's version number and exit
   -h, --help       show this help message and exit
-  -b               compress the dump using bzip2.
+  -b               compress the dump using bzip2. <strong>← 指定すると bzip2 圧縮された出力になる。python の bzip2 モジュールがインストール済みの場合のみ利用可能</strong>
   --deltas         pass --deltas to svnadmin dump.
   -c CNT           count of revisions per dumpfile. <strong>← 指定すると "3. 複数リビジョンの差分バックアップ"になる</strong>
   -o               overwrite files.
@@ -300,7 +302,7 @@ Options:
   -q               quiet.
   -r REV           revision number for single rev dump. <strong>← 指定すると "2. リビジョンごとのバックアップ"になる</strong>
   -t TRANSFER      transfer dumps to another machine (s.a. --help-transfer).
-  -z               compress the dump using gzip.
+  -z               compress the dump using gzip. <strong>← 指定すると gzip 圧縮された出力になる。</strong>
   --help-transfer  shows detailed help for the transfer option.
 </pre>
 
@@ -480,6 +482,11 @@ svnrepos.000040-000048.svndmp.bz2 ← 不要だけど自動的に消さない。
 </p>
 
 <h3>具体例2 (-c と -b オプションを使う場合)</h3>
+
+-b オプションを指定すると、バックアップデータを bzip2 圧縮する。<br>
+ただし python の bzip2 用のモジュールがインストールされているときのみ利用可能。<br>
+(-z オプションを指定すると、バックアップデータを gzip 圧縮する。)<br>
+
 <h4>シナリオ</h4>
 <p>
 	<ol>

@@ -82,6 +82,8 @@ https://m-tmatma.github.io/redmine/install_fedora24_redmine33.html
 https://m-tmatma.github.io/redmine/install_linux.html
 https://m-tmatma.github.io/redmine/newfeature.html
 https://m-tmatma.github.io/redmine/subdir.html
+https://m-tmatma.github.io/sota-backup/index.html
+https://m-tmatma.github.io/sota-backup/sota-backup.html
 https://m-tmatma.github.io/ssh/auto_login.html
 https://m-tmatma.github.io/ssh/index.html
 https://m-tmatma.github.io/ssh/rsync.html
