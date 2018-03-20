@@ -1,0 +1,74 @@
+@rem This is a batch file to maneuver the limitaion of the max path length which nuget.exe can handle.
+@rem 
+@rem It is designed to use in a Jenkins Job because it relies on BUILD_TAG variable.
+@rem If you want to use this outside of Jenkins, you need to choose an alternative unique id.
+@rem
+@rem 1. Create an unique path name for the next step.
+@rem 2. Create a unique and temporary junction for very long path directory. 
+@rem   (The path length of the temporary junction must be short enough.)
+@rem 3. move to the directory of the junction.
+@rem 4. remove all packages directories recursively. (not mandatory)
+@rem 5. run 'nuget.exe restore' for all solution files recursively.
+@rem 6. move to the original directory.
+@rem 7. remove the temporary junction.
+
+@echo off
+set RET=1
+@rem You may want to change the path of nuget.exe
+set NUGET_PATH=C:\Program Files (x86)\NuGet\nuget.exe
+
+@rem check environment variable of Jenkins
+if "%BUILD_TAG%" == "" (
+	echo BUILD_TAG is empty
+	exit /b 1
+)
+
+@rem parent directory of the temporal junction
+set WA_ROOT=C:\Windows\Temp
+
+@rem temporal junction
+@rem change this unique path if you need to.
+set WA_TARGET=%WA_ROOT%\%BUILD_TAG%
+
+@rem save current directory
+set CURRENT=%CD%
+
+@rem workspace directory which is the target directory of the junction
+set WA_SOURCE=%CURRENT%
+
+@rem create a temporal junction
+echo mklink /j "%WA_TARGET%" "%WA_SOURCE%"
+mklink /j "%WA_TARGET%" "%WA_SOURCE%"               || goto END
+
+@rem move to the junction directory to avoid the limitation.
+cd /d %WA_TARGET%                                   || goto END
+
+@rem this is optional
+for /r %%i in (packages) do (
+	if exist %%i (
+		echo rmdir /s /q %%i
+		     rmdir /s /q %%i
+	)
+)
+
+@rem run 'nuget.exe restore' recursively.
+for /r %%i in (*.sln) do (
+	if exist %%i (
+		echo "%NUGET_PATH%" restore %%i
+		     "%NUGET_PATH%" restore %%i || goto END
+	)
+)
+
+@rem set return code
+set RET=0
+
+:END
+@rem get back to the original directory.
+cd /d %CURRENT%
+
+@rem remove the temporal junction
+echo rmdir %WA_TARGET%
+     rmdir %WA_TARGET%
+
+@rem return result
+exit /b %RET%
