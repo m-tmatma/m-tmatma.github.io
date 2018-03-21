@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>workaround for 'The fully qualified file name must be less than 260 characters, and the directory name must be less than 248 characters.'</title>
+<title>workaround for nuget.exe error that 'The fully qualified file name must be less than 260 characters, and the directory name must be less than 248 characters.'</title>
 <meta name="keywords" content="jenkins" />
 <meta name="keywords" content="nuget" />
 <meta name="keywords" content="multibranch" />
@@ -216,11 +216,11 @@
 	<a href="NuGetLongPathNameWA-JP.html">next</a>
 </div>
 <div align="right">
-$Date: 2018-03-21 09:56:20 +0900 (水, 21 3 2018) $<br>
-$Revision: 1301 $<br>
+$Date: 2018-03-21 10:02:55 +0900 (水, 21 3 2018) $<br>
+$Revision: 1302 $<br>
 </div>
 
-<h1>workaround for 'The fully qualified file name must be less than 260 characters, and the directory name must be less than 248 characters.'</h1>
+<h1>workaround for nuget.exe error that 'The fully qualified file name must be less than 260 characters, and the directory name must be less than 248 characters.'</h1>
 
 <ul>
 <li>English</li>
@@ -326,9 +326,11 @@ if "%BUILD_TAG%" == "" (
 	exit /b 1
 )
 
+<strong>
 @rem the parent directory of a temporary junction
 @rem you may want to tweak this.
 set WA_ROOT=C:\Windows\Temp
+</strong>
 
 @rem path to temporary junction
 @rem change this path if you need to.

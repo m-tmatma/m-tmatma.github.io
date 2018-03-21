@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>ディレクトリ名の最大パス長 (248文字以下) の制限を回避するためのワークアラウンド</title>
+<title>nuget.exe の最大パス長の制限を回避するためのワークアラウンド</title>
 <meta name="keywords" content="jenkins" />
 <meta name="keywords" content="nuget" />
 <meta name="keywords" content="multibranch" />
@@ -13,6 +13,8 @@
 <meta name="keywords" content="path" />
 <meta name="keywords" content="workaround" />
 <meta name="keywords" content="最大パス長" />
+<meta name="keywords" content="制限" />
+<meta name="keywords" content="回避" />
 <meta name="keywords" content="ワークアラウンド" />
 <meta name="keywords" content="junction" />
 <meta name="keywords" content="ジャンクション" />
@@ -219,11 +221,11 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2018-03-21 09:47:18 +0900 (水, 21 3 2018) $<br>
-$Revision: 1300 $<br>
+$Date: 2018-03-21 10:02:55 +0900 (水, 21 3 2018) $<br>
+$Revision: 1302 $<br>
 </div>
 
-<h1>ディレクトリ名の最大パス長 (248文字以下) の制限を回避するためのワークアラウンド</h1>
+<h1>nuget.exe の最大パス長の制限を回避するためのワークアラウンド</h1>
 
 <ul>
 <li><a href="NuGetLongPathNameWA-EN.html">English</a></li>
@@ -329,9 +331,11 @@ if "%BUILD_TAG%" == "" (
 	exit /b 1
 )
 
+<strong>
 @rem the parent directory of a temporary junction
 @rem you may want to tweak this.
 set WA_ROOT=C:\Windows\Temp
+</strong>
 
 @rem path to temporary junction
 @rem change this path if you need to.
