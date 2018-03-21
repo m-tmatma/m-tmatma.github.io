@@ -216,8 +216,8 @@
 	<a href="NuGetLongPathNameWA-JP.html">next</a>
 </div>
 <div align="right">
-$Date: 2018-03-21 10:08:50 +0900 (水, 21 3 2018) $<br>
-$Revision: 1304 $<br>
+$Date: 2018-03-21 10:32:00 +0900 (水, 21 3 2018) $<br>
+$Revision: 1305 $<br>
 </div>
 
 <h1>workaround for nuget.exe error that 'The fully qualified file name must be less than 260 characters, and the directory name must be less than 248 characters.'</h1>
@@ -243,11 +243,15 @@ This page explains how to maneuver this limitation.<br>
 
 <ol>
 	<li>
-	Create an unique path name for the next step.
+	Create an unique path name for a temporary junction.<br>
+		<ul>
+			<li>The path length must be short enough.</li>
+			<li>The path must be unique between the creation and the deletion of the junction at least.</li>
+			<li>But you should choose an unique path after the deletion of the junction.</li>
+		</ul>
 	</li>
 	<li>
 	Create an unique and temporary junction for a very long path directory.
-	(The path length of the temporary junction must be short enough.)
 	</li>
 	<li>
 	move to the directory of the junction.
