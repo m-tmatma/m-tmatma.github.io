@@ -219,8 +219,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2018-03-20 23:11:59 +0900 (火, 20 3 2018) $<br>
-$Revision: 1297 $<br>
+$Date: 2018-03-21 09:17:39 +0900 (水, 21 3 2018) $<br>
+$Revision: 1298 $<br>
 </div>
 
 <h1>ディレクトリ名の最大パス長 (248文字以下) の制限を回避するためのワークアラウンド</h1>
@@ -327,11 +327,16 @@ if "%BUILD_TAG%" == "" (
 	exit /b 1
 )
 
-@rem parent directory of the temporal junction
+@rem the parent directory of a temporal junction
+@rem you may want to tweak this.
 set WA_ROOT=C:\Windows\Temp
 
-@rem temporal junction
-<strong>change this unique path if you need to.</strong>
+@rem path to temporal junction
+@rem change this path if you need to.
+@rem 
+@rem BUILD_TAG is defined by Jenkins.
+@rem see https://wiki.jenkins.io/display/JENKINS/Building+a+software+project
+@rem 
 <strong>set WA_TARGET=%WA_ROOT%\%BUILD_TAG%</strong>
 
 @rem save current directory
@@ -342,12 +347,13 @@ set WA_SOURCE=%CURRENT%
 
 @rem create a temporal junction
 echo mklink /j "%WA_TARGET%" "%WA_SOURCE%"
-mklink /j "%WA_TARGET%" "%WA_SOURCE%"               || goto END
+     mklink /j "%WA_TARGET%" "%WA_SOURCE%"          || goto END
 
-@rem move to the junction directory to avoid the limitation.
+@rem move to the junction directory to avoid the limitation of nuget.exe.
 cd /d %WA_TARGET%                                   || goto END
 
-@rem this is optional
+@rem this is optional.
+@rem If you don't need to remove packages directory in advance, disable or remove this.
 for /r %%i in (packages) do (
 	if exist %%i (
 		echo rmdir /s /q %%i
