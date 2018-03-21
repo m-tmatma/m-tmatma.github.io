@@ -342,12 +342,16 @@ set CURRENT=%CD%
 @rem workspace directory which is the target directory of the junction
 set WA_SOURCE=%CURRENT%
 
+<strong>
 @rem create a temporary junction
+@rem This is the first core of this workaround.
 echo mklink /j "%WA_TARGET%" "%WA_SOURCE%"
      mklink /j "%WA_TARGET%" "%WA_SOURCE%"          || goto END
 
 @rem move to the junction directory to avoid the limitation of nuget.exe.
+@rem This is the second core of this workaround.
 cd /d %WA_TARGET%                                   || goto END
+</strong>
 
 @rem this is optional.
 @rem If you don't need to remove packages directory in advance, disable or remove this.

@@ -42,10 +42,12 @@ set CURRENT=%CD%
 set WA_SOURCE=%CURRENT%
 
 @rem create a temporary junction
+@rem This is the first core of this workaround.
 echo mklink /j "%WA_TARGET%" "%WA_SOURCE%"
      mklink /j "%WA_TARGET%" "%WA_SOURCE%"          || goto END
 
 @rem move to the junction directory to avoid the limitation of nuget.exe.
+@rem This is the second core of this workaround.
 cd /d %WA_TARGET%                                   || goto END
 
 @rem this is optional.
