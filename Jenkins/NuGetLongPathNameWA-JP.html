@@ -327,17 +327,17 @@ if "%BUILD_TAG%" == "" (
 	exit /b 1
 )
 
-@rem the parent directory of a temporal junction
+@rem the parent directory of a temporary junction
 @rem you may want to tweak this.
 set WA_ROOT=C:\Windows\Temp
 
-@rem path to temporal junction
+@rem path to temporary junction
 @rem change this path if you need to.
 @rem 
-@rem BUILD_TAG is defined by Jenkins.
+@rem BUILD_TAG and EXECUTOR_NUMBER are defined by Jenkins.
 @rem see https://wiki.jenkins.io/display/JENKINS/Building+a+software+project
 @rem 
-<strong>set WA_TARGET=%WA_ROOT%\%BUILD_TAG%</strong>
+<strong>set WA_TARGET=%WA_ROOT%\%BUILD_TAG%-%EXECUTOR_NUMBER%</strong>
 
 @rem save current directory
 set CURRENT=%CD%
@@ -345,7 +345,7 @@ set CURRENT=%CD%
 @rem workspace directory which is the target directory of the junction
 set WA_SOURCE=%CURRENT%
 
-@rem create a temporal junction
+@rem create a temporary junction
 echo mklink /j "%WA_TARGET%" "%WA_SOURCE%"
      mklink /j "%WA_TARGET%" "%WA_SOURCE%"          || goto END
 
@@ -376,7 +376,7 @@ set RET=0
 @rem get back to the original directory.
 cd /d %CURRENT%
 
-@rem remove the temporal junction
+@rem remove the temporary junction
 echo rmdir %WA_TARGET%
      rmdir %WA_TARGET%
 
