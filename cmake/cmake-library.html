@@ -17,6 +17,10 @@
 <link href="../style.css" type="text/css" rel="stylesheet" />
 <title>cmake での shared library/static library のテストプロジェクト</title>
 <meta name="keywords" content="cmake" />
+<meta name="keywords" content="foreach" />
+<meta name="keywords" content="LISTS" />
+<meta name="keywords" content="SOURCE_DIR" />
+<meta name="keywords" content="BINARY_DIR" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -206,8 +210,8 @@
 	<a href="cmake-googletest-sample.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2018-03-24 13:27:18 +0900 (土, 24 3 2018) $<br>
-$Revision: 1310 $<br>
+$Date: 2018-03-24 15:39:29 +0900 (土, 24 3 2018) $<br>
+$Revision: 1313 $<br>
 </div>
 
 <h1>cmake での shared library/static library のテストプロジェクト</h1>
@@ -405,7 +409,7 @@ Library のプロジェクトに対するフォルダを指定する必要があ
 </table>
 
 <p>
-&lt;PROJECT-NAME&gt; は project で指定する名前です。
+&lt;PROJECT-NAME&gt; は project() で指定する名前です。
 </p>
 
 <p>
@@ -447,6 +451,52 @@ project (${project_name})
 	</td>
 </tr>
 </table>
+
+<h3>入れ子の変数定義/foreach</h3>
+
+以下のように変数 external_proj を定義して値として Library を入れておいて
+${${external_proj}_SOURCE_DIR} で ${Library_SOURCE_DIR} を参照することができます。
+
+<pre>
+set(external_proj Library)
+include_directories(${${external_proj}_SOURCE_DIR})
+</pre>
+
+このことを利用すると
+<a href="https://cmake.org/cmake/help/v3.0/command/foreach.html">
+foreach
+</a>
+を使うと、複数のプロジェクトのソースディレクトリやバイナリディレクトリに対して
+一括で指定ができます。
+
+<pre>
+#↓ 以下のように定義してもよい
+#set(external_projs Library Library2)
+
+#↓ 以下のように定義してもよい
+set(<strong>external_projs</strong> ${external_projs} Library)
+set(<strong>external_projs</strong> ${external_projs} Library2)
+
+foreach(<strong>loop_var</strong> IN LISTS <strong>external_projs</strong>)
+	# add include directory
+	# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_SOURCE_DIR.html
+	include_directories(${${<strong>loop_var</strong>}_SOURCE_DIR})
+
+	# add include directory for ${project_name}_Export.h
+	# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_BINARY_DIR.html
+	include_directories(${${<strong>loop_var</strong>}_BINARY_DIR})
+endforeach()
+
+
+# define sources files of an executable
+# <strong>target_link_libraries() は add_executable より後に指定します。</strong>
+add_executable(${project_name} ${SRC})
+
+# link a library
+foreach(<strong>loop_var</strong> IN LISTS <strong>external_projs</strong>)
+	target_link_libraries(${project_name} ${<strong>loop_var</strong>})
+endforeach()
+</pre>
 
 <h3>target_link_libraries</h3>
 
