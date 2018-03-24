@@ -206,8 +206,8 @@
 	<a href="cmake-googletest-sample.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2018-03-24 10:38:49 +0900 (土, 24 3 2018) $<br>
-$Revision: 1308 $<br>
+$Date: 2018-03-24 13:15:00 +0900 (土, 24 3 2018) $<br>
+$Revision: 1309 $<br>
 </div>
 
 <h1>cmake での shared library/static library のテストプロジェクト</h1>
@@ -352,10 +352,12 @@ project (${project_name})
 file(GLOB SRC *.c *.h)
 
 # add include directory
-include_directories(../Library)
+# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_SOURCE_DIR.html
+include_directories(${Library_SOURCE_DIR})
 
 # add include directory for ${project_name}_Export.h
-include_directories(${PROJECT_BINARY_DIR}/../Library)
+# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_BINARY_DIR.html
+include_directories(${Library_BINARY_DIR})
 
 # define sources files of an executable
 add_executable(${project_name} ${SRC})
@@ -364,11 +366,72 @@ add_executable(${project_name} ${SRC})
 target_link_libraries(${project_name} Library)
 </pre>
 
+<h3>古い説明</h3>
+
+<strike>
 include_directories でインクルードディレクトリの指定をしていますが、
 ${PROJECT_BINARY_DIR} を参照する場合、Program のプロジェクトに対する生成ディレクトリなので
 Library のプロジェクトに対するフォルダを指定する必要があるので ../Library を追加しています。
+</strike>
 
 target_link_libraries でリンクするライブラリを指定しています。
+
+
+<h3>&lt;PROJECT-NAME&gt;_SOURCE_DIR と &lt;PROJECT-NAME&gt;_BINARY_DIR</h3>
+
+<table>
+<tr>
+	<th>変数名</th>
+	<th>リンク</th>
+	<th>説明</th>
+</tr>
+<tr>
+	<td>&lt;PROJECT-NAME&gt;_SOURCE_DIR</td>
+	<td>
+	<a href="https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_SOURCE_DIR.html">
+	&lt;PROJECT-NAME&gt;_SOURCE_DIR
+	</a>
+	</td>
+	<td>&lt;PROJECT-NAME&gt; のプロジェクトのソースコードのトップディレクトリ</td>
+</tr>
+<tr>
+	<td>&lt;PROJECT-NAME&gt;_BINARY_DIR</td>
+	<td>
+	<a href="https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_BINARY_DIR.html">
+	&lt;PROJECT-NAME&gt;_BINARY_DIR
+	</a>
+	</td>
+	<td>&lt;PROJECT-NAME&gt; のプロジェクトのバイナリディレクトリ</td>
+</tr>
+</table>
+
+
+<h3>include_directories</h3>
+
+<table>
+<tr>
+	<th>記述</th>
+	<th>説明</th>
+</tr>
+<tr>
+	<td>
+	include_directories(<strong>${Library_SOURCE_DIR}</strong>/include)
+	</td>
+	<td>
+	Library プロジェクトのソースコードのディレクトリをインクルードディレクトリに追加する
+	</a>
+	</td>
+</tr>
+<tr>
+	<td>
+	include_directories(<strong>${Library_BINARY_DIR}</strong>)
+	</td>
+	<td>
+	Library プロジェクトのバイナリディレクトリをインクルードディレクトリに追加する
+	</a>
+	</td>
+</tr>
+</table>
 
 <h2>トップのプロジェクトの定義</h2>
 

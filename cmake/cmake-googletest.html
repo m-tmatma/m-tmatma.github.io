@@ -207,8 +207,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2018-03-24 10:38:49 +0900 (土, 24 3 2018) $<br>
-$Revision: 1308 $<br>
+$Date: 2018-03-24 13:15:00 +0900 (土, 24 3 2018) $<br>
+$Revision: 1309 $<br>
 </div>
 
 <h1>cmake で googletest を使う方法</h1>
@@ -531,12 +531,14 @@ project (${project_name})
 # define a variable SRC with file GLOB
 file(GLOB SRC *.cpp *.h)
 
+# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_SOURCE_DIR.html
 # add include directories
-include_directories(../googletest/googletest/include)
-include_directories(../src)
+include_directories(<strong>${googletest_SOURCE_DIR}</strong>/include)
+include_directories(<strong>${calc_SOURCE_DIR}</strong>)
 
-# add include directory for ${project_name}_Export.h
-include_directories(${PROJECT_BINARY_DIR}/../src)
+# https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_BINARY_DIR.html
+# add include directory for calc_Export.h
+include_directories(<strong>${calc_BINARY_DIR}</strong>)
 
 # define sources files of an executable
 add_executable(${project_name} ${SRC})
@@ -547,11 +549,81 @@ target_link_libraries(${project_name} gtest_main)
 target_link_libraries(${project_name} calc)
 </pre>
 
+<h3>古い説明</h3>
+
+<strike>
 <p>
 include_directories でインクルードディレクトリの指定をしていますが、
 ${PROJECT_BINARY_DIR} を参照する場合、Program のプロジェクトに対する生成ディレクトリなので
 calc のプロジェクトに対するフォルダを指定する必要があるので ../src を追加しています。
 </p>
+</strike>
+
+<h3>&lt;PROJECT-NAME&gt;_SOURCE_DIR と &lt;PROJECT-NAME&gt;_BINARY_DIR</h3>
+
+<table>
+<tr>
+	<th>変数名</th>
+	<th>リンク</th>
+	<th>説明</th>
+</tr>
+<tr>
+	<td>&lt;PROJECT-NAME&gt;_SOURCE_DIR</td>
+	<td>
+	<a href="https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_SOURCE_DIR.html">
+	&lt;PROJECT-NAME&gt;_SOURCE_DIR
+	</a>
+	</td>
+	<td>&lt;PROJECT-NAME&gt; のプロジェクトのソースコードのトップディレクトリ</td>
+</tr>
+<tr>
+	<td>&lt;PROJECT-NAME&gt;_BINARY_DIR</td>
+	<td>
+	<a href="https://cmake.org/cmake/help/v3.0/variable/PROJECT-NAME_BINARY_DIR.html">
+	&lt;PROJECT-NAME&gt;_BINARY_DIR
+	</a>
+	</td>
+	<td>&lt;PROJECT-NAME&gt; のプロジェクトのバイナリディレクトリ</td>
+</tr>
+</table>
+
+<h3>include_directories</h3>
+
+<table>
+<tr>
+	<th>記述</th>
+	<th>説明</th>
+</tr>
+<tr>
+	<td>
+	include_directories(<strong>${googletest_SOURCE_DIR}</strong>/include)
+	</td>
+	<td>
+	googletest プロジェクトのソースコードのディレクトリをインクルードディレクトリに追加する
+	</a>
+	</td>
+</tr>
+<tr>
+	<td>
+	include_directories(<strong>${calc_SOURCE_DIR}</strong>)
+	</td>
+	<td>
+	calc プロジェクトのソースコードのディレクトリをインクルードディレクトリに追加する
+	</a>
+	</td>
+</tr>
+<tr>
+	<td>
+	include_directories(<strong>${calc_BINARY_DIR}</strong>)
+	</td>
+	<td>
+	calc プロジェクトのバイナリディレクトリをインクルードディレクトリに追加する
+	</a>
+	</td>
+</tr>
+</table>
+
+<h3>target_link_libraries</h3>
 
 <p>
 target_link_libraries でリンクするライブラリを指定しています。GoogleTest の gtest と gtest_main と calc をリンクしています。
