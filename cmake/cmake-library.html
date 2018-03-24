@@ -206,8 +206,8 @@
 	<a href="cmake-googletest-sample.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2018-03-24 13:15:00 +0900 (土, 24 3 2018) $<br>
-$Revision: 1309 $<br>
+$Date: 2018-03-24 13:27:18 +0900 (土, 24 3 2018) $<br>
+$Revision: 1310 $<br>
 </div>
 
 <h1>cmake での shared library/static library のテストプロジェクト</h1>
@@ -369,13 +369,12 @@ target_link_libraries(${project_name} Library)
 <h3>古い説明</h3>
 
 <strike>
+<p>
 include_directories でインクルードディレクトリの指定をしていますが、
 ${PROJECT_BINARY_DIR} を参照する場合、Program のプロジェクトに対する生成ディレクトリなので
 Library のプロジェクトに対するフォルダを指定する必要があるので ../Library を追加しています。
+</p>
 </strike>
-
-target_link_libraries でリンクするライブラリを指定しています。
-
 
 <h3>&lt;PROJECT-NAME&gt;_SOURCE_DIR と &lt;PROJECT-NAME&gt;_BINARY_DIR</h3>
 
@@ -405,6 +404,22 @@ target_link_libraries でリンクするライブラリを指定しています�
 </tr>
 </table>
 
+<p>
+&lt;PROJECT-NAME&gt; は project で指定する名前です。
+</p>
+
+<p>
+例えばある CMakeLists.txt で以下のように定義しているプロジェクトを参照する場合
+&lt;PROJECT-NAME&gt;_SOURCE_DIR は ${calc_SOURCE_DIR} のように参照します。
+</p>
+
+<pre>
+# define a variable of project name
+set( project_name calc)
+
+# define a variable of project name
+project (${project_name})
+</pre>
 
 <h3>include_directories</h3>
 
@@ -432,6 +447,12 @@ target_link_libraries でリンクするライブラリを指定しています�
 	</td>
 </tr>
 </table>
+
+<h3>target_link_libraries</h3>
+
+<p>
+target_link_libraries でリンクするライブラリを指定しています。Library をリンクしています。
+</p>
 
 <h2>トップのプロジェクトの定義</h2>
 

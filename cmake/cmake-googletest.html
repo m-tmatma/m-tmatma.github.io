@@ -207,8 +207,8 @@
 	次へ進む
 </div>
 <div align="right">
-$Date: 2018-03-24 13:15:00 +0900 (土, 24 3 2018) $<br>
-$Revision: 1309 $<br>
+$Date: 2018-03-24 13:27:18 +0900 (土, 24 3 2018) $<br>
+$Revision: 1310 $<br>
 </div>
 
 <h1>cmake で googletest を使う方法</h1>
@@ -586,6 +586,23 @@ calc のプロジェクトに対するフォルダを指定する必要がある
 	<td>&lt;PROJECT-NAME&gt; のプロジェクトのバイナリディレクトリ</td>
 </tr>
 </table>
+
+<p>
+&lt;PROJECT-NAME&gt; は project で指定する名前です。
+</p>
+
+<p>
+例えばある CMakeLists.txt で以下のように定義しているプロジェクトを参照する場合
+&lt;PROJECT-NAME&gt;_SOURCE_DIR は ${calc_SOURCE_DIR} のように参照します。
+</p>
+
+<pre>
+# define a variable of project name
+set( project_name calc)
+
+# define a variable of project name
+project (${project_name})
+</pre>
 
 <h3>include_directories</h3>
 
