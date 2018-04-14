@@ -206,8 +206,8 @@
 	<a href="cmake-library.html">次へ進む</a>
 </div>
 <div align="right">
-$Date: 2018-03-24 10:38:49 +0900 (土, 24 3 2018) $<br>
-$Revision: 1308 $<br>
+$Date: 2018-04-14 18:59:24 +0900 (土, 14 4 2018) $<br>
+$Revision: 1314 $<br>
 </div>
 
 <h1>cmake のコンパイル方法</h1>
@@ -218,10 +218,12 @@ Windows でコンパイルする場合、cmake のバイナリがインストー
 CMAKE_INSTALL_PREFIX でインストール先を指定します。<br>
 
 <pre>
-&gt; git clone https://github.com/Kitware/CMake.git
+&gt; git clone https://gitlab.kitware.com/cmake/cmake.git
 &gt; mkdir build2017
 &gt; cd    build2017
 &gt; cmake -G "Visual Studio 15 2017" -D CMAKE_INSTALL_PREFIX=c:\cmake ../cmake
+&gt; cmake --build . --config Debug
+&gt; cmake --build . --config Release
 </pre>
 
 <h2>cmake のコンパイル方法 (Mac, Linux の場合)</h2>
