@@ -15,8 +15,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="../style.css" type="text/css" rel="stylesheet" />
-<title>Visual Studio</title>
+<title>CreateGUIDVSPlugin Manual (Visual Studio Plugin)</title>
 <meta name="keywords" content="Visual Studio" />
+<meta name="keywords" content="Visual Studio 2017" />
+<meta name="keywords" content="Visual Studio 2015" />
+<meta name="keywords" content="Plugin" />
+<meta name="keywords" content="GUID" />
+<meta name="keywords" content="insert" />
+<meta name="keywords" content="paste" />
 </head>
 <body>
 <!-- User Heat Tag -->
@@ -84,7 +90,7 @@
 	<div align="right">
 	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
 	<strong>
-	<a href="http://diary.fc2.com/">日記</a>
+	<a href="http://diary.fc2.com/">diary</a>
 	</strong>
 	</div>
 </noscript>
@@ -198,37 +204,285 @@
 	</div>
 	<!-- /#srchBox -->
 </div>
-<div class="index">
-	<a href="../sitemap.html">サイトマップ</a>
-	<a href="../contact.html">連絡先</a>
-	<a href="../">最初に戻る</a>
-	<a href="../">戻る</a>
-	<a href="commandline.html">次へ進む</a>
-</div>
-<div align="right">
-$Date: 2018-04-30 19:23:54 +0900 (月, 30 4 2018) $<br>
-$Revision: 1315 $<br>
-</div>
 
-<h1>Visual Studio</h1>
+<h1>CreateGUIDVSPlugin Manual (Visual Studio Plugin)</h1>
 
-<h2>Visual Studio のページ</h2>
 <ul>
-<li><a href="https://marketplace.visualstudio.com/search?term=publisher%3A%22tmatma%22&target=VS&category=All%20categories&vsVersion=&sortBy=Relevance">自作のプラグイン</a></li>
-<li><a href="commandline.html">コマンドラインによる Visual Studio コンパイル</a></li>
-<li><a href="ForceUTF8.html">Visual Studio プラグイン ForceUTF8/ForceUTF8 with BOM</a></li>
-<li><a href="VSPlugin.html">Visual Studio プラグインの作り方 on Visual Studio 2017</a></li>
-<li><a href="VSPlugin-2015-and-2017.html">Visual Studio プラグインの作り方 Visual Studio 2015/2017 両対応</a></li>
-<li><a href="CopyWithLineNumbers.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)</a></li>
-<li><a href="CopyWithLineNumbersManualJP.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)のマニュアル (日本語)</a></li>
-<li><a href="CopyWithLineNumbersManualEN.html">CopyWithLineNumbers (行番号付きでコピーするプラグイン)のマニュアル (英語)</a></li>
-<li><a href="CreateGUIDVSPluginManulEN.html">CreateGUIDVSPlugin (Visual Studio Plugin) のマニュアル (英語)</a></li>
-<li><a href="SetStartupProjectVS.html">SetStartupProjectVS (Visual Studio のスタートアッププロジェクトを変更するプラグイン)</a></li>
-<li><a href="GoogleTestAdapter.html">Google Test Adapter を使う方法</a></li>
-<li><a href="EditorConfig.html">Visual Studio プラグイン EditorConfig/EditorConfig Language Service</a></li>
+<li>English</li>
+<li>日本語</li>
 </ul>
 
+<h2>GitHub</h2>
 
+<a href="https://github.com/m-tmatma/CreateGUIDVSPlugin">https://github.com/m-tmatma/CreateGUIDVSPlugin</a>
+
+
+<h2>How to install</h2>
+
+<ol>
+<li>you can download from <a href="https://marketplace.visualstudio.com/search?term=publisher%3A%22tmatma%22&target=VS&category=All%20categories&vsVersion=&sortBy=Relevance">here</a></li>
+<li>close all Visual Studio</li>
+<li>double click CreateGUIDVSPlugin.vsix</li>
+</ol>
+
+<h2>How to use</h2>
+
+<h3>usecase 1</h3>
+
+<ol>
+<li>select on active document</li>
+<li>right click on active document</li>
+<li>Select "Replace GUID"</li>
+</ol>
+
+<h3>usecase 2</h3>
+
+<ol>
+<li>unselect on active document</li>
+<li>right click on active document</li>
+<li>Select "Insert GUID"</li>
+</ol>
+
+
+<h3>usecase 3</h3>
+
+<ol>
+<li>unselect on active document</li>
+<li>right click on active document</li>
+<li>Select "Copy GUID"</li>
+</ol>
+
+<h2>How to customize</h2>
+
+You can customize the format of the text by template<br>
+
+<h3>template variable</h3>
+
+<p>
+<table>
+<tr>
+	<th>Variable Name</th>
+	<th>Description</th>
+	<th>example data</th>
+	<th>Available version</th>
+</tr>
+<tr>
+	<td>{LowerHyphens}</td>
+	<td>Lower-case Full GUID with hypens</td>
+	<td>205ce170-bb0d-49b6-b82d-2175698ef964</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperHyphens}</td>
+	<td>Upper-case Full GUID with hypens</td>
+	<td>205CE170-BB0D-49B6-B82D-2175698EF964</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerNoHyphens}</td>
+	<td>Lower-case Full GUID without hypens</td>
+	<td>205ce170bb0d49b6b82d2175698ef964</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperNoHyphens}</td>
+	<td>Upper-case Full GUID without hypens</td>
+	<td>205CE170BB0D49B6B82D2175698EF964</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerPart1}</td>
+	<td>Lower Case 1st Part</td>
+	<td>205ce170</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperPart1}</td>
+	<td>Upper Case 1st Part</td>
+	<td>205CE170</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerPart2}</td>
+	<td>Lower Case 2nd Part</td>
+	<td>bb0d</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperPart2}</td>
+	<td>Upper Case 2nd Part</td>
+	<td>BB0D</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerPart3}</td>
+	<td>Lower Case 3rd Part</td>
+	<td>49b6</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperPart3}</td>
+	<td>Upper Case 3rd Part</td>
+	<td>49B6</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes1}</td>
+	<td>1st byte of Lower Case Bytes Part</td>
+	<td>b8</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes1}</td>
+	<td>1st byte of Upper Case Bytes Part</td>
+	<td>B8</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes2}</td>
+	<td>2nd byte of Lower Case Bytes Part</td>
+	<td>2d</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes2}</td>
+	<td>2nd byte of Upper Case Bytes Part</td>
+	<td>2D</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes3}</td>
+	<td>3rd byte of Lower Case Bytes Part</td>
+	<td>21</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes3}</td>
+	<td>3rd byte of Upper Case Bytes Part</td>
+	<td>21</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes4}</td>
+	<td>4th byte of Lower Case Bytes Part</td>
+	<td>75</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes4}</td>
+	<td>4th byte of Upper Case Bytes Part</td>
+	<td>75</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes5}</td>
+	<td>5th byte of Lower Case Bytes Part</td>
+	<td>69</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes5}</td>
+	<td>5th byte of Upper Case Bytes Part</td>
+	<td>69</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes6}</td>
+	<td>6th byte of Lower Case Bytes Part</td>
+	<td>8e</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes6}</td>
+	<td>6th byte of Upper Case Bytes Part</td>
+	<td>8E</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes7}</td>
+	<td>7th byte of Lower Case Bytes Part</td>
+	<td>f9</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes7}</td>
+	<td>7th byte of Upper Case Bytes Part</td>
+	<td>F9</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{LowerBytes8}</td>
+	<td>8th byte of Lower Case Bytes Part</td>
+	<td>64</td>
+	<td>ver 1.0 or later</td>
+</tr>
+<tr>
+	<td>{UpperBytes8}</td>
+	<td>8th byte of Upper Case Bytes Part</td>
+	<td>64</td>
+	<td>ver 1.0 or later</td>
+</tr>
+</table>
+</p>
+
+<h2>example</h2>
+
+<h3>template</h3>
+
+<pre>
+// {{LowerHyphens}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{LowerPart1}, 0x{LowerPart2}, 0x{LowerPart3}, 0x{LowerBytes1}, 0x{LowerBytes2}, 0x{LowerBytes3}, 0x{LowerBytes4}, 0x{LowerBytes5}, 0x{LowerBytes6}, 0x{LowerBytes7}, 0x{LowerBytes8});
+
+// {{LowerHyphens(1)}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{LowerPart1(1)}, 0x{LowerPart2(1)}, 0x{LowerPart3(1)}, 0x{LowerBytes1(1)}, 0x{LowerBytes2(1)}, 0x{LowerBytes3(1)}, 0x{LowerBytes4(1)}, 0x{LowerBytes5(1)}, 0x{LowerBytes6(1)}, 0x{LowerBytes7(1)}, 0x{LowerBytes8(1)});
+
+// {{LowerHyphens(2)}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{LowerPart1(2)}, 0x{LowerPart2(2)}, 0x{LowerPart3(2)}, 0x{LowerBytes1(2)}, 0x{LowerBytes2(2)}, 0x{LowerBytes3(2)}, 0x{LowerBytes4(2)}, 0x{LowerBytes5(2)}, 0x{LowerBytes6(2)}, 0x{LowerBytes7(2)}, 0x{LowerBytes8(2)});
+
+// {{UpperHyphens}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{UpperPart1}, 0x{UpperPart2}, 0x{UpperPart3}, 0x{UpperBytes1}, 0x{UpperBytes2}, 0x{UpperBytes3}, 0x{UpperBytes4}, 0x{UpperBytes5}, 0x{UpperBytes6}, 0x{UpperBytes7}, 0x{UpperBytes8});
+
+// {{UpperHyphens(1)}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{UpperPart1(1)}, 0x{UpperPart2(1)}, 0x{UpperPart3(1)}, 0x{UpperBytes1(1)}, 0x{UpperBytes2(1)}, 0x{UpperBytes3(1)}, 0x{UpperBytes4(1)}, 0x{UpperBytes5(1)}, 0x{UpperBytes6(1)}, 0x{UpperBytes7(1)}, 0x{UpperBytes8(1)});
+
+// {{UpperHyphens(2)}}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x{UpperPart1(2)}, 0x{UpperPart2(2)}, 0x{UpperPart3(2)}, 0x{UpperBytes1(2)}, 0x{UpperBytes2(2)}, 0x{UpperBytes3(2)}, 0x{UpperBytes4(2)}, 0x{UpperBytes5(2)}, 0x{UpperBytes6(2)}, 0x{UpperBytes7(2)}, 0x{UpperBytes8(2)});
+</pre>
+
+<h3>output</h3>
+
+<pre>
+// {7e4e7801-c83d-4ab3-a3e7-b0af34df333b}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x7e4e7801, 0xc83d, 0x4ab3, 0xa3, 0xe7, 0xb0, 0xaf, 0x34, 0xdf, 0x33, 0x3b);
+
+// {5259b268-1863-4591-9236-19783f8f36ff}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x5259b268, 0x1863, 0x4591, 0x92, 0x36, 0x19, 0x78, 0x3f, 0x8f, 0x36, 0xff);
+
+// {bf2b3dc7-0763-423e-9542-96f2e4aa6e9a}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0xbf2b3dc7, 0x0763, 0x423e, 0x95, 0x42, 0x96, 0xf2, 0xe4, 0xaa, 0x6e, 0x9a);
+
+// {7E4E7801-C83D-4AB3-A3E7-B0AF34DF333B}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x7E4E7801, 0xC83D, 0x4AB3, 0xA3, 0xE7, 0xB0, 0xAF, 0x34, 0xDF, 0x33, 0x3B);
+
+// {5259B268-1863-4591-9236-19783F8F36FF}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0x5259B268, 0x1863, 0x4591, 0x92, 0x36, 0x19, 0x78, 0x3F, 0x8F, 0x36, 0xFF);
+
+// {BF2B3DC7-0763-423E-9542-96F2E4AA6E9A}
+DEFINE_GUID(&lt;&lt;name&gt;&gt;, 0xBF2B3DC7, 0x0763, 0x423E, 0x95, 0x42, 0x96, 0xF2, 0xE4, 0xAA, 0x6E, 0x9A);
+</pre>
+
+
+<h3>how to set the template</h3>
+
+<p>
+<ol>
+<li>Select Tools Menu</li>
+<li>Select Options...</li>
+<li>Select CreateGUIDVSPlugin</li>
+<li>Select an item from ComboBox</li>
+<li>press Insert button</li>
+</ol>
+</p>
 
 <div class="ads_bottom">
 	<div class="responsive_googleads_bottom">
