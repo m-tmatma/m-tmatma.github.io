@@ -60,6 +60,7 @@ https://m-tmatma.github.io/OpenCover/OpenCover1.html
 https://m-tmatma.github.io/OpenCover/OpenCover2.html
 https://m-tmatma.github.io/OpenCppCoverage/index.html
 https://m-tmatma.github.io/OpenCppCoverage/OpenCppCoverage.html
+https://m-tmatma.github.io/other/bug-chrome-win10-1803.html
 https://m-tmatma.github.io/other/cmd_explorer.html
 https://m-tmatma.github.io/other/firefox_plugin.html
 https://m-tmatma.github.io/other/google_desktop.html
@@ -157,6 +158,7 @@ https://m-tmatma.github.io/VC/commandline.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbers.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualEN.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualJP.html
+https://m-tmatma.github.io/VC/CreateGUIDVSPluginManulEN.html
 https://m-tmatma.github.io/VC/EditorConfig.html
 https://m-tmatma.github.io/VC/ForceUTF8.html
 https://m-tmatma.github.io/VC/GoogleTestAdapter.html
