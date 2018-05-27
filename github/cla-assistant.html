@@ -1,0 +1,611 @@
+﻿<html>
+<head>
+<!-- Start Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-49508988-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-49508988-1');
+</script>
+<!-- End Google Analytics -->
+<meta name="google-site-verification" content="8Y9FzGJmBS8lXf2-5dS9kvKDfT7uJFyN2AF63K5LgJQ" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Fedora" />
+<meta name="keywords" content="Fedora 26" />
+<meta name="keywords" content="dnf" />
+<meta name="keywords" content="rpm" />
+<meta name="keywords" content="gitbucket" />
+<meta name="keywords" content="gitbucket 4.15" />
+<meta name="keywords" content="gitbucket 4.15.0" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>cla-assistant 使い方</title>
+</head>
+<body>
+<!-- User Heat Tag -->
+<!-- http://userheat.com -->
+<script type="text/javascript">
+(function(add, cla){window['UserHeatTag']=cla;window[cla]=window[cla]||function(){(window[cla].q=window[cla].q||[]).push(arguments)},window[cla].l=1*new Date();var ul=document.createElement('script');var tag = document.getElementsByTagName('script')[0];ul.async=1;ul.src=add;tag.parentNode.insertBefore(ul,tag);})('//uh.nakanohito.jp/uhj2/uh.js', '_uhtracker');_uhtracker({id:'uhG8g9zBC0'});
+</script>
+<!-- End User Heat Tag --><!-- Pt engine End -->
+<!-- Pt engine Start -->
+<!-- https://www.ptengine.jp/ -->
+<script type="text/javascript">
+    window._pt_lt = new Date().getTime();
+    window._pt_sp_2 = [];
+    _pt_sp_2.push('setAccount,52fcdfa3');
+    var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    (function() {
+        var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
+        atag.src = _protocol + 'js.ptengine.jp/pta.js';
+        var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
+        stag.src = _protocol + 'js.ptengine.jp/pts.js';
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+    })();
+</script>
+<!-- Pt engine End -->
+<!-- [FC2 Analyzer] http://analyzer.fc2.com/  -->
+<div class="ads_top">
+	<div class="responsive_googleads_top">
+	<p>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5744677742"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive2 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="6823799623"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive3 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="8280636932"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive4 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="3399436226"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</p>
+	</div>
+	<!-- end of "responsive_googleads_top" -->
+
+	<!--
+		<div class="amazon_ads_top">
+		<iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=294&l=ur1&category=prime&banner=1P5H17MJB4YQ4W7GVCG2&f=ifr&linkID=73c314d12922ddf9b7c8be441ba9202b&t=mtsuchiyama-22&tracking_id=mtsuchiyama-22" width="320" height="100" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+		<iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=294&l=ur1&category=musicunlimited&banner=1J5RT8CC7JYRE8BB1E82&f=ifr&linkID=e31282b25ce951fc8af6bce3b10171f1&t=mtsuchiyama-22&tracking_id=mtsuchiyama-22" width="320" height="100" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+		</div>
+	-->
+	<!-- end of "amazon_ads_top" -->
+</div>
+<!-- end of "ads_top" -->
+
+
+<noscript>
+	<div align="right">
+	<img src="http://analyzer5.fc2.com:8080/ana/icon.php?uid=45767&ref=&href=&wid=0&hei=0&&col=0" />
+	<strong>
+	<a href="http://diary.fc2.com/">日記</a>
+	</strong>
+	</div>
+</noscript>
+<!-- [FC2 Analyzer]  -->
+
+<div align="left">
+	<div id="srchBox">
+	<style type="text/css">
+	#srchBox
+	{
+	width:298px;
+	_width:296px;
+	margin-bottom:10px;
+	background-color:#FFF9F9;
+	border-style:solid;
+	border-width:1px;
+	border-color:#EEEEEE;
+	color:#000000;
+	text-align:left;
+	}
+	#srchBox *
+	{
+	margin:0;
+	padding:0;
+	font-size:13px;
+	*font-size:small;
+	*font:x-small;
+	}
+	#srchBox a img
+	{
+	border:none;
+	}
+	#srchBox #srch
+	{
+	padding:10px 10px 0 10px;
+	}
+	#srchBox #srch #srchForm
+	{
+	white-space:nowrap;
+	}
+	#srchBox #srchInput
+	{
+	width:188px;
+	margin-right:6px;
+	vertical-align:bottom;
+	}
+	#srchBox #srchBtn
+	{
+	width:80px;
+	}
+	*html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	*:first-child+html #srchBox #srchBtn
+	{
+	padding-top:2px;
+	}
+	#srchBox ul
+	{
+	margin-top:6px;
+	text-align:left;
+	}
+	#srchBox li
+	{
+	list-style-type:none;
+	display:inline;
+	zoom:1;
+	padding-right:10px;
+	}
+	#srchBox li input
+	{
+	zoom:1;
+	margin-right:2px;
+	_margin:-4px 0 -4px -4px;
+	vertical-align:middle;
+	border:0;
+	}
+	*:+html #srchBox li input
+	{
+	margin:-4px 0 -4px -4px;
+	}
+	#srchBox #srchLogo
+	{
+	margin:6px 6px 6px 0;
+	text-align:right;
+	}
+	#srchBox #srchLogo a
+	{
+	color:#666666;
+	text-decoration:none;
+	font-size:85%;
+	}
+	#srchBox #srchLogo a:hover
+	{
+	text-decoration:underline;
+	}
+
+	</style>
+	<form action="https://custom.search.yahoo.co.jp/search" method="get" id="srch">
+	<p id="srchForm">
+	<input type="text" name="p" id="srchInput"><input type="submit" value="検索" id="srchBtn">
+	<input type="hidden" id="fr" name="fr" value="cse">
+	<input type="hidden" id="ei" name="ei" value="UTF-8">
+	<input type="hidden" id="csid" name="csid" value="J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX">
+	</p>
+	<input type="hidden" name="vs" value="m-tmatma.github.io" id="yjInsite">
+	</form>
+	<p id="srchLogo"><a href="http://www.yahoo.co.jp"><img src="https://s.yimg.jp/images/search/customsearch/yjlogo/yjlogo_type1_fffafa.gif" width="124" height="20" alt="powered by Yahoo! JAPAN"></a></p>
+	<img src="https://custom.search.yahoo.co.jp/images/window/J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX.gif">
+	</div>
+	<!-- /#srchBox -->
+</div>
+<div class="index">
+	<a href="../sitemap.html">サイトマップ</a>
+	<a href="../contact.html">連絡先</a>
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<div align="right">
+$Date: 2018-05-27 17:58:58 +0900 (2018/05/27 (日)) $<br>
+$Revision: 1340 $<br>
+</div>
+
+<h1>cla-assistant 使い方</h1>
+
+<h2>概略</h2>
+
+オープンソースソフトウェアにおいて、いろんな人の貢献を受け入れるにあたって
+作成した頂いたソースの扱いを明確にするために
+事前に <a href="https://producingoss.com/ja/copyright-assignment.html>
+CLA(Contributor License Agreement, 貢献者ライセンス同意書)
+</a>
+に署名を求めることがあります。<br>
+
+例えば GitHub の <a href="https://github.com/google>google のリポジトリ</a> では
+最初の Pull Request を送ったときに Google の CLA に署名することを求められます。<br>
+
+GitHub で公開しているオープンソースのリポジトリに対して GitHub と連携して
+CLA に署名してもらう手段として <a href="https://cla-assistant.io">cla-assistant</a> が
+提供されています。<br>
+
+このページでは <a href="https://cla-assistant.io">cla-assistant</a> の使い方を説明します。<br>
+
+<h2>手順の概略</h2>
+
+<h3>リポジトリのオーナー側の手順</h3>
+
+<ol>
+<li>CLA を採用するリポジトリ側のアカウントを準備する</li>
+<li>CLA を採用するリポジトリを作成する</li>
+<li>cla-assistant を有効にする</li>
+</ol>
+
+
+<h3>リポジトリにPull Request を送る側の手順</h3>
+
+<ol>
+<li>Pull Request を送るユーザーのアカウントを準備する</li>
+<li>CLA を採用するリポジトリを作成する</li>
+<li>cla-assistant を有効にする</li>
+</ol>
+
+<h2>手順</h2>
+
+<h3>リポジトリのオーナー側の手順</h3>
+
+<h4>リポジトリのオーナー側のアカウント作成</h4>
+
+<ol>
+<li>
+	<a href="https://github.com">https://github.com</a> にアクセスする。<br>
+	<img src="image/cla-assistant/1-1-github-create-account.jpg" />
+</li>
+<li>
+	使用したいアカウント名、メールアドレス、パスワードを入力して "Sign up for GitHub" を選ぶ<br>
+	<img src="image/cla-assistant/1-2-github-create-account.jpg" />
+</li>
+<li>
+	オープンソース用に使用する場合、そのまま Continue をクリックする<br>
+	<img src="image/cla-assistant/1-3-github-create-account.jpg" />
+</li>
+<li>
+	スクロールして Continue をクリックする<br>
+	<img src="image/cla-assistant/1-4-github-create-account.jpg" />
+</li>
+<li>
+	指定したメールアドレス確認メールが来るので、メールのリンクをクリックする。<br>
+	<img src="image/cla-assistant/1-5-github-create-account-verify.jpg" />
+</li>
+<li>
+	以下の画面になる<br>
+	<img src="image/cla-assistant/1-6-dashboard.jpg" />
+</li>
+</ol>
+
+<h4>リポジトリの作成</h4>
+
+<ol>
+<li>
+	<img src="image/cla-assistant/2-1-create-repository.jpg" />
+</li>
+</ol>
+
+<h4>ファイルの追加</h4>
+
+<ol>
+<li>
+	git コマンドで clone してファイルを追加する。
+	<img src="image/cla-assistant/3-1-add-file.jpg" />
+</li>
+<li>
+	以下の画面になる。
+	<img src="image/cla-assistant/3-2-done-push.jpg" />
+</li>
+</ol>
+
+<h4>cla-assistant の設定</h4>
+
+<ol>
+<li>
+	<a href="https://cla-assistant.io">https://cla-assistant.io</a> にアクセスする。<br>
+	"Sign in with GitHub" をクリックする。
+	<img src="image/cla-assistant/4-1-cla-assistant.jpg" />
+</li>
+<li>
+	GitHub に対して CLA assistant からアクセスする権限を付与するか確認画面が出る<br>
+	<img src="image/cla-assistant/4-2-sign-up-cla-assistant.jpg" />
+	CLA assistant に権限を与える場合、"Authorize cla-assistant" をクリックする<br>
+</li>
+<li>
+	もう一度、権限を与えるか確認画面が出る。<br>
+	画面をスクロールする。<br>
+	<img src="image/cla-assistant/4-3-authorize1.jpg" />
+</li>
+<li>
+	CLA assistant に権限を与える場合、"Authorize cla-assistant" をクリックする<br>
+	<img src="image/cla-assistant/4-4-authorize2.jpg" />
+</li>
+<li>
+	CLA の設定画面になる<br>
+	Configure CLA を選ぶ<br>
+	<img src="image/cla-assistant/4-5-configure-CLA.jpg" />
+</li>
+<li>
+	CLA を設定する対象リポジトリと CLA を設定する<br>
+	既存の CLA と独自のものを選べる<br>
+	ここでは "don't have one" のリンクを選ぶ<br>
+	<img src="image/cla-assistant/4-6-configure-CLA.jpg" />
+</li>
+<li>
+	"gist.github.com" のリンクを選ぶ<br>
+	<img src="image/cla-assistant/4-7-configure-CLA-gist.jpg" />
+</li>
+<li>
+	"gist.github.com" のファイルを入力する画面になる<br>
+	<img src="image/cla-assistant/4-8-create-CLA-gist.jpg" />
+</li>
+<li>
+	CLA に使うテキストを入力する<br>
+	"create public gist" を選ぶ<br>
+	<img src="image/cla-assistant/4-9-edit-CLA-gist.jpg" />
+</li>
+<li>
+	以下の画面になる<br>
+	<img src="image/cla-assistant/4-10-done-CLA-gist.jpg" />
+</li>
+<li>
+	"Paste a URL from a Gist" に作成した Gist の URL を貼り付ける<br>
+	<img src="image/cla-assistant/4-11-set-CLA-gist.jpg" />
+</li>
+<li>
+	"LINK" を選択する<br>
+	<img src="image/cla-assistant/4-12-link-CLA-gist.jpg" />
+</li>
+<li>
+	"Yes, let's do this" を選択する<br>
+	<img src="image/cla-assistant/4-13-confirm-link-CLA-gist.jpg" />
+</li>
+<li>
+	"Great, thanks!" を選択する<br>
+	<img src="image/cla-assistant/4-14-done-link-CLA-gist.jpg" />
+</li>
+<li>
+	CLA が登録されたことを確認できる<br>
+	<img src="image/cla-assistant/4-15-list-CLA.jpg" />
+</li>
+<li>
+	"Setting" 画面で Webhooks に cla assistant が追加されていることを確認できる<br>
+	<img src="image/cla-assistant/5-1-list-webhook.jpg" />
+</li>
+</ol>
+
+<h3>リポジトリにPull Request を送る側の手順</h3>
+
+<h4>Pull Request を送る側のアカウント作成</h4>
+
+<ol>
+<li>
+	<img src="image/cla-assistant/6-1-create-another-user.jpg" />
+</li>
+<li>
+	<img src="image/cla-assistant/6-2-create-another-user.jpg" />
+</li>
+<li>
+	<img src="image/cla-assistant/6-3-create-another-user.jpg" />
+</li>
+<li>
+	<img src="image/cla-assistant/6-4-create-another-user.jpg" />
+</li>
+<li>
+	<img src="image/cla-assistant/6-5-done-create-another-user.jpg" />
+</li>
+</ol>
+
+<h4>Pull Request を送るための準備</h4>
+
+<ol>
+<li>
+	Pull Request を送りたいリポジトリにアクセスする<br>
+	Fork ボタンを押す<br>
+	<img src="image/cla-assistant/7-1-fork.jpg" />
+</li>
+<li>
+	Fork 中に以下の画面になる<br>
+	<img src="image/cla-assistant/7-2-fork.jpg" />
+</li>
+<li>
+	Pull Request を行うための作業ブランチを作る<br>
+	"Branch: master" のところをクリックして、ブランチ名を入力する。<br>
+	"Create branch: ～" のところをクリックして、ブランチを作成する<br>
+	<img src="image/cla-assistant/8-1-create-feature-branch.jpg" />
+</li>
+<li>
+	"test.txt" をクリックすると以下の画面になる<br>
+	鉛筆ボタンをクリックしてファイルの編集を行う<br>
+	<img src="image/cla-assistant/9-1-edit.jpg" />
+</li>
+<li>
+	スクロールして、"commit directly to the ... branch." にチェックが入っている状態で "Commit changes" を選ぶ<br>
+	<img src="image/cla-assistant/9-2-commit.jpg" />
+</li>
+<li>
+	以下の画面になる。<br>
+	<img src="image/cla-assistant/9-3-done-commit.jpg" />
+</li>
+</ol>
+
+<h4>Pull Request を送る手順 (CLA への署名含む)</h4>
+
+<ol>
+<li>
+	"Compare & pull request" を選ぶ<br>
+	<img src="image/cla-assistant/10-1-pull-request.jpg" />
+</li>
+<li>
+	"pull request の説明の入力画面になる<br>
+	"create pull request を選ぶ<br>
+	<img src="image/cla-assistant/10-2-open-pull-request1.jpg" />
+</li>
+<li>
+	"pull request が作成される<br>
+	<img src="image/cla-assistant/10-3-open-pull-request2.jpg" />
+</li>
+<li>
+	少し待つと以下の画面になり、CLA に署名されていないという表示が出る。
+	"CLA not signed yet" のバッチをクリックする。<br>
+	<img src="image/cla-assistant/10-4-check-pull-request1.jpg" />
+</li>
+<li>
+	以下の画面が表示される。<br>
+	CLA に同意できるなら "Sign in with GitHub to agree" をクリックして署名する<br>
+	<img src="image/cla-assistant/10-5-sign-CLA.jpg" />
+</li>
+<li>
+	CLA assistant に権限を与えるか確認する画面が表示される<br>
+	CLA assistant に権限を与える場合、"Authorize cla-assistant" をクリックする<br>
+	<img src="image/cla-assistant/10-6-authorize-cla-assistant.jpg" />
+</li>
+<li>
+	CLA assistant の処理画面が表示される<br>
+	<img src="image/cla-assistant/10-7-authorize-cla-assistant2.jpg" />
+</li>
+<li>
+	"CLA signed" のバッチが表示されて、署名できたことが確認できる<br>
+	<img src="image/cla-assistant/10-8-done-sign-cla-assistant.jpg" />
+</li>
+</ol>
+
+<h3>リポジトリのオーナー側の手順</h3>
+
+<ol>
+<li>
+	リポジトリのページにアクセスすると "Pull requests" で 1 となっており
+	オープンしている "pull request" があるこを確認できる。
+	<img src="image/cla-assistant/11-1-check-pull-request.jpg" />
+</li>
+<li>
+	"Pull requests" を選ぶと以下の画面になる<br>
+	<img src="image/cla-assistant/11-2-list-pull-request.jpg" />
+</li>
+<li>
+	Pull request を選ぶ<br>
+	<img src="image/cla-assistant/11-3-show-pull-request.jpg" />
+</li>
+<li>
+	以下の画面になる。<br>
+	"CLA signed" のバッチが表示されていることを確認できる<br>
+	"Confirm merge" を選択する<br>
+	<img src="image/cla-assistant/11-4-merge-pull-request.jpg" />
+</li>
+<li>
+	以下の画面になる。<br>
+	<img src="image/cla-assistant/11-5-merged-pull-request.jpg" />
+</li>
+</ol>
+
+
+<h3>リポジトリにPull Request を送った側の手順</h3>
+
+<ol>
+<li>
+	pull request がマージされたのを確認できる<br>
+	"Delete branch" を選択してマージ済みの branch を削除する<br>
+	<img src="image/cla-assistant/12-1-delete-branch.jpg" />
+</li>
+<li>
+	"マージ済みの branch が削除されたのを確認できる<br>
+	<img src="image/cla-assistant/12-2-deleted-branch.jpg" />
+</li>
+</ol>
+
+
+<div class="ads_bottom">
+	<div class="responsive_googleads_bottom">
+	<p>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom1 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="4712927016"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom2 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5590894411"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom3 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5195023189"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom4 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5371402567"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</p>
+	</div>
+	<!-- end of "responsive_googleads_bottom" -->
+
+	<!--
+		<div class="amazon_ads_top">
+		<iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=294&l=ur1&category=prime&banner=1P5H17MJB4YQ4W7GVCG2&f=ifr&linkID=73c314d12922ddf9b7c8be441ba9202b&t=mtsuchiyama-22&tracking_id=mtsuchiyama-22" width="320" height="100" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+		<iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=294&l=ur1&category=musicunlimited&banner=1J5RT8CC7JYRE8BB1E82&f=ifr&linkID=e31282b25ce951fc8af6bce3b10171f1&t=mtsuchiyama-22&tracking_id=mtsuchiyama-22" width="320" height="100" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+		</div>
+	-->
+	<!-- end of "amazon_ads_top" -->
+</div>
+<!-- end of "ads_bottom" -->
+</body>
+</html>
