@@ -3,10 +3,11 @@ import os
 def convert_to_pug(htmlfile, pugfile):
 	command = "html2pug < %s > %s" % (htmlfile, pugfile)
 	print (command)
+	os.system(command)
 
 def convert_from_pug(pugfile):
 	command = "pug %s --pretty" % (pugfile)
-	print (command)
+	os.system(command)
 
 scriptdir = os.path.dirname(os.path.realpath(__file__))
 for dirpath, dirnames, filenames in os.walk(scriptdir):
