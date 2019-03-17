@@ -17,6 +17,7 @@ https://m-tmatma.github.io/cpu/asm/link.html
 https://m-tmatma.github.io/distcc/distcc_tcp.html
 https://m-tmatma.github.io/distcc/index.html
 https://m-tmatma.github.io/EFI/index.html
+https://m-tmatma.github.io/Fedora/exFat_fedora29.html
 https://m-tmatma.github.io/Fedora/index.html
 https://m-tmatma.github.io/Fedora/install_linux_from_USB.html
 https://m-tmatma.github.io/Fedora/install_linux_from_USB_fedora27.html
@@ -31,6 +32,7 @@ https://m-tmatma.github.io/git/ResolveConflictByRebase.html
 https://m-tmatma.github.io/git/update-submodule.html
 https://m-tmatma.github.io/gitbucket/gitbucket-fedora-rpm.html
 https://m-tmatma.github.io/gitbucket/index.html
+https://m-tmatma.github.io/github/cla-assistant.html
 https://m-tmatma.github.io/github/enum-release-versions.html
 https://m-tmatma.github.io/github/index.html
 https://m-tmatma.github.io/h265/HEVC_software.html
@@ -145,7 +147,6 @@ https://m-tmatma.github.io/svndoc/svn_write_through_proxy.html
 https://m-tmatma.github.io/svndoc/1.9/index.html
 https://m-tmatma.github.io/svndoc/1.9/svn_basic_2008.html
 https://m-tmatma.github.io/svndoc/1.9/svn_ssl_2008.html
-https://m-tmatma.github.io/svnmerge/index.html
 https://m-tmatma.github.io/svnmerge/svnmerge_py_ja.html
 https://m-tmatma.github.io/swift3/file.html
 https://m-tmatma.github.io/swift3/index.html
@@ -159,6 +160,7 @@ https://m-tmatma.github.io/VC/CopyWithLineNumbers.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualEN.html
 https://m-tmatma.github.io/VC/CopyWithLineNumbersManualJP.html
 https://m-tmatma.github.io/VC/CreateGUIDVSPluginManulEN.html
+https://m-tmatma.github.io/VC/CreateGUIDVSPluginManulJP.html
 https://m-tmatma.github.io/VC/EditorConfig.html
 https://m-tmatma.github.io/VC/ForceUTF8.html
 https://m-tmatma.github.io/VC/GoogleTestAdapter.html
@@ -170,7 +172,6 @@ https://m-tmatma.github.io/virtualbox/virtualbox-windows-compile.html
 https://m-tmatma.github.io/wdf-driver/index.html
 https://m-tmatma.github.io/wdf-driver/Sample-KMDF-Function-Driver-for-OSR-USB-FX2.html
 https://m-tmatma.github.io/wdf-driver/UMDF-Driver-Skeleton-Sample.html
-https://m-tmatma.github.io/web/index.html
 https://m-tmatma.github.io/web/mobile-friendly.html
 https://m-tmatma.github.io/Windows8/index.html
 https://m-tmatma.github.io/wwwc/index.html

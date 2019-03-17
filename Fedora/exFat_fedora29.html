@@ -1,0 +1,150 @@
+﻿<html>
+<head>
+<!-- Start Google Analytics -->
+<script async type="text/javascript" src="../googleanalytics.js"></script>
+<!-- End Google Analytics -->
+<meta name="google-site-verification" content="8Y9FzGJmBS8lXf2-5dS9kvKDfT7uJFyN2AF63K5LgJQ" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="samba名" />
+<link href="../style.css" type="text/css" rel="stylesheet" />
+<title>exFat を使う (Fedora 29)</title>
+</head>
+<body>
+<div class="ads_top">
+	<div class="responsive_googleads_top">
+	<p>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5744677742"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive2 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="6823799623"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive3 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="8280636932"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</p>
+	</div>
+	<!-- end of "responsive_googleads_top" -->
+</div>
+<!-- end of "ads_top" -->
+
+
+
+<div align="left">
+	<div id="srchBox">
+	<form action="https://custom.search.yahoo.co.jp/search" method="get" id="srch">
+	<p id="srchForm">
+	<input type="text" name="p" id="srchInput"><input type="submit" value="検索" id="srchBtn">
+	<input type="hidden" id="fr" name="fr" value="cse">
+	<input type="hidden" id="ei" name="ei" value="UTF-8">
+	<input type="hidden" id="csid" name="csid" value="J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX">
+	</p>
+	<input type="hidden" name="vs" value="m-tmatma.github.io" id="yjInsite">
+	</form>
+	<p id="srchLogo"><a href="http://www.yahoo.co.jp"><img src="https://s.yimg.jp/images/search/customsearch/yjlogo/yjlogo_type1_fffafa.gif" width="124" height="20" alt="powered by Yahoo! JAPAN"></a></p>
+	<img src="https://custom.search.yahoo.co.jp/images/window/J0zMbP1PHIwqivqBjqOaAkRIovGsfNu3LxBX.gif">
+	</div>
+	<!-- /#srchBox -->
+</div>
+<div class="index">
+	<a href="../sitemap.html">サイトマップ</a>
+	<a href="../contact.html">連絡先</a>
+	<a href="../">トップに戻る</a>
+	<a href="./">最初に戻る</a>
+</div>
+<!--
+<div align="right">
+</div>
+-->
+
+<h1>exFat を使う (Fedora 29)</h1>
+
+Fedora 29 で exFat はデフォルトで有効になっていないため、認識できるようにする方法を説明します。
+
+<h2>インストール方法</h2>
+
+<pre>
+wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-29.noarch.rpm
+sudo rpm -Uvh rpmfusion-free-release-29.noarch.rpm
+sudo dnf install fuse-exfat  -y
+sudo dnf install exfat-utils -y
+</pre>
+
+<h2>説明</h2>
+
+<ul>
+<li>何らかの問題で Fedora に含めることができないソフトウェアのために <a href="https://rpmfusion.org/Configuration">RPM Fusion</a> というリポジトリがあります。</li>
+<li><a href="http://download1.rpmfusion.org/free/fedora/">http://download1.rpmfusion.org/free/fedora/</a> から Fedora の対応するバージョンのファイルを
+ダウンロードしてインストールことで、RPM Fusion のソフトウェアをインストールできます。</li>
+<li><a href="https://fedora.pkgs.org/29/rpmfusion-free-x86_64/fuse-exfat-1.3.0-1.fc29.x86_64.rpm.html">fuse-exfat</a> というパッケージをインストール
+することで exFat を認識します。</li>
+<li><a href="https://fedora.pkgs.org/29/rpmfusion-free-x86_64/exfat-utils-1.3.0-1.fc29.x86_64.rpm.html">exfat-utils</a> というパッケージをインストール
+することで exFat 関連のツールが利用可能になります。</li>
+</ul>
+
+<div class="ads_bottom">
+	<div class="responsive_googleads_bottom">
+	<p>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom1 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="4712927016"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom2 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5590894411"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- responsive_bottom3 -->
+		<ins class="adsbygoogle"
+		     style="display:block"
+		     data-ad-client="ca-pub-8722759789158430"
+		     data-ad-slot="5195023189"
+		     data-ad-format="auto"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</p>
+	</div>
+	<!-- end of "responsive_googleads_bottom" -->
+</div>
+<!-- end of "ads_bottom" -->
+</body>
+</html>
