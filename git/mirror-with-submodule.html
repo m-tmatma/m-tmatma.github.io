@@ -204,34 +204,34 @@ GitHub (ミラー元)
 	<li>
 		submod1
 		<ol>
-			<li>git clone</li>
-			<li>ファイル編集</li>
-			<li>git add</li>
-			<li>git commit</li>
-			<li>git push</li>
+			<li><a href="#steps-GitHub-submod1-clone">git clone</a></li>
+			<li><a href="#steps-GitHub-submod1-commit">ファイル編集</a></li>
+			<li><a href="#steps-GitHub-submod1-commit">git add</a></li>
+			<li><a href="#steps-GitHub-submod1-commit">git commit</a></li>
+			<li><a href="#steps-GitHub-submod1-push">git push</a></li>
 		</ol>
 	</li>
 	<li>
 		submod2
 		<ol>
-			<li>git clone</li>
-			<li>ファイル編集</li>
-			<li>git add</li>
-			<li>git commit</li>
-			<li>git push</li>
+			<li><a href="#steps-GitHub-submod2-clone">git clone</a></li>
+			<li><a href="#steps-GitHub-submod2-commit">ファイル編集</a></li>
+			<li><a href="#steps-GitHub-submod2-commit">git add</a></li>
+			<li><a href="#steps-GitHub-submod2-commit">git commit</a></li>
+			<li><a href="#steps-GitHub-submod2-push">git push</a></li>
 		</ol>
 	</li>
 	<li>
 		submod-parant
 		<ol>
-			<li>git clone</li>
-			<li>ファイル編集</li>
-			<li>git add</li>
-			<li>git commit</li>
-			<li>submod1 を submodule として追加</li>
-			<li>submod2 を submodule として追加</li>
-			<li>git commit</li>
-			<li>git push</li>
+			<li><a href="#steps-GitHub-submod-parent-clone">git clone</a></li>
+			<li><a href="#steps-GitHub-submod-parent-commit">ファイル編集</a></li>
+			<li><a href="#steps-GitHub-submod-parent-commit">git add</a></li>
+			<li><a href="#steps-GitHub-submod-parent-commit">git commit</a></li>
+			<li><a href="#steps-GitHub-submod-parent-add-submod">submod1 を submodule として追加</a></li>
+			<li><a href="#steps-GitHub-submod-parent-add-submod">submod2 を submodule として追加</a></li>
+			<li><a href="#steps-GitHub-submod-parent-commit2">git commit</a></li>
+			<li><a href="#steps-GitHub-submod-parent-push">git push</a></li>
 		</ol>
 	</li>
 </ol>
@@ -243,22 +243,22 @@ Bitbucket (ミラー先)
 	<li>
 		submod1
 		<ol>
-			<li>git remote add</li>
-			<li>git push</li>
+			<li><a href="#steps-Bitbucket-submod1-remote">git remote add</a></li>
+			<li><a href="#steps-Bitbucket-submod1-push">git push</a></li>
 		</ol>
 	</li>
 	<li>
 		submod2
 		<ol>
-			<li>git remote add</li>
-			<li>git push</li>
+			<li><a href="#steps-Bitbucket-submod2-remote">git remote add</a></li>
+			<li><a href="#steps-Bitbucket-submod2-push">git push</a></li>
 		</ol>
 	</li>
 	<li>
 		submod-parant
 		<ol>
-			<li>git remote add</li>
-			<li>git push</li>
+			<li><a href="#steps-Bitbucket-submod-parent-remote">git remote add</a></li>
+			<li><a href="#steps-Bitbucket-submod-parent-push">git push</a></li>
 		</ol>
 	</li>
 </ol>
@@ -407,7 +407,7 @@ Changes to be committed:
         new file:   submod2
 </pre>
 
-<h4 id="steps-GitHub-submod-parent-commit">submod-parant のリポジトリに submodule の追加を commit</h4>
+<h4 id="steps-GitHub-submod-parent-commit2">submod-parant のリポジトリに submodule の追加を commit</h4>
 
 <pre>
 D:\demo\submod-parant>git commit -m "add submodule"
@@ -504,9 +504,9 @@ To https://bitbucket.org/m-tmatma/submod2.git
  * [new branch]      master -> master
 </pre>
 
-<h3 id="steps-Bitbucket-submod-parant-add">Bitbucket 上に 親リポジトリを登録する</h3>
+<h3 id="steps-Bitbucket-submod-parent-add">Bitbucket 上に 親リポジトリを登録する</h3>
 
-<h4 id="steps-Bitbucket-submod-parant-remote">Bitbucket の submod-parant を remote URL として登録</h4>
+<h4 id="steps-Bitbucket-submod-parent-remote">Bitbucket の submod-parant を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod-parant>git remote -v
@@ -516,7 +516,7 @@ origin  https://github.com/m-tmatma/submod-parant.git (push)
 D:\demo\submod-parant>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git
 </pre>
 
-<h4 id="steps-Bitbucket-submod-parant-check">remote の登録確認</h4>
+<h4 id="steps-Bitbucket-submod-parent-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod-parant>git remote -v
@@ -526,7 +526,7 @@ origin  https://github.com/m-tmatma/submod-parant.git (fetch)
 origin  https://github.com/m-tmatma/submod-parant.git (push)
 </pre>
 
-<h4 id="steps-Bitbucket-submod-parant-push">Bitbucket の submod-parant に push</h4>
+<h4 id="steps-Bitbucket-submod-parent-push">Bitbucket の submod-parant に push</h4>
 
 <pre>
 D:\demo\submod-parant>git push mirror master
