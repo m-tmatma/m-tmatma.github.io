@@ -196,6 +196,72 @@ Bitbucket 上で空の リポジトリを作成します。(https://bitbucket.or
 	<li>submod2</li>
 </ul>
 
+<h2>大まかな流れ</h2>
+
+GitHub (ミラー元)
+
+<ol>
+	<li>
+		submod1
+		<ol>
+			<li>git clone</li>
+			<li>ファイル編集</li>
+			<li>git add</li>
+			<li>git commit</li>
+			<li>git push</li>
+		</ol>
+	</li>
+	<li>
+		submod2
+		<ol>
+			<li>git clone</li>
+			<li>ファイル編集</li>
+			<li>git add</li>
+			<li>git commit</li>
+			<li>git push</li>
+		</ol>
+	</li>
+	<li>
+		submod-parant
+		<ol>
+			<li>git clone</li>
+			<li>ファイル編集</li>
+			<li>git add</li>
+			<li>git commit</li>
+			<li>submod1 を submodule として追加</li>
+			<li>submod2 を submodule として追加</li>
+			<li>git commit</li>
+			<li>git push</li>
+		</ol>
+	</li>
+</ol>
+
+Bitbucket (ミラー先)
+
+
+<ol>
+	<li>
+		submod1
+		<ol>
+			<li>git remote add</li>
+			<li>git push</li>
+		</ol>
+	</li>
+	<li>
+		submod2
+		<ol>
+			<li>git remote add</li>
+			<li>git push</li>
+		</ol>
+	</li>
+	<li>
+		submod-parant
+		<ol>
+			<li>git remote add</li>
+			<li>git push</li>
+		</ol>
+	</li>
+</ol>
 
 <h2>GitHub 上のリポジトリへのコード登録</h2>
 
