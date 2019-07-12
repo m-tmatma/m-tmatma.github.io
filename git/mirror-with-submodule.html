@@ -198,7 +198,7 @@ Bitbucket 上で空の リポジトリを作成します。(https://bitbucket.or
 
 <h2>大まかな流れ</h2>
 
-GitHub (ミラー元)
+<h3>GitHub (ミラー元) の構築</h3>
 
 <ol>
 	<li>
@@ -236,8 +236,7 @@ GitHub (ミラー元)
 	</li>
 </ol>
 
-Bitbucket (ミラー先)
-
+<h3>Bitbucket (ミラー先) の構築</h3>
 
 <ol>
 	<li>
@@ -262,6 +261,16 @@ Bitbucket (ミラー先)
 		</ol>
 	</li>
 </ol>
+
+
+<h3>Bitbucket (ミラー先) の clone</h3>
+
+<ol>
+	<li><a href="#steps-mirror-clone">git clone</a></li>
+	<li><a href="#steps-mirror-submodule">git submodule init</a></li>
+	<li><a href="#steps-mirror-submodule">git submodule update</a></li>
+</ol>
+
 
 <h2 id="steps-GitHub">GitHub 上のリポジトリへのコード登録</h2>
 
@@ -541,6 +550,38 @@ To https://bitbucket.org/m-tmatma/submod-parent.git
 </pre>
 
 
+<h2 id="steps-mirror">Bitbucket 上のミラーを clone</h2>
+
+<h3 id="steps-mirror-clone">clone</h3>
+
+<pre>
+D:\demo>git clone https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git mirror
+Cloning into 'mirror'...
+remote: Counting objects: 6, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 6 (delta 0), reused 0 (delta 0)
+Unpacking objects: 100% (6/6), done.
+</pre>
+
+<h3 id="steps-mirror-submodule">submodule の取得</h3>
+
+<pre>
+D:\demo>cd mirror
+
+D:\demo\mirror>git remote -v
+origin  https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git (fetch)
+origin  https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git (push)
+
+D:\demo\mirror>git submodule init
+Submodule 'submod1' (https://m-tmatma@bitbucket.org/m-tmatma/submod1) registered for path 'submod1'
+Submodule 'submod2' (https://m-tmatma@bitbucket.org/m-tmatma/submod2) registered for path 'submod2'
+
+D:\demo\mirror>git submodule update
+Cloning into 'D:/demo/mirror/submod1'...
+Cloning into 'D:/demo/mirror/submod2'...
+Submodule path 'submod1': checked out 'fef6a0b0567400d56de933c6124de6c7a3fb2edb'
+Submodule path 'submod2': checked out '5bb30aae61a7a2b729639ed0b16167adafb9cd37'
+</pre>
 
 <div class="ads_bottom">
 	<div class="responsive_googleads_bottom">
