@@ -2,37 +2,39 @@ body
 {
 /*	background-color: #FFFFCC; */
 /*	background-color: white;   */
+	counter-reset: number01;
 	counter-reset: number02;
 	counter-reset: number03;
-	counter-reset: number04;
 }
 
-h2
+h1
 {
-	counter-increment: number02;
-	counter-reset: number03;
-	counter-reset: number04;
+	counter-reset: number01;
 }
 h2:before
 {
-	content: counter(number02) ". ";
+	content: counter(number01) ". ";
+	counter-increment: number01;
 }
-h3
+h2
 {
-	counter-increment: number03;
-	counter-reset: number04;
+	counter-reset: number02;
 }
+
 h3:before
 {
-	content: counter(number02) "-" counter(number03) ". ";
+	content: counter(number01) "." counter(number02) ". ";
+	counter-increment: number02;
+}
+
+h4:before
+{
+	content: counter(number01) "." counter(number02) "." counter(number03) ". ";
+	counter-increment: number03;
 }
 h4
 {
-	counter-increment: number04;
-}
-h4:before
-{
-	content: counter(number02) "-" counter(number03) "-" counter(number04) ". ";
+	counter-reset: number03;
 }
 
 h1, h2, h3, h4
