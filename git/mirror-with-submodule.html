@@ -157,19 +157,19 @@ git submodule は相対パスでも指定することが可能です。
 	<td>Bitbucket</td>
 	<td>親リポジトリ (ミラー先)</td>
 	<td>submod-parent</td>
-	<td>https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git</td>
+	<td>https://bitbucket.org/m-tmatma/submod-parent.git</td>
 </tr>
 <tr>
 	<td>Bitbucket</td>
 	<td>Submodule 1 (ミラー先)</td>
 	<td>submod1</td>
-	<td>https://m-tmatma@bitbucket.org/m-tmatma/submod1.git</td>
+	<td>https://bitbucket.org/m-tmatma/submod1.git</td>
 </tr>
 <tr>
 	<td>Bitbucket</td>
 	<td>Submodule 2 (ミラー先)</td>
 	<td>submod2</td>
-	<td>https://m-tmatma@bitbucket.org/m-tmatma/submod2.git</td>
+	<td>https://bitbucket.org/m-tmatma/submod2.git</td>
 </tr>
 </table> 
 
@@ -450,15 +450,15 @@ D:\demo\submod1>git remote -v
 origin  https://github.com/m-tmatma/submod1.git (fetch)
 origin  https://github.com/m-tmatma/submod1.git (push)
 
-D:\demo\submod1>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod1.git
+D:\demo\submod1>git remote add mirror https://bitbucket.org/m-tmatma/submod1.git
 </pre>
 
 <h4 id="steps-Bitbucket-submod1-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod1>git remote -v
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod1.git (fetch)
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod1.git (push)
+mirror  https://bitbucket.org/m-tmatma/submod1.git (fetch)
+mirror  https://bitbucket.org/m-tmatma/submod1.git (push)
 origin  https://github.com/m-tmatma/submod1.git (fetch)
 origin  https://github.com/m-tmatma/submod1.git (push)
 </pre>
@@ -485,15 +485,15 @@ D:\demo\submod2>git remote -v
 origin  https://github.com/m-tmatma/submod2.git (fetch)
 origin  https://github.com/m-tmatma/submod2.git (push)
 
-D:\demo\submod2>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod2.git
+D:\demo\submod2>git remote add mirror https://bitbucket.org/m-tmatma/submod2.git
 </pre>
 
 <h4 id="steps-Bitbucket-submod2-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod2>git remote -v
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod2.git (fetch)
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod2.git (push)
+mirror  https://bitbucket.org/m-tmatma/submod2.git (fetch)
+mirror  https://bitbucket.org/m-tmatma/submod2.git (push)
 origin  https://github.com/m-tmatma/submod2.git (fetch)
 origin  https://github.com/m-tmatma/submod2.git (push)
 </pre>
@@ -519,15 +519,15 @@ D:\demo\submod-parent>git remote -v
 origin  https://github.com/m-tmatma/submod-parent.git (fetch)
 origin  https://github.com/m-tmatma/submod-parent.git (push)
 
-D:\demo\submod-parent>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git
+D:\demo\submod-parent>git remote add mirror https://bitbucket.org/m-tmatma/submod-parent.git
 </pre>
 
 <h4 id="steps-Bitbucket-submod-parent-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod-parent>git remote -v
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git (fetch)
-mirror  https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git (push)
+mirror  https://bitbucket.org/m-tmatma/submod-parent.git (fetch)
+mirror  https://bitbucket.org/m-tmatma/submod-parent.git (push)
 origin  https://github.com/m-tmatma/submod-parent.git (fetch)
 origin  https://github.com/m-tmatma/submod-parent.git (push)
 </pre>
@@ -552,7 +552,7 @@ To https://bitbucket.org/m-tmatma/submod-parent.git
 <h3 id="steps-mirror-clone">clone</h3>
 
 <pre>
-D:\demo>git clone https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git mirror
+D:\demo>git clone https://bitbucket.org/m-tmatma/submod-parent.git mirror
 Cloning into 'mirror'...
 remote: Counting objects: 6, done.
 remote: Compressing objects: 100% (4/4), done.
@@ -566,12 +566,12 @@ Unpacking objects: 100% (6/6), done.
 D:\demo>cd mirror
 
 D:\demo\mirror>git remote -v
-origin  https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git (fetch)
-origin  https://m-tmatma@bitbucket.org/m-tmatma/submod-parent.git (push)
+origin  https://bitbucket.org/m-tmatma/submod-parent.git (fetch)
+origin  https://bitbucket.org/m-tmatma/submod-parent.git (push)
 
 D:\demo\mirror>git submodule init
-Submodule 'submod1' (https://m-tmatma@bitbucket.org/m-tmatma/submod1) registered for path 'submod1'
-Submodule 'submod2' (https://m-tmatma@bitbucket.org/m-tmatma/submod2) registered for path 'submod2'
+Submodule 'submod1' (https://bitbucket.org/m-tmatma/submod1) registered for path 'submod1'
+Submodule 'submod2' (https://bitbucket.org/m-tmatma/submod2) registered for path 'submod2'
 
 D:\demo\mirror>git submodule update
 Cloning into 'D:/demo/mirror/submod1'...
