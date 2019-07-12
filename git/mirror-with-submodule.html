@@ -263,11 +263,11 @@ Bitbucket (ミラー先)
 	</li>
 </ol>
 
-<h2>GitHub 上のリポジトリへのコード登録</h2>
+<h2 id="steps-GitHub">GitHub 上のリポジトリへのコード登録</h2>
 
-<h3>GitHub 上に submodule 用のリポジトリ1 を登録する</h3>
+<h3 id="steps-GitHub-submod1-add">GitHub 上に submodule 用のリポジトリ1 を登録する</h3>
 
-<h4>submod1 のリポジトリを clone</h4>
+<h4 id="steps-GitHub-submod1-clone">submod1 のリポジトリを clone</h4>
 
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod1.git
@@ -275,7 +275,7 @@ Cloning into 'submod1'...
 warning: You appear to have cloned an empty repository.
 </pre>
 
-<h4>submod1 のリポジトリにコードを commit</h4>
+<h4 id="steps-GitHub-submod1-commit">submod1 のリポジトリにコードを commit</h4>
 
 <pre>
 D:\demo>cd submod1
@@ -290,7 +290,7 @@ D:\demo\submod1>git commit -m "add test1.txt"
  create mode 100644 test1.txt
 </pre>
 
-<h4>submod1 のリポジトリにコードを push</h4>
+<h4 id="steps-GitHub-submod1-push">submod1 のリポジトリにコードを push</h4>
 
 <pre>
 D:\demo\submod1>git push origin master
@@ -303,9 +303,9 @@ To https://github.com/m-tmatma/submod1.git
 </pre>
 
 
-<h3>GitHub 上に submodule 用のリポジトリ2 を登録する</h3>
+<h3 id="steps-GitHub-submod2-add">GitHub 上に submodule 用のリポジトリ2 を登録する</h3>
 
-<h4>submod2 のリポジトリを clone</h4>
+<h4 id="steps-GitHub-submod2-clone">submod2 のリポジトリを clone</h4>
 
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod2.git
@@ -313,7 +313,7 @@ Cloning into 'submod2'...
 warning: You appear to have cloned an empty repository.
 </pre>
 
-<h4>submod2 のリポジトリにコードを commit</h4>
+<h4 id="steps-GitHub-submod2-commit">submod2 のリポジトリにコードを commit</h4>
 
 <pre>
 D:\demo>cd submod2
@@ -328,7 +328,7 @@ D:\demo\submod2>git commit -m "add test2.txt"
  create mode 100644 test2.txt
 </pre>
 
-<h4>submod2 のリポジトリにコードを push</h4>
+<h4 id="steps-GitHub-submod2-push">submod2 のリポジトリにコードを push</h4>
 
 <pre>
 D:\demo\submod2>git push origin master
@@ -342,9 +342,9 @@ To https://github.com/m-tmatma/submod2.git
 
 
 
-<h3>GitHub 上に 親リポジトリを登録する</h3>
+<h3 id="steps-GitHub-submod-parent-add">GitHub 上に 親リポジトリを登録する</h3>
 
-<h4>submod-parant のリポジトリを clone</h4>
+<h4 id="steps-GitHub-submod-parent-clone">submod-parant のリポジトリを clone</h4>
 
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod-parant.git
@@ -352,7 +352,7 @@ Cloning into 'submod-parant'...
 warning: You appear to have cloned an empty repository.
 </pre>
 
-<h4>submod-parant のリポジトリにコードを commit</h4>
+<h4 id="steps-GitHub-submod-parent-commit">submod-parant のリポジトリにコードを commit</h4>
 
 <pre>
 D:\demo>cd submod-parant
@@ -367,7 +367,7 @@ D:\demo\submod-parant>git commit -m "add test-parent.txt"
  create mode 100644 test-parent.txt
 </pre>
 
-<h4>submod-parant のリポジトリに submodule を追加</h4>
+<h4 id="steps-GitHub-submod-parent-add-submod">submod-parant のリポジトリに submodule を追加</h4>
 
 <strong>ここがこの記事の唯一の核心</strong>
 
@@ -391,7 +391,7 @@ warning: LF will be replaced by CRLF in .gitmodules.
 The file will have its original line endings in your working directory
 </pre>
 
-<h4>ローカルの状態確認</h4>
+<h4 id="steps-GitHub-submod-parent-status">ローカルの状態確認</h4>
 
 <pre>
 D:\demo\submod-parant>git status
@@ -407,7 +407,7 @@ Changes to be committed:
         new file:   submod2
 </pre>
 
-<h4>submod-parant のリポジトリに submodule の追加を commit</h4>
+<h4 id="steps-GitHub-submod-parent-commit">submod-parant のリポジトリに submodule の追加を commit</h4>
 
 <pre>
 D:\demo\submod-parant>git commit -m "add submodule"
@@ -418,7 +418,7 @@ D:\demo\submod-parant>git commit -m "add submodule"
  create mode 160000 submod2
 </pre>
 
-<h4>submod-parant のリポジトリにコードを push</h4>
+<h4 id="steps-GitHub-submod-parent-push">submod-parant のリポジトリにコードを push</h4>
 
 <pre>
 D:\demo\submod-parant>git push origin master
@@ -432,12 +432,12 @@ To https://github.com/m-tmatma/submod-parant.git
  * [new branch]      master -> master
 </pre>
 
-<h2>Bitbucket 上のリポジトリへのコード登録</h2>
+<h2 id="steps-Bitbucket-submod1">Bitbucket 上のリポジトリへのコード登録</h2>
 
 
-<h3>Bitbucket 上に submodule 用のリポジトリ1 を登録する</h3>
+<h3 id="steps-Bitbucket-submod1-add">Bitbucket 上に submodule 用のリポジトリ1 を登録する</h3>
 
-<h4>Bitbucket の submod1 を remote URL として登録</h4>
+<h4 id="steps-Bitbucket-submod1-remote">Bitbucket の submod1 を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod1>git remote -v
@@ -447,7 +447,7 @@ origin  https://github.com/m-tmatma/submod1.git (push)
 D:\demo\submod1>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod1.git
 </pre>
 
-<h4>remote の登録確認</h4>
+<h4 id="steps-Bitbucket-submod1-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod1>git remote -v
@@ -457,7 +457,7 @@ origin  https://github.com/m-tmatma/submod1.git (fetch)
 origin  https://github.com/m-tmatma/submod1.git (push)
 </pre>
 
-<h4>Bitbucket の submod1 に push</h4>
+<h4 id="steps-Bitbucket-submod1-push">Bitbucket の submod1 に push</h4>
 
 <pre>
 D:\demo\submod1>git push mirror master
@@ -470,9 +470,9 @@ To https://bitbucket.org/m-tmatma/submod1.git
 </pre>
 
 
-<h3>Bitbucket 上に submodule 用のリポジトリ2 を登録する</h3>
+<h3 id="steps-Bitbucket-submod2-add">Bitbucket 上に submodule 用のリポジトリ2 を登録する</h3>
 
-<h4>Bitbucket の submod2 を remote URL として登録</h4>
+<h4 id="steps-Bitbucket-submod2-remote">Bitbucket の submod2 を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod2>git remote -v
@@ -482,7 +482,7 @@ origin  https://github.com/m-tmatma/submod2.git (push)
 D:\demo\submod2>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod2.git
 </pre>
 
-<h4>remote の登録確認</h4>
+<h4 id="steps-Bitbucket-submod2-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod2>git remote -v
@@ -492,7 +492,7 @@ origin  https://github.com/m-tmatma/submod2.git (fetch)
 origin  https://github.com/m-tmatma/submod2.git (push)
 </pre>
 
-<h4>Bitbucket の submod2 に push</h4>
+<h4 id="steps-Bitbucket-submod2-push">Bitbucket の submod2 に push</h4>
 
 <pre>
 D:\demo\submod2>git push mirror master
@@ -504,9 +504,9 @@ To https://bitbucket.org/m-tmatma/submod2.git
  * [new branch]      master -> master
 </pre>
 
-<h3>Bitbucket 上に 親リポジトリを登録する</h3>
+<h3 id="steps-Bitbucket-submod-parant-add">Bitbucket 上に 親リポジトリを登録する</h3>
 
-<h4>Bitbucket の submod-parant を remote URL として登録</h4>
+<h4 id="steps-Bitbucket-submod-parant-remote">Bitbucket の submod-parant を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod-parant>git remote -v
@@ -516,7 +516,7 @@ origin  https://github.com/m-tmatma/submod-parant.git (push)
 D:\demo\submod-parant>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git
 </pre>
 
-<h4>remote の登録確認</h4>
+<h4 id="steps-Bitbucket-submod-parant-check">remote の登録確認</h4>
 
 <pre>
 D:\demo\submod-parant>git remote -v
@@ -526,7 +526,7 @@ origin  https://github.com/m-tmatma/submod-parant.git (fetch)
 origin  https://github.com/m-tmatma/submod-parant.git (push)
 </pre>
 
-<h4>Bitbucket の submod-parant に push</h4>
+<h4 id="steps-Bitbucket-submod-parant-push">Bitbucket の submod-parant に push</h4>
 
 <pre>
 D:\demo\submod-parant>git push mirror master
