@@ -201,11 +201,17 @@ Bitbucket 上で空の リポジトリを作成します。(https://bitbucket.or
 
 <h3>GitHub 上に submodule 用のリポジトリ1 を登録する</h3>
 
+<h4>submod1 のリポジトリを clone</h4>
+
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod1.git
 Cloning into 'submod1'...
 warning: You appear to have cloned an empty repository.
+</pre>
 
+<h4>submod1 のリポジトリにコードを commit</h4>
+
+<pre>
 D:\demo>cd submod1
 
 D:\demo\submod1>echo test1 > test1.txt
@@ -216,7 +222,11 @@ D:\demo\submod1>git commit -m "add test1.txt"
 [master (root-commit) fef6a0b] add test1.txt
  1 file changed, 1 insertion(+)
  create mode 100644 test1.txt
+</pre>
 
+<h4>submod1 のリポジトリにコードを push</h4>
+
+<pre>
 D:\demo\submod1>git push origin master
 Enumerating objects: 3, done.
 Counting objects: 100% (3/3), done.
@@ -229,11 +239,17 @@ To https://github.com/m-tmatma/submod1.git
 
 <h3>GitHub 上に submodule 用のリポジトリ2 を登録する</h3>
 
+<h4>submod2 のリポジトリを clone</h4>
+
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod2.git
 Cloning into 'submod2'...
 warning: You appear to have cloned an empty repository.
+</pre>
 
+<h4>submod2 のリポジトリにコードを commit</h4>
+
+<pre>
 D:\demo>cd submod2
 
 D:\demo\submod2>echo test2 > test2.txt
@@ -244,7 +260,11 @@ D:\demo\submod2>git commit -m "add test2.txt"
 [master (root-commit) 5bb30aa] add test2.txt
  1 file changed, 1 insertion(+)
  create mode 100644 test2.txt
+</pre>
 
+<h4>submod2 のリポジトリにコードを push</h4>
+
+<pre>
 D:\demo\submod2>git push origin master
 Enumerating objects: 3, done.
 Counting objects: 100% (3/3), done.
@@ -258,11 +278,17 @@ To https://github.com/m-tmatma/submod2.git
 
 <h3>GitHub 上に 親リポジトリを登録する</h3>
 
+<h4>submod-parant のリポジトリを clone</h4>
+
 <pre>
 D:\demo>git clone https://github.com/m-tmatma/submod-parant.git
 Cloning into 'submod-parant'...
 warning: You appear to have cloned an empty repository.
+</pre>
 
+<h4>submod-parant のリポジトリにコードを commit</h4>
+
+<pre>
 D:\demo>cd submod-parant
 
 D:\demo\submod-parant>echo test-parent > test-parent.txt
@@ -273,7 +299,13 @@ D:\demo\submod-parant>git commit -m "add test-parent.txt"
 [master (root-commit) 3728826] add test-parent.txt
  1 file changed, 1 insertion(+)
  create mode 100644 test-parent.txt
- 
+</pre>
+
+<h4>submod-parant のリポジトリに submodule を追加</h4>
+
+<strong>ここがこの記事の唯一の核心</strong>
+
+<pre>
 D:\demo\submod-parant>git submodule add <strong>../submod1</strong> submod1
 Cloning into 'D:/demo/submod-parant/submod1'...
 remote: Enumerating objects: 3, done.
@@ -291,7 +323,11 @@ remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
 Unpacking objects: 100% (3/3), done.
 warning: LF will be replaced by CRLF in .gitmodules.
 The file will have its original line endings in your working directory
+</pre>
 
+<h4>ローカルの状態確認</h4>
+
+<pre>
 D:\demo\submod-parant>git status
 On branch master
 Your branch is based on 'origin/master', but the upstream is gone.
@@ -303,15 +339,22 @@ Changes to be committed:
         new file:   .gitmodules
         new file:   submod1
         new file:   submod2
+</pre>
 
+<h4>submod-parant のリポジトリに submodule の追加を commit</h4>
+
+<pre>
 D:\demo\submod-parant>git commit -m "add submodule"
 [master e60d89e] add submodule
  3 files changed, 8 insertions(+)
  create mode 100644 .gitmodules
  create mode 160000 submod1
  create mode 160000 submod2
+</pre>
 
+<h4>submod-parant のリポジトリにコードを push</h4>
 
+<pre>
 D:\demo\submod-parant>git push origin master
 Enumerating objects: 6, done.
 Counting objects: 100% (6/6), done.
@@ -328,13 +371,19 @@ To https://github.com/m-tmatma/submod-parant.git
 
 <h3>Bitbucket 上に submodule 用のリポジトリ1 を登録する</h3>
 
+<h4>Bitbucket の submod1 を remote URL として登録</h4>
+
 <pre>
 D:\demo\submod1>git remote -v
 origin  https://github.com/m-tmatma/submod1.git (fetch)
 origin  https://github.com/m-tmatma/submod1.git (push)
 
 D:\demo\submod1>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod1.git
+</pre>
 
+<h4>Bitbucket の submod1 に push</h4>
+
+<pre>
 D:\demo\submod1>git push mirror master
 Enumerating objects: 3, done.
 Counting objects: 100% (3/3), done.
@@ -347,6 +396,7 @@ To https://bitbucket.org/m-tmatma/submod1.git
 
 <h3>Bitbucket 上に submodule 用のリポジトリ2 を登録する</h3>
 
+<h4>Bitbucket の submod2 を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod2>git remote -v
@@ -354,7 +404,11 @@ origin  https://github.com/m-tmatma/submod2.git (fetch)
 origin  https://github.com/m-tmatma/submod2.git (push)
 
 D:\demo\submod2>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod2.git
+</pre>
 
+<h4>Bitbucket の submod2 に push</h4>
+
+<pre>
 D:\demo\submod2>git push mirror master
 Enumerating objects: 3, done.
 Counting objects: 100% (3/3), done.
@@ -366,6 +420,7 @@ To https://bitbucket.org/m-tmatma/submod2.git
 
 <h3>Bitbucket 上に 親リポジトリを登録する</h3>
 
+<h4>Bitbucket の submod-parant を remote URL として登録</h4>
 
 <pre>
 D:\demo\submod-parant>git remote -v
@@ -373,7 +428,11 @@ origin  https://github.com/m-tmatma/submod-parant.git (fetch)
 origin  https://github.com/m-tmatma/submod-parant.git (push)
 
 D:\demo\submod-parant>git remote add mirror https://m-tmatma@bitbucket.org/m-tmatma/submod-parant.git
+</pre>
 
+<h4>Bitbucket の submod-parant に push</h4>
+
+<pre>
 D:\demo\submod-parant>git push mirror master
 Enumerating objects: 6, done.
 Counting objects: 100% (6/6), done.
