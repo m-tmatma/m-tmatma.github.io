@@ -26,15 +26,15 @@ h3:before
 	content: counter(numberA) "." counter(numberB) ". ";
 	counter-increment: numberB;
 }
+h3
+{
+	counter-reset: numberC;
+}
 
 h4:before
 {
 	content: counter(numberA) "." counter(numberB) "." counter(numberC) ". ";
 	counter-increment: numberC;
-}
-h4
-{
-	counter-reset: numberC;
 }
 
 h1, h2, h3, h4
