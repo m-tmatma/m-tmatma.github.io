@@ -2,39 +2,39 @@ body
 {
 /*	background-color: #FFFFCC; */
 /*	background-color: white;   */
-	counter-reset: number01;
-	counter-reset: number02;
-	counter-reset: number03;
+	counter-reset: numberA;
+	counter-reset: numberB;
+	counter-reset: numberC;
 }
 
 h1
 {
-	counter-reset: number01;
+	counter-reset: numberA;
 }
 h2:before
 {
-	content: counter(number01) ". ";
-	counter-increment: number01;
+	content: counter(numberA) ". ";
+	counter-increment: numberA;
 }
 h2
 {
-	counter-reset: number02;
+	counter-reset: numberB;
 }
 
 h3:before
 {
-	content: counter(number01) "." counter(number02) ". ";
-	counter-increment: number02;
+	content: counter(numberA) "." counter(numberB) ". ";
+	counter-increment: numberB;
 }
 
 h4:before
 {
-	content: counter(number01) "." counter(number02) "." counter(number03) ". ";
-	counter-increment: number03;
+	content: counter(numberA) "." counter(numberB) "." counter(numberC) ". ";
+	counter-increment: numberC;
 }
 h4
 {
-	counter-reset: number03;
+	counter-reset: numberC;
 }
 
 h1, h2, h3, h4
