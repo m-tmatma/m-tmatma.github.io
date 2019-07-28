@@ -4,6 +4,7 @@
 #
 # this works on Python 3
 import ctypes
+import io
 
 class Test(ctypes.Structure):
     _pack_ = 1
@@ -100,6 +101,17 @@ def Test4():
         print (i, "d = ", d)
     data = bytes(test2)
     print(data)
+
+    stream = io.BytesIO(data)
+    c = stream.read(1)
+    a = stream.read(4)
+    print (c)
+    print (a)
+
+    cc = int.from_bytes(c, byteorder='big')
+    aa = int.from_bytes(a, byteorder='big')
+    print(cc)
+    print(aa)
 
 Test1()
 Test2()
