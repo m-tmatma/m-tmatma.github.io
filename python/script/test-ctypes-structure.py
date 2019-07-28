@@ -33,39 +33,39 @@ class TestBigArray(ctypes.BigEndianStructure):
 def Test1():
     test1 = Test(1, 2, 3)
     print ("size = ", ctypes.sizeof(test1))
+    print ("c = ", test1.testc)
     print ("a = ", test1.testa)
     print ("b = ", test1.testb)
-    print ("c = ", test1.testc)
 
     data = bytes(test1)
     print(data)
 
     test2 = Test.from_buffer_copy(data)
+    print ("c = ", test2.testc)
     print ("a = ", test2.testa)
     print ("b = ", test2.testb)
-    print ("c = ", test2.testc)
 
 def Test2():
     test1 = TestBig(1, 2, 3)
     print ("size = ", ctypes.sizeof(test1))
+    print ("c = ", test1.testc)
     print ("a = ", test1.testa)
     print ("b = ", test1.testb)
-    print ("c = ", test1.testc)
 
     data = bytes(test1)
     print(data)
 
     test2 = TestBig.from_buffer_copy(data)
+    print ("c = ", test2.testc)
     print ("a = ", test2.testa)
     print ("b = ", test2.testb)
-    print ("c = ", test2.testc)
 
 def Test3():
     test1 = TestBig(1, 2, 3)
     print ("size = ", ctypes.sizeof(test1))
+    print ("c = ", test1.testc)
     print ("a = ", test1.testa)
     print ("b = ", test1.testb)
-    print ("c = ", test1.testc)
 
     size = ctypes.sizeof(test1)
     buf = (ctypes.c_char * size)()
@@ -74,16 +74,16 @@ def Test3():
     print(data)
 
     test2 = TestBig.from_buffer_copy(data)
+    print ("c = ", test2.testc)
     print ("a = ", test2.testa)
     print ("b = ", test2.testb)
-    print ("c = ", test2.testc)
 
 def Test4():
     test1 = TestBigArray(1, 2, 3)
     print ("size = ", ctypes.sizeof(test1))
+    print ("c = ", test1.testc)
     print ("a = ", test1.testa)
     print ("b = ", test1.testb)
-    print ("c = ", test1.testc)
 
     test1.testd[0] = 10
     test1.testd[1] = 11
@@ -93,9 +93,9 @@ def Test4():
     print(data)
 
     test2 = TestBigArray.from_buffer_copy(data)
+    print ("c = ", test2.testc)
     print ("a = ", test2.testa)
     print ("b = ", test2.testb)
-    print ("c = ", test2.testc)
     for i, d in enumerate(test2.testd):
         print (i, "d = ", d)
     data = bytes(test2)
