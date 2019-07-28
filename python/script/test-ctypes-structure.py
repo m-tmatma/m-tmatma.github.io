@@ -90,6 +90,7 @@ def Test4():
     test1.testd[2] = 12
     test1.testd[3] = 13
     data = bytes(test1)
+    print(data)
 
     test2 = TestBigArray.from_buffer_copy(data)
     print ("a = ", test2.testa)
@@ -97,6 +98,8 @@ def Test4():
     print ("c = ", test2.testc)
     for i, d in enumerate(test2.testd):
         print (i, "d = ", d)
+    data = bytes(test2)
+    print(data)
 
 Test1()
 Test2()
