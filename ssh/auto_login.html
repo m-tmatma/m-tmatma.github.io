@@ -129,7 +129,8 @@ $ chmod 600 .ssh/id_rsa
 <h4>公開鍵のセット</h4>
 
 <pre>
-$ cat id_rsa.pub >>  .ssh/authorized_keys
+$ mkdir -p ~/.ssh
+$ cat id_rsa.pub >>  ~/.ssh/authorized_keys
 $ rm  id_rsa.pub
 </pre>
 
