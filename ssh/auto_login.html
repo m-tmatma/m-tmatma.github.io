@@ -82,10 +82,44 @@ SSH の自動ログインメモです
 
 <h3>クライアントPC</h3>
 
+<strong>
+	<p>
+		暗号化方式に関して、従来SSHのログインにRSA方式を使用していましたが、現在は ed25519 が推奨されています。
+	</p>
+	<p>
+	ed25519 を使えない場合は RSA 4096bit を使用します。RSAのデフォルトの2048bitでは弱いので、
+	鍵長を明示することによりセキュリティ強度を確保する必要があります。
+</p>
+</strong>
+
+<p>
+参考
+
+<ul>
+	<li><a href="https://linuxfan.info/ssh-ed25519">https://linuxfan.info/ssh-ed25519</a></li>
+	<li><a href="https://jnst.hateblo.jp/entry/2014/12/15/200542">https://jnst.hateblo.jp/entry/2014/12/15/200542</a></li>
+</ul>
+</p>
+
 <h4>公開鍵/秘密鍵の作成</h4>
 
+<h5>ed25519 の場合</h5>
+
 <pre>
-$ ssh-keygen -t rsa
+$ ssh-keygen -t ed25519
+</pre>
+
+<ul>
+<li>秘密鍵 .ssh/id_ed25519</li>
+<li>公開鍵 .ssh/id_ed25519.pub</li>
+</ul>
+
+ed25519 の場合、鍵長は固定なので鍵長を指定しません。
+
+<h5>RSA の場合</h5>
+
+<pre>
+$ ssh-keygen -t rsa -b 4096
 </pre>
 
 <ul>
@@ -93,7 +127,20 @@ $ ssh-keygen -t rsa
 <li>公開鍵 .ssh/id_rsa.pub</li>
 </ul>
 
+<strong>
+	[2023/9/16追記]RSA鍵の生成で鍵長を指定しない場合、鍵長は 2048bit になります。2048bitでは暗号強度的に足りないとみなされるため
+	明示的に鍵長さを -b オプションで 4096 を指定します。
+</strong>
+
 <h4>公開鍵をサーバーに転送</h4>
+
+<h5>ed25519 の場合</h5>
+
+<pre>
+$ scp .ssh/id_ed25519.pub user@server:
+</pre>
+
+<h5>RSA の場合</h5>
 
 <pre>
 $ scp .ssh/id_rsa.pub user@server:
@@ -104,6 +151,14 @@ server → 実際のサーバー名に置き換えてください<br>
 
 <h4>パーミッションの設定 (通常は不要)</h4>
 
+<h5>ed25519 の場合</h5>
+
+<pre>
+$ chmod 600 .ssh/id_ed25519
+</pre>
+
+<h5>RSA の場合</h5>
+
 <pre>
 $ chmod 600 .ssh/id_rsa
 </pre>
@@ -111,6 +166,16 @@ $ chmod 600 .ssh/id_rsa
 <h3>サーバー</h3>
 
 <h4>公開鍵のセット</h4>
+
+<h5>ed25519 の場合</h5>
+
+<pre>
+$ mkdir -p ~/.ssh
+$ cat id_ed25519.pub >>  ~/.ssh/authorized_keys
+$ rm  id_ed25519.pub
+</pre>
+
+<h5>RSA の場合</h5>
 
 <pre>
 $ mkdir -p ~/.ssh
@@ -139,7 +204,7 @@ $ chmod 600 ~/.ssh/authorized_keys
 
 以下をチェック
 <ul>
-	<li>クライアント側の .ssh/id_rsa  のパーミッション (600)</li>
+	<li>クライアント側の .ssh/id_ed25519 または .ssh/id_rsa  のパーミッション (600)</li>
 	<li>サーバー側のホームディレクトリのパーミッション (755)</li>
 	<li>サーバー側の .ssh ディレクトリのパーミッション (700)</li>
 	<li>サーバー側の .ssh/authorized_keys のパーミッション (600)</li>
